@@ -1,149 +1,107 @@
-# Appendix: Just Enough Vim {#vim-tutorial}
+# 부록: 딱 필요한 만큼의 Vim {#vim-tutorial}
 
-[fl[Vim|https://www.vim.org/]] is a very-commonly installed editor with
-a steep learning curve.
+[fl[Vim|https://www.vim.org/]]은 아주 흔히 설치되어 있지만 학습 곡선이 가파른 편집기입니다.
 
-This appendix is here just to give you enough Vim to be dangerous!
+이 부록은 여러분이 사고(?)를 칠 수 있을 만큼의 Vim만 알려 드리려고 마련했습니다!
 
-## Launching Vim
+## Vim 실행하기 {#launching-vim}
 
-It could be you found yourself in Vim because you were committing and
-you didn't use `-m` to specify a message. You'll know it if you see some
-`~` characters down the left and some kind of status bar at the bottom.
+커밋하면서 메시지를 지정하는 `-m`을 사용하지 않아 Vim에 들어왔을 수 있습니다. 왼쪽에 `~` 문자가 몇 개 있고 아래쪽에 어떤 상태 표시줄이 보이면 Vim인 줄 알 수 있습니다.
 
-Or you might have launched it yourself with something like this, to edit
-`foo.c`:
+또는 `foo.c`를 편집하려고 다음과 같이 직접 실행했을 수도 있습니다.
 
 ``` {.default}
 $ vim foo.c
 ```
 
-## Modal Editing
+## 모달 편집 {#modal-editing}
 
-Vim primarily exists in two modes:
+Vim에는 주로 두 가지 모드가 있습니다.
 
-* ***Insert Mode***: This is the mode where you're pressing keys and the
-  corresponding letters appear in your document, just like you expect
-  from any normal editor.
+* ***입력 모드***: 키를 누르면 일반 편집기에서 예상하는 대로 해당 글자가 문서에 나타나는 모드입니다.
 
-* ***Normal mode***: This is the special Vim mode that you're not
-  familiar with in virtually all other editors. In this mode, keys have
-  special meaning. For example, the `h` key moves the cursor one
-  character to the left.
+* ***일반 모드***: 거의 모든 다른 편집기에서는 접하지 못했을 Vim의 특별한 모드입니다. 이 모드에서 키는 특별한 의미를 가집니다. 예를 들어 `h` 키는 커서를 왼쪽으로 한 글자 옮깁니다.
 
-  **The editor starts in normal mode!** This is why when you get dumped
-  into it none of the keys do what you want.
+  **편집기는 일반 모드에서 시작합니다!** 갑자기 Vim에 떨어졌을 때 어떤 키도 원하는 대로 작동하지 않는 이유가 바로 이것입니다.
 
-The power of Vim comes from memorizing *tons* of Normal Mode commands.
-This allows you to move the cursor and edit at speed. The [fl[vimhelp
-website has a reference of all the normal mode
-commands|https://vimhelp.org/index.txt.html#normal-index]], just to give
-you a rough idea of what's available.
+Vim의 힘은 *수많은* 일반 모드 명령을 외우는 데서 나옵니다. 그러면 커서를 옮기고 빠르게 편집할 수 있습니다. 무엇을 할 수 있는지 대략 감을 잡도록 [fl[vimhelp 웹사이트에 모든 일반 모드 명령의 참고 자료가 있습니다|https://vimhelp.org/index.txt.html#normal-index]].
 
-But at first, when you barely know any Normal Mode commands, modal
-editing just seems to get in the way. But as you get better at it,
-you'll see it's actually a really powerful feature.
+하지만 처음에는 아는 일반 모드 명령이 거의 없으므로 모달 편집이 방해만 되는 것처럼 보입니다. 실력이 늘면 사실 아주 강력한 기능임을 알게 됩니다.
 
-## Going Between Modes
+## 모드 사이 이동하기 {#going-between-modes}
 
-Here are the two main modes:
+주요 모드 두 가지를 오가는 방법은 다음과 같습니다.
 
-* To get from *normal mode* to *insert mode*, press `i`.
-* To get from *insert mode* back to *normal mode*, press `ESC`. (That's
-  the "escape" key in the upper left of the keyboard.)
+* *일반 모드*에서 *입력 모드*로 가려면 `i`를 누릅니다.
+* *입력 모드*에서 *일반 모드*로 돌아가려면 `ESC`를 누릅니다. (키보드 왼쪽 위의 "escape" 키입니다.)
 
-There! You've learned one normal mode command! `i` to insert some text!
+됐습니다! 일반 모드 명령 하나를 배웠습니다! 텍스트를 입력하는 `i`입니다!
 
-> **Try it:** launch Vim, type `i`, then type `hello world!`, then hit
-> `ESC` to get back to normal mode.
+> **해 보기:** Vim을 실행하고 `i`를 누른 다음 `hello world!`를 입력하고, `ESC`를 눌러 일반 모드로 돌아가세요.
 
-## Moving the Cursor
+## 커서 옮기기 {#moving-the-cursor}
 
-You can probably use the cursor keys. In fact, your version of Vim might
-even allow you to use them without ever leaving insert mode.
+아마 화살표 키를 사용할 수 있을 것입니다. 사용하는 Vim 버전에서는 입력 모드를 벗어나지 않고도 화살표 키를 쓸 수 있을지 모릅니다.
 
-*Real* Vim users move the cursor in normal mode with the following keys.
+*진짜* Vim 사용자는 일반 모드에서 다음 키로 커서를 옮깁니다.
 
-* Up: `k`
-* Down: `j`
-* Left: `h`
-* Right: `l`
+* 위: `k`
+* 아래: `j`
+* 왼쪽: `h`
+* 오른쪽: `l`
 
-Muscle memory will eventually take over with these.
+결국에는 근육 기억이 알아서 해 줄 것입니다.
 
-If you're in insert mode, the delete key should generally work as
-expected, as well.
+입력 모드에서는 Delete 키도 일반적으로 예상대로 작동합니다.
 
-## More Modes
+## 더 많은 모드 {#more-modes}
 
-I said there were two main modes, but there are actually more. Here are
-two more bonus modes:
+주요 모드가 두 가지라고 했지만 사실 더 있습니다. 보너스로 두 가지를 더 소개합니다.
 
-* To get from *normal mode* to *command-line mode*, press `:`. More on
-  this, below.
-* To get from *normal mode* to *search mode*, enter `/`. Type a string
-  to search for.
+* *일반 모드*에서 *명령줄 모드*로 가려면 `:`를 누릅니다. 아래에서 더 설명합니다.
+* *일반 모드*에서 *검색 모드*로 가려면 `/`를 입력합니다. 검색할 문자열을 입력하세요.
 
-## Command Line Mode
+## 명령줄 모드 {#command-line-mode}
 
-As mentioned earlier, if you're in normal mode, you can hit `:` to get
-to ***command line mode***.
+앞에서 말했듯이 일반 모드에서 `:`를 누르면 ***명령줄 모드***로 들어갑니다.
 
-This moves the cursor to the bottom of the screen and allows you to type
-a command there.
+커서가 화면 아래쪽으로 이동하며 그곳에 명령을 입력할 수 있습니다.
 
-So from now on in this chapter, when I say something like `:q!`, that
-means to type those three characters from normal mode.
+따라서 이 장의 지금부터 `:q!` 같은 것을 말하면 일반 모드에서 그 세 문자를 입력하라는 뜻입니다.
 
-If you get into command line mode and want to get back to normal mode,
-just press return without entering a command.
+명령줄 모드에 들어갔다가 일반 모드로 돌아가려면 명령을 입력하지 말고 Return 키만 누르세요.
 
-## Exiting Vim
+## Vim 종료하기 {#exiting-vim}
 
-There are a few ways, and all of them start from normal mode. (So hit
-`ESC` after you're done entering text, then try to exit.)
+방법은 몇 가지이며 모두 일반 모드에서 시작합니다. (텍스트 입력을 끝낸 뒤 `ESC`를 누르고 종료를 시도하세요.)
 
-* `ZZ` — exit, saving only if there have been changes
-* `:wq` — exit, saving unconditionally ("write, quit")
-* `:q` — exit, don't save
-* `:q!` — exit, don't save even if there have been changes!
+* `ZZ` — 변경 사항이 있을 때만 저장하고 종료
+* `:wq` — 무조건 저장하고 종료("write, quit")
+* `:q` — 저장하지 않고 종료
+* `:q!` — 변경 사항이 있어도 저장하지 않고 종료!
 
-And one more that's of use for Git:
+Git에서 유용한 것이 하나 더 있습니다.
 
-* `:cq` — exit with a non-zero (AKA error) exit status
+* `:cq` — 0이 아닌(즉, 오류를 뜻하는) 종료 상태로 종료
 
-If you do a `:cq` when entering a commit message in Vim, Git will think
-something went wrong and not complete the commit. So if you find
-yourself in Vim writing a commit message and think, "I didn't mean to do
-this yet!" you can `:cq` to get out of it. The files will remain on the
-stage.
+Vim에서 커밋 메시지를 입력할 때 `:cq`를 실행하면 Git은 문제가 생겼다고 판단하여 커밋을 완료하지 않습니다. 커밋 메시지를 쓰다가 "아직 이걸 할 생각은 아니었는데!"라는 생각이 들면 `:cq`로 빠져나오세요. 파일은 스테이징 영역에 그대로 남습니다.
 
-## Learn More
+## 더 배우기 {#learn-more}
 
-If you have Vim installed, you already have Vim Tutor installed! This is
-just a file that gets opened and directs you through using and learning
-vim.
+Vim이 설치되어 있다면 Vim Tutor도 이미 설치되어 있습니다! 파일 하나를 열어 Vim의 사용법을 안내하고 익히게 해 주는 프로그램입니다.
 
-Launch it with:
+다음과 같이 실행합니다.
 
 ``` {.default}
 $ vimtutor
 ```
 
-If you don't feel like messing with it right now, you can just `:q!` to
-quit.
+당장 이것저것 해 볼 마음이 없다면 `:q!`로 종료하면 됩니다.
 
-There's also an interactive online tutorial called
-[fl[OpenVim|https://openvim.com/]] that gets you through the first
-steps.
+[fl[OpenVim|https://openvim.com/]]이라는 대화형 온라인 튜토리얼도 있어 첫 단계를 배울 수 있습니다.
 
-Finally, [fl[ChatGPT|https://chatgpt.com/]] or other AIs will be helpful
-in finding new normal mode commands and answering questions.
+마지막으로 [fl[ChatGPT|https://chatgpt.com/]]나 다른 AI도 새로운 일반 모드 명령을 찾고 질문에 답을 얻는 데 도움이 됩니다.
 
-> _"This your last chance. After this there is no turning back. You take
-> the blue pill, the story ends. You wake up using your normal editor
-> and edit files whatever way you want to. You take the red pill, you
-> stay in Vim and I show you how deep the rabbit hole goes."_
+> _"이번이 마지막 기회다. 이제 되돌아갈 수 없다. 파란 약을 먹으면 이야기는 끝나고, 평범한 편집기를 쓰며 깨어나 원하는 방식대로 파일을 편집하게 된다. 빨간 약을 먹으면 Vim에 남게 되고, 내가 토끼 굴이 얼마나 깊은지 보여 주겠다."_
 >
-> \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ —With apologies to Morpheus, _The Matrix_
-
+> \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ —_매트릭스_의 모피어스에게 사과하며

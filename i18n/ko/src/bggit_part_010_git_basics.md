@@ -1,271 +1,249 @@
-# Git Basics
+# Git 기초 {#git-basics}
 
-Welcome to the _Beej's Guide to Git_!
+_Beej의 Git 안내서_에 오신 것을 환영합니다!
 
-This guide has two goals, in no particular order:
+이 안내서에는 특별한 우선순위 없이 두 가지 목표가 있습니다.
 
-1. Help you get some familiarity with Git syntax on the command line.
-2. Help you get a mental model that describes how Git stores its
-   information.
+1. 명령줄에서 쓰는 Git 문법에 익숙해지도록 돕습니다.
+2. Git이 정보를 저장하는 방식을 설명하는 머릿속 모형을 갖추도록 돕습니다.
 
-I feel the second of these is very important for becoming even remotely
-adept at using Git, which is why I spend so much time talking about it.
-Yes, you can get by with a cheat-sheet of common Git commands, but if
-you want to fearlessly use the tool to its full effectiveness, you gotta
-learn the internals!
+두 번째 목표는 Git을 조금이라도 능숙하게 쓰는 데 매우 중요하다고 생각합니다. 그래서 그 이야기에 많은 시간을 씁니다. 물론 자주 쓰는 Git 명령 치트 시트만으로도 그럭저럭 지낼 수 있습니다. 하지만 이 도구의 성능을 두려움 없이 온전히 활용하고 싶다면 내부 원리를 배워야 합니다!
 
-And, yes, Git is complex. There's a *lot* to it. But like with many
-complex tools, there's a lot of power to be found there if you put in
-the time to get good at it.
+그리고 맞습니다. Git은 복잡합니다. 알아야 할 것이 *아주* 많습니다. 하지만 수많은 복잡한 도구가 그렇듯, 시간을 들여 능숙해지면 그 안에서 막강한 힘을 발견할 수 있습니다.
 
-## What is Git?
+## Git이란 무엇인가요? {#what-is-git}
 
-Git is a _source code control system_, also known as a _version control
-system_.
+Git은 _소스 코드 관리 시스템_, 또는 _버전 관리 시스템_입니다.
 
-Clear? Okay, not really? Let's dive in a bit more, then!
+명확한가요? 사실 그렇지 않다고요? 그렇다면 조금 더 깊이 들어가 봅시다!
 
-Git's main job is to keep a log of _snapshots_ of the current state of
-all your source code in a particular directory tree. A snapshot is the
-current state of all tracked files at a particular time. If you wanted
-to see what your source code looked like last Wednesday, you could go
-back in time and see it.
+Git의 주된 일은 특정 디렉터리 트리에 있는 모든 소스 코드의 현재
+상태를 _스냅샷_으로 남겨 기록을 보관하는 것입니다. 스냅샷은 특정
+시점에 추적 중인 모든 파일의 상태입니다. 지난 수요일에 소스 코드가
+어떤 모습이었는지 보고 싶다면 시간을 거슬러 올라가 확인할 수 있습니다.
 
-The idea is that you'll make some changes (to implement a feature, for
-example), and then you'll _commit_ those changes to the _source code
-repo_ (repository) once the feature is ready. This saves the changes to
-the repo and allows other collaborators to see them.
+방식은 이렇습니다. 먼저 어떤 변경 사항을 만듭니다(예를 들어 기능을
+구현합니다). 기능이 준비되면 그 변경 사항을 _소스 코드 저장소_에
+_커밋_합니다. 그러면 변경 사항이 저장소에 저장되고 다른 협업자도 볼
+수 있게 됩니다.
 
-And if you ever change something you didn't want to, or you want to see
-how things were implemented in the past, you can always check out a
-previous commit and take a look.
+원하지 않던 부분을 바꿨거나 예전에 어떤 방식으로 구현했는지 보고
+싶을 때도 이전 커밋을 언제든 체크아웃해서 살펴볼 수 있습니다.
 
-Git keeps a history of all the commits you've ever made. Assuming
-nothing criminal is happening, this should be a great relief to you; if
-you accidentally delete a bunch of code, you can look at a previous
-commit and get it all back.
+Git은 지금까지 만든 모든 커밋의 이력을 보관합니다. 범죄 행위 같은
+것만 없다면 이 사실은 큰 안도감을 줄 것입니다. 실수로 코드를 잔뜩
+지워도 이전 커밋을 살펴보고 전부 되찾을 수 있으니까요.
 
-But that's not all! As we'll see, Git also works well as a remote backup
-mechanism, and works wonderfully when cooperating with a team on the
-same codebase.
+하지만 그게 전부가 아닙니다! 앞으로 살펴보겠지만 Git은 원격 백업
+수단으로도 잘 작동하고, 한 팀이 같은 코드베이스에서 협업할 때도
+아주 훌륭하게 작동합니다.
 
-### Definitions
+### 정의 {#definitions}
 
-* **Source Code Control System**/**Version Control System**: Software
-  that manages changes to a software project potentially consisting of
-  thousands of source files edited by potentially hundreds of
-  developers. Git is a source code control system. There are many
-  others.
+* **소스 코드 관리 시스템**/**버전 관리 시스템**: 수백 명의 개발자가
+  편집하는 수천 개의 소스 파일로 이루어질 수도 있는 소프트웨어
+  프로젝트의 변경 사항을 관리하는 소프트웨어입니다. Git은 소스 코드
+  관리 시스템입니다. 그 밖에도 많은 시스템이 있습니다.
 
-* [i[Commit]] **Commit**: An explicit moment in time where a snapshot of
-  the contents of all the source files are recorded in the source code
-  control system. Very, very typically the code is in a working state
-  when the commit is made; in other words, the commit represents in some
-  ways a seal of approval that the repo in this state is in working
-  order even if the changes aren't complete.
+* [i[Commit]] **커밋**: 모든 소스 파일 내용의 스냅샷을 소스 코드 관리
+  시스템에 기록하는 명시적인 한 시점입니다. 아주, 아주 일반적으로는
+  커밋을 만들 때 코드가 작동하는 상태입니다. 다시 말해, 변경 작업이
+  완전히 끝나지 않았더라도 이 상태의 저장소가 제대로 작동한다는 일종의
+  승인 도장 역할을 커밋이 합니다.
   
-  Example commits might be:
+  커밋의 예는 다음과 같습니다.
 
-  * "Add feature *X* to the codebase"
-  * "Fix bug *Y*"
-  * "Merge other contributor's changes into the codebase"
-  * "Partially complete the Spanish translation"
+  * "코드베이스에 기능 *X* 추가"
+  * "버그 *Y* 수정"
+  * "다른 기여자의 변경 사항을 코드베이스에 병합"
+  * "스페인어 번역 일부 완료"
 
-* **Repo**/**Source Code Repository**: This is where a particular
-  software project is stored in the source code control system.
-  Typically each project has its own repo. For example, you might
-  "create a Git repo" to hold a new project you're working on.
+* **저장소**/**소스 코드 저장소**: 소스 코드 관리 시스템에서 특정
+  소프트웨어 프로젝트가 저장되는 곳입니다. 보통 프로젝트마다 자체
+  저장소가 있습니다. 예를 들어 새로 작업하는 프로젝트를 담으려고
+  "Git 저장소를 만들" 수 있습니다.
 
-  Sometimes repos are local to your computer, and sometimes they're
-  stored on other, remote computers.
+  저장소는 자신의 컴퓨터에 로컬로 있기도 하고, 다른 원격 컴퓨터에
+  저장되기도 합니다.
 
-## What is GitHub?
-
-[i[GitHub]]
-
-[fl[GitHub|https://github.com/]] is **not** Git.
-
-## What is GitHub?
+## GitHub이란 무엇인가요? {#what-is-github}
 
 [i[GitHub]]
 
-Oh, more?
+[fl[GitHub|https://github.com/]]은 Git이 **아닙니다**.
 
-[GitHub](https://github.com/) is a website that provides a front end to
-a lot of Git features, and some additional GitHub-specific features, as
-well.
+## GitHub이란 무엇인가요? {#what-is-github-1}
 
-It also provides remote storage for your repo, which acts as a backup.
+[i[GitHub]]
 
-Takeaway: GitHub is a web-based front-end to Git (specifically one that
-works on the copy of your repo at GitHub—stay tuned for more on that
-later).
+아, 더 설명해 달라고요?
 
-> [i[GitLab]][i[Gitea]]**What about GitLab and Gitea?**
-> [fl[GitLab|https://gitlab.com]] is a competitor to GitHub.
-> [fl[Gitea|https://docs.gitea.com/]] is an open-source competitor that
-> allows you to basically run a GitHub-like front-end on your own
-> server. None of this information is immediately important.
+[GitHub](https://github.com/)은 수많은 Git 기능을 위한 프런트엔드와
+GitHub만의 부가 기능을 제공하는 웹사이트입니다.
 
-Regardless of whatever repos you have on GitHub, you'll also have copies
-(known as _clones_) of those repos on your local system to work on.
-Periodically, in a common workflow, you'll sync your clone of the repo
-with GitHub.
+또한 저장소를 원격에 보관하는 공간을 제공하며, 이는 백업 역할을 합니다.
 
-> **You don't need GitHub.** Even though you might be commonly using
-> GitHub, there's no law that says you have to. You can just create and
-> destroy repos on your local system all you want, even if you're not
-> connected to the Internet. See [Appendix: Making a
-> Playground](#making-playground) for more information once you're more
-> comfortable with the basics.
+요점은 GitHub가 Git의 웹 기반 프런트엔드라는 것입니다. 더 정확히는
+GitHub에 있는 저장소 사본을 대상으로 작동하는 프런트엔드입니다. 이
+부분은 나중에 더 설명할 테니 기대해 주세요.
 
-## The Most Basic Git Workflow
+> [i[GitLab]][i[Gitea]]**GitLab과 Gitea는 어떤가요?**
+> [fl[GitLab|https://gitlab.com]]은 GitHub의 경쟁 서비스입니다.
+> [fl[Gitea|https://docs.gitea.com/]]는 자체 서버에서 GitHub 같은
+> 프런트엔드를 운영할 수 있게 해 주는 오픈 소스 경쟁 제품입니다.
+> 이 정보는 어느 것도 당장 중요하지 않습니다.
+
+GitHub에 어떤 저장소가 있든 작업을 위해 그 저장소의 사본(이를
+_클론_이라고 합니다)을 로컬 시스템에도 두게 됩니다. 일반적인 작업
+흐름에서는 로컬 저장소 클론을 GitHub와 주기적으로 동기화합니다.
+
+> **GitHub는 없어도 됩니다.** GitHub를 흔히 사용하기는 하지만 꼭
+> 사용해야 한다는 법은 없습니다. 인터넷에 연결하지 않아도 로컬
+> 시스템에서 마음껏 저장소를 만들고 없앨 수 있습니다. 기초가 좀 더
+> 익숙해지면 자세한 내용은 [부록: 연습장
+> 만들기](#making-playground)를 참고하세요.
+
+## 가장 기본적인 Git 작업 흐름 {#the-most-basic-git-workflow}
 
 [i[Workflow-->Basic]]
 
-There's a super-common workflow that you'll use repeatedly:
+계속해서 사용하게 될 아주 흔한 작업 흐름이 있습니다.
 
-1. _Clone_ a _remote_ repo. The remote repo is commonly on GitHub, but
-   not necessarily.
-2. Make some local changes in your _working tree_, where the project
-   files are on your computer.
-3. Add those changes to the _stage_ (AKA the _index_).
-4. _Commit_ those changes.
-5. _Push_ your commit back to the remote repo.
-6. Go back to Step 2.
+1. _원격_ 저장소를 _클론_합니다. 원격 저장소는 보통 GitHub에 있지만,
+   반드시 그런 것은 아닙니다.
+2. 컴퓨터에 프로젝트 파일이 있는 _작업 트리_에서 로컬 변경 사항을
+   만듭니다.
+3. 그 변경 사항을 _스테이징 영역_(즉, _인덱스_)에 추가합니다.
+4. 변경 사항을 _커밋_합니다.
+5. 커밋을 원격 저장소로 다시 _푸시_합니다.
+6. 2단계로 돌아갑니다.
 
-This is not the only workflow; there are others that are also not
-uncommon.
+이것만이 유일한 작업 흐름은 아닙니다. 흔히 쓰이는 다른 작업 흐름도
+있습니다.
 
-### Definitions
+### 정의 {#definitions-1}
 
-* **Clone** (verb): to make a copy of a remote repo locally.
+* **클론**(동사): 원격 저장소의 사본을 로컬에 만드는 것입니다.
 
-* **Clone** (noun): a local copy of a remote repo.
+* **클론**(명사): 원격 저장소의 로컬 사본입니다.
 
-* **Remote**: In Git, a clone of a repo in another location.
+* **원격 저장소**: Git에서 다른 위치에 있는 저장소 클론입니다.
 
-* **Working Tree**: The directory that you go into to edit and change
-  the files of the project. This is created when you clone.
+* **작업 트리**: 프로젝트 파일을 편집하고 변경하기 위해 들어가는
+  디렉터리입니다. 클론할 때 만들어집니다.
 
-* **Stage**: In Git, a place you add copies of files to in preparation
-  for a commit. The commit will include all the modified files that
-  you've placed on the stage. It will not include modified files you
-  haven't placed on the stage.
+* **스테이징 영역**: Git에서 커밋을 준비하며 파일 사본을 추가하는
+  곳입니다. 커밋에는 스테이징 영역에 올린 수정 파일이 모두 포함됩니다.
+  스테이징 영역에 올리지 않은 수정 파일은 포함되지 않습니다.
 
-* **Index**: A less-common name for the stage.
+* **인덱스**: 스테이징 영역을 가리키는 덜 흔한 이름입니다.
 
-## What is Cloning?
+## 클론이란 무엇인가요? {#what-is-cloning}
 
 [i[Clone]<]
 
-First, some backstory.
+먼저 배경 이야기부터 하겠습니다.
 
-Git is what's known as a _distributed_ version control system. This
-means that, unlike many version control systems, there's no one central
-authority for the data. (Though commonly Git users treat a site like
-GitHub in this regard, loosely.)
+Git은 이른바 _분산_ 버전 관리 시스템입니다. 이는 다른 많은 버전 관리
+시스템과 달리 데이터를 관장하는 단일 중앙 기관이 없다는 뜻입니다.
+(Git 사용자들이 GitHub 같은 사이트를 느슨하게나마 중앙 기관처럼
+취급하는 일은 흔합니다.)
 
-Instead, Git has _clones_ of repos. These are complete, standalone
-copies of the entire commit history of that repo. Any clone can be
-recreated from any other. None of them are more powerful than any
-others.
+그 대신 Git에는 저장소의 _클론_이 있습니다. 클론은 해당 저장소의 전체
+커밋 이력을 완전하게 담은 독립적인 사본입니다. 어떤 클론에서든 다른
+클론을 다시 만들 수 있습니다. 어느 클론도 다른 클론보다 더 강력하지
+않습니다.
 
-Looking back at The Most Basic Git Workflow, above, we see that Step 1
-is to clone an existing repo.
+앞에서 본 가장 기본적인 Git 작업 흐름을 돌아보면 1단계는 기존 저장소를
+클론하는 것이었습니다.
 
-If you're doing this from GitHub, it means you're making a local copy of
-an entire, existing GitHub repo.
+GitHub에서 클론한다면 기존 GitHub 저장소 전체의 로컬 사본을 만드는
+것입니다.
 
-Making a clone is a one time-process, typically (though you can make as
-many as you want).
+보통 클론을 만드는 일은 한 번만 합니다(물론 원하는 만큼 만들 수도
+있습니다).
 
-### Definitions
+### 정의 {#definitions-2}
 
-* **Distributed Version Control System**: A VCS in which there is no
-  central authority of the data, and multiple clones of a repo exist.
+* **분산 버전 관리 시스템**: 데이터를 관장하는 중앙 기관이 없으며 한
+  저장소의 클론이 여러 개 존재하는 VCS입니다.
 
-  This means after you clone a repo, there are two: one that is remote,
-  and one that is local to your computer.
+  즉 저장소를 클론한 뒤에는 두 개가 존재합니다. 하나는 원격에 있고,
+  다른 하나는 자신의 컴퓨터에 로컬로 있습니다.
 
-  These clones are completely separate and changes you make to your
-  local repo will not be reflected in the remote clone. Unless, that is,
-  you explicitly make them interact.
+  두 클론은 완전히 분리되어 있으므로 로컬 저장소에 만든 변경 사항은
+  원격 클론에 반영되지 않습니다. 물론 둘이 상호 작용하도록 명시적으로
+  지시하지 않는 한 말입니다.
 
-## How Do Clones Interact?
+## 클론끼리는 어떻게 상호 작용하나요? {#how-do-clones-interact}
 
-After you make a clone, there are two major operations you typically
-use:
+클론을 만든 다음에는 보통 두 가지 주요 작업을 사용합니다.
 
 
-* [i[Push]]**Push**: This takes your local commits and uploads them to
-  the remote repo.
+* [i[Push]]**푸시**: 로컬 커밋을 가져다가 원격 저장소에 업로드합니다.
 
-* [i[Pull]]**Pull**: This takes the remote commits and downloads them to
-  your local repo.
+* [i[Pull]]**풀**: 원격 커밋을 가져다가 로컬 저장소로 다운로드합니다.
 
-Behind the scenes, there's a process going on called a _merge_, but
-we'll talk more about that later.
+그 뒤에서는 _병합_이라는 과정이 일어나지만, 이에 대해서는 나중에 더
+이야기하겠습니다.
 
-Until you push, your local changes aren't visible on the remote repo.
+푸시하기 전에는 로컬 변경 사항이 원격 저장소에 보이지 않습니다.
 
-Until you pull, the changes on the remote repo aren't visible on your
-local repo.
+풀하기 전에는 원격 저장소의 변경 사항이 로컬 저장소에 보이지 않습니다.
 
 [i[Clone]>]
 
-## Actual Git Usage
+## 실제 Git 사용법 {#actual-git-usage}
 
 [i[Workflow-->Basic]<]
 
-Let's put all this into play. This section assumes you have the
-command line Git tools installed. It also generally assumes you're
-running a Unix shell like Bash or Zsh.
+이제 이 모든 것을 실제로 해 봅시다. 이 절에서는 명령줄 Git 도구가
+설치되어 있다고 가정합니다. 또한 대체로 Bash나 Zsh 같은 Unix 셸을
+실행하고 있다고 가정합니다.
 
-> **Where do you get these shells?** Linux/BSD/Unix and Mac users will
-> already have these shells. Yay!
+> **이런 셸은 어디서 구하나요?** Linux/BSD/Unix와 Mac 사용자라면 이미
+> 이런 셸을 가지고 있습니다. 만세!
 >
-> Recommendation for Windows users is to [fl[install and run Ubuntu with
-> WSL|https://learn.microsoft.com/en-us/windows/wsl/]] to get a virtual
-> Linux installation. Or, if you don't want to jump down that particular
-> rabbit hole just yet, run Git Bash (included with Git).
+> Windows 사용자에게는 가상 Linux 환경을 마련할 수 있도록 [fl[WSL로
+> Ubuntu를 설치하고 실행하는
+> 방법|https://learn.microsoft.com/en-us/windows/wsl/]]을 권합니다.
+> 아직 그 특별한 토끼 굴에 뛰어들고 싶지 않다면 Git에 포함된 Git
+> Bash를 실행해도 됩니다.
 
-For this example, we'll assume we have a GitHub repo already in
-existence that we're going to clone.
+이 예제에서는 클론할 GitHub 저장소가 이미 있다고 가정하겠습니다.
 
-Recall the process in The Most Basic Git Workflow, above:
+앞에서 본 가장 기본적인 Git 작업 흐름을 떠올려 보세요.
 
-1. _Clone_ a _remote_ repo. The remote repo is commonly on GitHub, but
-   not necessarily.
-2. Make some local changes.
-3. Add those changes to the _stage_.
-4. _Commit_ those changes.
-5. _Push_ your commit back to the remote repo.
-6. Go back to Step 2.
+1. _원격_ 저장소를 _클론_합니다. 원격 저장소는 보통 GitHub에 있지만,
+   반드시 그런 것은 아닙니다.
+2. 로컬 변경 사항을 만듭니다.
+3. 그 변경 사항을 _스테이징 영역_에 추가합니다.
+4. 변경 사항을 _커밋_합니다.
+5. 커밋을 원격 저장소로 다시 _푸시_합니다.
+6. 2단계로 돌아갑니다.
 
-### Step 0: One-time Setup {#initial-setup}
+### 0단계: 한 번만 하는 설정 {#initial-setup}
 
 [i[Configuration]]
 
-"Wait! You didn't say there was a Step 0!"
+"잠깐만요! 0단계가 있다는 말은 안 했잖아요!"
 
-Yes, one time, before you start using Git, you should tell it what your
-name and email address are. These will be attached to the commits
-you make to the repo.
+맞습니다. Git을 사용하기 시작하기 전에 딱 한 번, 자신의 이름과 이메일
+주소를 Git에 알려 주어야 합니다. 이 정보는 저장소에 만드는 커밋에
+붙습니다.
 
-You can change them any time in the future, and you can even set them on
-a per-repo basis. But for now, let's set them globally so Git doesn't
-complain when you make a commit.
+나중에 언제든 바꿀 수 있고 저장소마다 따로 설정할 수도 있습니다.
+하지만 지금은 커밋을 만들 때 Git이 불평하지 않도록 전역으로
+설정합시다.
 
-You just have to do this once then never again (unless you want to).
+한 번만 하면 다시 할 필요가 없습니다(원한다면 해도 됩니다).
 
-Type both of these on the command line, filling in the appropriate
-information.
+알맞은 정보를 채워 다음 두 명령을 명령줄에 입력하세요.
 
-> **In this guide, things you type at the shell prompt are indicated by
-> a prefaced `$`**. Don't type the `$`; just type what follows it. Your
-> actual shell prompt might be `%` or `$` or something else, but here we
-> use the `$` to indicate it.
+> **이 안내서에서는 셸 프롬프트에 직접 입력하는 내용 앞에 `$`를
+> 붙입니다.** `$`는 입력하지 말고 그 뒤에 나오는 내용만 입력하세요.
+> 실제 셸 프롬프트는 `%`나 `$` 또는 다른 표시일 수 있지만, 여기서는
+> 입력임을 나타내기 위해 `$`를 사용합니다.
 
 [i[Configuration-->Name and email]]
 
@@ -274,15 +252,15 @@ $ git config set --global user.name "Your Name"
 $ git config set --global user.email "your-email@example.com"
 ```
 
-If you need to change them in the future, just run those commands again.
+나중에 이 정보를 바꿔야 한다면 그 명령들을 다시 실행하면 됩니다.
 
-> **If you get an error with the above commands** you might be running
-> an older version of Git. Try them again, but leave out the word `set`.
-> Or, better yet, see if you can get a newer version of Git.
+> **위 명령에서 오류가 난다면** 오래된 버전의 Git을 실행 중일 수
+> 있습니다. `set`이라는 단어를 빼고 다시 시도해 보세요. 아니면 더 좋은
+> 방법으로, 새 버전의 Git을 구할 수 있는지 알아보세요.
 
-Finally, let's set the default branch name. It's really too early to
-explain what that means, but let's run this command and set the name to
-`main`. This will keep Git from complaining when you create a repo.
+마지막으로 기본 브랜치 이름을 설정합시다. 이것이 무슨 뜻인지 설명하기엔
+사실 너무 이르지만, 다음 명령을 실행해 이름을 `main`으로 설정하겠습니다.
+그러면 저장소를 만들 때 Git이 불평하지 않을 것입니다.
 
 [i[Configuration-->Default branch]]
 
@@ -290,41 +268,40 @@ explain what that means, but let's run this command and set the name to
 $ git config set --global init.defaultBranch main
 ```
 
-> **Some repos use `master` for the default branch name instead of
-> `main`.** It's actually an arbitrary choice, and repo creators can use
-> anything they want. Git itself hints, "Names commonly chosen instead
-> of 'master' are 'main', 'trunk' and 'development'."
+> **일부 저장소는 기본 브랜치 이름으로 `main` 대신 `master`를
+> 사용합니다.** 사실 이는 임의로 정할 수 있으며 저장소를 만드는 사람은
+> 원하는 이름을 무엇이든 사용할 수 있습니다. Git 자체도 "'master'
+> 대신 흔히 선택하는 이름으로는 'main', 'trunk', 'development'가
+> 있습니다"라고 힌트를 줍니다.
 >
-> I'm suggesting using `main` for multiple reasons, not the least of
-> which is that's what GitHub uses, but it's up to you. In this guide
-> I'll use `main`.
+> 제가 `main` 사용을 제안하는 데는 여러 이유가 있고, GitHub에서 이
+> 이름을 쓴다는 점도 결코 사소한 이유가 아닙니다. 하지만 선택은
+> 여러분의 몫입니다. 이 안내서에서는 `main`을 사용하겠습니다.
 
-### Step 1: Clone an Existing Repo
+### 1단계: 기존 저장소 클론하기 {#step-1-clone-an-existing-repo}
 
 [i[Clone]]
 
-Let's clone a repo! Here's an example repo you can actually use. Don't
-worry--you can't mess anything up on the remote repo even though (and
-because) you don't own it.
+저장소를 클론해 봅시다! 실제로 사용할 수 있는 예제 저장소가 있습니다.
+걱정하지 마세요. 그 원격 저장소를 소유하지 않았기 때문에(그리고
+소유하지 않았는데도) 그곳에서 무언가를 망칠 수는 없습니다.
 
-> **Like we said before, this isn't the only workflow.** Sometimes
-> people make a local repo first, add some commits, then create a remote
-> repo and push those commits. But for this example, we'll assume the
-> remote repo exists first, though this isn't a requirement.
+> **앞서 말했듯 이것만이 유일한 작업 흐름은 아닙니다.** 로컬 저장소를
+> 먼저 만들고 커밋을 몇 개 추가한 다음 원격 저장소를 만들어 그 커밋을
+> 푸시하는 경우도 있습니다. 하지만 이 예제에서는 필수 조건은
+> 아니지만 원격 저장소가 먼저 존재한다고 가정하겠습니다.
 
-Switch into a subdirectory where you want the clone created. This
-command will create a new subdirectory out of there that will hold all
-the repo files.
+클론을 만들고 싶은 하위 디렉터리로 이동하세요. 다음 명령은 그곳에 모든
+저장소 파일을 담을 새 하위 디렉터리를 만듭니다.
 
-(In the example, anything that begins with `$` represents the shell
-prompt indicating this is input, not output. Don't type the `$`; just
-type in the part after it.)
+(예제에서 `$`로 시작하는 것은 모두 셸 프롬프트를 나타냅니다. 즉 출력이
+아니라 입력입니다. `$`는 입력하지 말고 그 뒤의 부분만 입력하세요.)
 
 ``` {.default}
 $ git clone https://github.com/beejjorgensen/git-example-repo.git
 ```
 
-You should see some output similar to this:
+다음과 비슷한 출력이 나타날 것입니다.
 
 ``` {.default}
 Cloning into 'git-example-repo'...
@@ -337,14 +314,14 @@ Receiving objects: 100% (10/10), done.
 Resolving deltas: 100% (2/2), done.
 ```
 
-Congratulations! You have a clone of the repo. Let's have a peek:
+축하합니다! 저장소의 클론이 생겼습니다. 한번 들여다봅시다.
 
 ``` {.default}
 $ cd git-example-repo
 $ ls -la
 ```
 
-And we see a number of files:
+여러 파일이 보입니다.
 
 ``` {.default}
 total 16
@@ -355,22 +332,22 @@ drwxr-xr-x   12 beej  staff   384 Jan 18 13:35 .git
 -rwxr-xr-x    1 beej  staff    75 Jan 18 13:35 hello.py
 ```
 
-There are two files in this repo: `README.md` and `hello.py`.
+이 저장소에는 `README.md`와 `hello.py`, 두 파일이 있습니다.
 
-> [i[`.git` directory]]**The directory `.git` has special meaning;**
-> it's the directory where Git keeps all its metadata and commits. You
-> can look in there, but you don't have to. If you do look, don't change
-> anything. The only thing that makes a directory a Git repo is the
-> presence of a valid `.git` directory within it.
+> [i[`.git` directory]]**`.git` 디렉터리에는 특별한 의미가 있습니다.**
+> Git이 모든 메타데이터와 커밋을 보관하는 디렉터리입니다. 들여다봐도
+> 되지만 그럴 필요는 없습니다. 들여다본다면 아무것도 바꾸지 마세요.
+> 어떤 디렉터리를 Git 저장소로 만들어 주는 유일한 요소는 그 안에
+> 유효한 `.git` 디렉터리가 있다는 점입니다.
 
 [i[Status]]
-Let's ask Git what it thinks the current status of the local repo is:
+Git이 생각하는 로컬 저장소의 현재 상태가 무엇인지 물어봅시다.
 
 ``` {.default}
 $ git status
 ```
 
-Gives us:
+다음과 같이 나옵니다.
 
 ``` {.default}
 On branch main
@@ -379,68 +356,65 @@ Your branch is up to date with 'origin/main'.
 nothing to commit, working tree clean
 ```
 
-There's a lot of information here, surprisingly.
+놀랍게도 여기에는 정보가 아주 많습니다.
 
-We haven't talked about branching yet, but this is letting us know we're
-on branch `main`. That's fine for now.
+아직 브랜치에 관해 이야기하지 않았지만, 이 출력은 현재 `main` 브랜치에
+있다고 알려 줍니다. 지금은 그것으로 충분합니다.
 
-It also tells us this branch is up to date with a branch called
-[i[Remote-->`origin`]] `origin/main`. A branch in Git is just a
-reference to a certain commit that's been made, like a Post-It note
-attached to that commit. (Recall that a commit is a snapshot of the code
-repo at some time.)
+또 이 브랜치가 [i[Remote-->`origin`]] `origin/main`이라는 브랜치와 최신
+상태로 일치한다고 알려 줍니다. Git의 브랜치는 만들어진 특정 커밋을
+가리키는 참조일 뿐이며, 그 커밋에 붙인 포스트잇과 같습니다. (커밋은
+어떤 시점의 코드 저장소 스냅샷이라는 점을 기억하세요.)
 
-We don't want to get caught up in the intricacies of branching right
-now, but bear with me for a couple paragraphs.
+지금 당장 브랜치의 복잡한 세부 사항에 빠지고 싶지는 않지만, 몇 문단만
+참고 따라와 주세요.
 
-`origin` is an alias for the remote repository that we originally cloned
-from, so `origin/main` corresponds to "branch `main` on the repo you
-originally cloned from"[^a7cb].
+`origin`은 처음에 클론해 온 원격 저장소의 별칭입니다. 따라서
+`origin/main`은 "처음에 클론해 온 저장소의 `main` 브랜치"에
+해당합니다[^a7cb].
 
-[^a7cb]: We're glazing over an important topic here that we'll come back
-    to later called _remote tracking branches_.
+[^a7cb]: 여기서는 나중에 다시 다룰 _원격 추적 브랜치_라는 중요한
+    주제를 대충 넘어가고 있습니다.
 
-There is one important thing to notice here: there are two `main`
-branches. There's the `main` branch on your local repo, and there's a
-corresponding `main` branch on the remote (`origin`) repo[^2d0c].
+여기서 눈여겨볼 중요한 점이 하나 있습니다. `main` 브랜치가 두 개라는
+것입니다. 로컬 저장소에 `main` 브랜치가 있고, 원격(`origin`) 저장소에도
+그에 대응하는 `main` 브랜치가 있습니다[^2d0c].
 
-[^2d0c]: And again we're doing some hand-waving. There are actually
-    three branches. Two of them, `main` and `origin/main` are on your
-    local clone. And there's a third `main` on the remote `origin` that
-    your `origin/main` is _tracking_. Feel free to ignore this detail
-    until we get to the remote tracking branch chapter.
+[^2d0c]: 또다시 손을 휘휘 저으며 대충 설명하고 있습니다. 실제로는
+    브랜치가 세 개입니다. 그중 `main`과 `origin/main` 두 개는 로컬
+    클론에 있습니다. 그리고 원격 `origin`에는 로컬의 `origin/main`이
+    _추적_하는 세 번째 `main`이 있습니다. 원격 추적 브랜치 장에 이를
+    때까지는 이 세부 사항을 마음 편히 무시해도 됩니다.
 
-Remember how clones are separate? That is, changes you make on one clone
-aren't automatically visible on the other? This is an indication of
-that. You can make changes to your local `main` branch, and these won't
-affect the remote's `main` branch. (At least, not until you push those
-changes!)
+클론들이 서로 분리되어 있다는 말을 기억하나요? 한 클론에서 만든 변경
+사항이 다른 클론에 자동으로 보이지 않는다는 말입니다. 이 출력이 바로
+그 점을 보여 줍니다. 로컬 `main` 브랜치를 바꿔도 원격의 `main`
+브랜치에는 영향을 주지 않습니다. (적어도 그 변경 사항을 푸시하기
+전까지는요!)
 
-Lastly, it mentions we're up-to-date with the latest version of `main`
-on `origin` (that we know of), and that there's nothing to commit
-because there are no local changes. We're not sure what that means yet,
-but it all sounds like vaguely good news.
+마지막으로, 우리가 알고 있는 `origin`의 최신 `main` 버전과 현재 상태가
+일치하며 로컬 변경 사항이 없어서 커밋할 것도 없다고 합니다. 아직 이게
+무슨 뜻인지 확실히 모르지만, 어렴풋이 좋은 소식처럼 들립니다.
 
-### Step 2: Make Some Local Changes
+### 2단계: 로컬 변경 사항 만들기 {#step-2-make-some-local-changes}
 
-Let's edit a file and make some changes to it.
+파일을 편집해서 몇 가지를 바꿔 봅시다.
 
-> **Again, don't worry about messing up the remote repo**—you don't have
-> permissions to do that. Your safety is completely assured from a Git
-> perspective.
+> **다시 말하지만 원격 저장소를 망칠까 걱정하지 마세요.** 그렇게 할
+> 권한이 없습니다. Git의 관점에서는 안전이 완벽하게 보장됩니다.
 
-If you're using VS Code, you can run it in the current directory like so:
+VS Code를 사용한다면 다음처럼 현재 디렉터리에서 실행할 수 있습니다.
 
 ``` {.default}
 $ code .
 ```
 
-Otherwise, open the code in your favorite editor, which, admit it, is
-[fl[Vim|https://www.vim.org/]].
+그렇지 않다면 가장 좋아하는 편집기에서 코드를 여세요. 솔직히 인정하세요.
+그건 [fl[Vim|https://www.vim.org/]]이잖아요.
 
-Let's change `hello.py`:
+`hello.py`를 바꿔 봅시다.
 
-It was:
+원래는 다음과 같았습니다.
 
 ``` {.py .numberLines}
 #!/usr/bin/env python
@@ -449,7 +423,7 @@ print("Hello, world!")
 print("This is my program!")
 ```
 
-but let's add a line so it reads:
+여기에 한 줄을 추가해 다음과 같이 만듭시다.
 
 ``` {.py .numberLines}
 #!/usr/bin/env python
@@ -459,10 +433,10 @@ print("This is my program!")
 print("And this is my modification!")
 ```
 
-And save that file.
+그리고 파일을 저장하세요.
 
 [i[Status]]
-Let's ask Git what the status is now.
+이제 Git에 상태가 어떤지 물어봅시다.
 
 ``` {.default}
 $ git status
@@ -478,30 +452,30 @@ $ git status
   no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-This is telling us a couple important things.
+여기에는 몇 가지 중요한 내용이 있습니다.
 
-First, Git has detected that we modified a file, namely `hello.py`,
-which we did.
+먼저 Git은 파일 하나, 즉 `hello.py`가 수정되었다고 감지했습니다. 실제로
+우리가 한 일입니다.
 
-But it also says there are `no changes added to commit` (i.e. "there is
-nothing to make a commit with"). What does that mean?
+하지만 `no changes added to commit`이라고도 합니다(즉 "커밋을 만들
+재료가 없다"는 뜻입니다). 무슨 뜻일까요?
 
-It means we haven't added any modified files to the _stage_ yet. Recall
-that the stage is where we can place items that we wish to include in
-the next commit. Let's try that.
+아직 수정된 파일을 _스테이징 영역_에 하나도 추가하지 않았다는 뜻입니다.
+스테이징 영역은 다음 커밋에 포함하고 싶은 항목을 놓아두는 곳이었습니다. 한번
+해 봅시다.
 
-#### Step 2.1: Reviewing Your Changes
+#### 2.1단계: 변경 사항 검토하기 {#step-2.1-reviewing-your-changes}
 
 [i[Diff]]
-We're going to divert for just a moment to briefly introduce a new
-optional tool: `git diff` (short for "difference", though we still
-pronounce it "diff").
+잠깐 옆길로 새어 선택적으로 사용할 수 있는 새 도구 `git diff`를 짧게
+소개하겠습니다("difference"의 줄임말이지만 그래도 "diff"라고
+발음합니다).
 
-If you make some changes to files and you need a refresher on all the
-things you've changed, you can run this command to see it. But, fair
-warning, the output is... *esoteric*.
+파일을 몇 개 바꾼 뒤 무엇을 바꿨는지 전부 다시 확인하고 싶다면 이
+명령을 실행해서 볼 수 있습니다. 하지만 미리 솔직히 경고하자면 출력이
+좀... *난해합니다*.
 
-Let's try it.
+한번 해 봅시다.
 
 ``` {.default}
 $ git diff
@@ -516,42 +490,42 @@ $ git diff
   +print("And this is my modification!")
 ```
 
-What the heck is this sorcery? If you're lucky, it got color-coded for
-you with (by convention) added lines in green and deleted lines in red.
+이 무슨 마법인가요? 운이 좋다면 관례에 따라 추가된 줄은 초록색,
+삭제된 줄은 빨간색으로 색칠되어 보일 것입니다.
 
-For now, just notice a couple things:
+지금은 몇 가지만 눈여겨보세요.
 
-1. The file name. We see this change was to `hello.py`.
-2. The line with the `+` at the front. This indicates an added line.
+1. 파일 이름입니다. 이 변경이 `hello.py`에 이루어졌음을 알 수 있습니다.
+2. 앞에 `+`가 붙은 줄입니다. 추가된 줄이라는 뜻입니다.
 
-A `-` at the front of a line would indicate the line was deleted. And
-changed lines are often shown as the old line being deleted and a new
-one added.
+줄 앞의 `-`는 그 줄이 삭제되었다는 뜻입니다. 변경된 줄은 흔히 이전
+줄이 삭제되고 새 줄이 추가된 형태로 표시됩니다.
 
-Finally, if you want to see the diff for things you've added to the
-stage already (in the next step), you can run `git diff --staged`.
+마지막으로, 다음 단계에서 이미 스테이징 영역에 추가한 항목의 diff를 보고
+싶다면 `git diff --staged`를 실행하면 됩니다.
 
-We'll dive more into diff later, but I wanted to introduce it here since
-it's so useful.
+diff는 나중에 더 깊이 살펴보겠지만 워낙 유용한 도구라 여기서 소개하고
+싶었습니다.
 
-### Step 3: Add Changes to the Stage
+### 3단계: 변경 사항을 스테이징 영역에 추가하기 {#step-3-add-changes-to-the-stage}
 
 [i[Stage]<]
 [i[Add]<]
 
-The Git status message, above, is trying to help us out. It says:
+앞의 Git 상태 메시지는 우리를 도우려 하고 있습니다. 이렇게 말합니다.
 
 ``` {.default}
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-It's suggesting that `git add` will add things to the stage—and it will.
+`git add`를 사용하면 항목을 스테이징 영역에 추가할 수 있다고 제안합니다.
+실제로 그렇습니다.
 
-Now we, the developers, know that we modified `hello.py`, and that we'd
-like to make a commit that reflects the changes to that file. So we need
-to first add it to the stage so that we can make a commit.
+이제 개발자인 우리는 `hello.py`를 수정했고 그 파일의 변경 사항을
+반영하는 커밋을 만들고 싶다는 사실을 압니다. 따라서 커밋을 만들 수
+있도록 먼저 파일을 스테이징 영역에 추가해야 합니다.
 
-Let's do it with `git add`:
+`git add`로 해 봅시다.
 
 ``` {.default}
 $ git add hello.py
@@ -564,42 +538,39 @@ $ git status
 	  modified:   hello.py
 ```
 
-Now it's changed from saying "Changes not staged for commit" to saying
-"Changes to be committed", so we have successfully copied `hello.py` to
-the stage!
+이제 메시지가 "Changes not staged for commit"에서 "Changes to be
+committed"로 바뀌었습니다. `hello.py`를 스테이징 영역에 성공적으로 복사한
+것입니다!
 
-> **There's also a helpful message there about how to _unstage_ the
-> file.** Let's say you accidentally added it to the stage and you
-> changed your mind and wanted to not include it in the commit after
-> all. You can run
+> **파일을 스테이징 영역에서 _내리는_ 방법을 알려 주는 유용한 메시지도
+> 있습니다.** 실수로 파일을 스테이징 영역에 추가했다가 마음이 바뀌어 결국
+> 커밋에 포함하고 싶지 않다고 해 봅시다. 다음 명령을 실행할 수 있습니다.
 >
 > ``` {.default}
 > $ git restore --staged hello.py
 > ```
 > <!-- ` vim markdown highlight bug workaround -->
 >
-> and that will change it back to the "Changes not staged for commit"
-> state.
+> 그러면 파일이 "Changes not staged for commit" 상태로 돌아갑니다.
 
 [i[Stage]>]
 [i[Add]>]
 
-### Step 4: Commit those Changes
+### 4단계: 변경 사항 커밋하기 {#step-4-commit-those-changes}
 
 [i[Commit]<]
 
-Now that we have something copied to the stage, we can make a commit.
-Recall that a commit is just a snapshot of the state of the repo given
-the modified files on the stage. Modified files not on the stage will
-not be included in the snapshot. Unmodified files are automatically
-included in the snapshot.
+이제 스테이징 영역에 무언가를 복사했으므로 커밋을 만들 수 있습니다. 커밋은
+스테이징 영역에 있는 수정 파일을 반영한 저장소 상태의 스냅샷일 뿐이라는
+점을 떠올리세요. 스테이징 영역에 없는 수정 파일은 스냅샷에 포함되지
+않습니다. 수정하지 않은 파일은 자동으로 스냅샷에 포함됩니다.
 
-In short, the commit snapshot will contain all the unmodified files Git
-currently tracks **plus** the modified files that are on the stage. (Git
-just doesn't show all the unmodified files with `status` because the
-output would be completely unhelpful.)
+간단히 말해 커밋 스냅샷에는 Git이 현재 추적하는 수정되지 않은 파일
+전부에 **더해** 스테이징 영역에 있는 수정 파일이 들어갑니다. (`status`에서
+수정되지 않은 모든 파일을 보여 주면 출력이 전혀 쓸모없어지기 때문에
+Git이 표시하지 않을 뿐입니다.)
 
-Let's do it:
+해 봅시다.
 
 ``` {.default}
 $ git commit -m "Add another print line"
@@ -607,18 +578,17 @@ $ git commit -m "Add another print line"
    1 file changed, 1 insertion(+)
 ```
 
-> **The `-m` switch allows you to specify a commit message.** If you
-> don't use `-m`, you'll be popped into an editor, which will probably
-> be Nano or Vim, to edit the commit message. If you're not familiar
-> with those, see [Getting Out of Editors](#editor-get-out) for help.
+> **`-m` 스위치를 사용하면 커밋 메시지를 지정할 수 있습니다.** `-m`을
+> 사용하지 않으면 아마 Nano나 Vim 같은 편집기가 불쑥 나타나 커밋
+> 메시지를 편집하게 됩니다. 이런 편집기에 익숙하지 않다면 [편집기에서
+> 빠져나오기](#editor-get-out)를 참고하세요.
 >
-> **If you do get into the editor, know that every line in the commit
-> message that begins with `#` is a comment** that is ignored for the
-> purposes of the commit. It's a little weird that the commit message is
-> a comment about the commit, and then you can have commented-out lines
-> in the comment, but I don't make the rules!
+> **편집기에 들어가게 된다면 커밋 메시지에서 `#`로 시작하는 모든 줄은
+> 주석이며** 커밋을 만들 때 무시된다는 점을 알아 두세요. 커밋 메시지가
+> 커밋에 관한 논평인데 그 논평 안에 다시 주석 처리된 줄을 넣을 수
+> 있다니 조금 이상하지만, 규칙을 만든 사람은 제가 아닙니다!
 
-And that's good news! Let's check the status:
+좋은 소식입니다! 상태를 확인해 봅시다.
 
 ``` {.default}
 $ git status
@@ -629,60 +599,60 @@ $ git status
   nothing to commit, working tree clean
 ```
 
-"Nothing to commit, working tree clean" means we have no local changes
-to our branch.
+"Nothing to commit, working tree clean"은 브랜치에 로컬 변경 사항이
+없다는 뜻입니다.
 
-> **Turns out there's an optional shortcut here.** If you've modified a
-> file, you can just commit it directly (without adding it to the
-> stage!) by naming it on the command line.
+> **알고 보니 여기에는 선택적으로 쓸 수 있는 지름길도 있습니다.** 파일을
+> 수정했다면 명령줄에 그 파일 이름을 지정해 (스테이징 영역에 추가하지 않고도!)
+> 바로 커밋할 수 있습니다.
 >
-> Let's say you modified `foo.txt` but didn't add it. You could:
+> `foo.txt`를 수정했지만 추가하지 않았다고 해 봅시다. 다음처럼 할 수
+> 있습니다.
 >
 > ``` {.default}
 > $ git commit -m "jerbify the flurblux" foo.txt
 > ```
 > 
 > <!-- ` -->
-> And that would make the commit directly, bypassing the whole
-> add-it-to-the-stage step. But you can only do this with files that
-> the repo already is aware of, i.e. they aren't "untracked".
+> 그러면 스테이징 영역에 추가하는 단계를 통째로 건너뛰고 바로 커밋을
+> 만듭니다. 다만 저장소가 이미 알고 있는 파일, 즉 "추적되지 않는"
+> 파일이 아닌 경우에만 이렇게 할 수 있습니다.
 >
-> You can specify multiple files here, or a directory. Also, this
-> doesn't affect files that are already on the stage.
+> 여기에는 파일 여러 개나 디렉터리를 지정할 수도 있습니다. 또한 이미
+> 스테이징 영역에 있는 파일에는 영향을 주지 않습니다.
 
-But look! The status says we're "ahead of 'origin/main' by 1 commit"!
-This means our local commit history on the `main` branch has one commit
-that the remote commit history on its `main` branch does not have.
+그런데 보세요! 상태에 "ahead of 'origin/main' by 1 commit"이라고
+나옵니다! 로컬 `main` 브랜치의 커밋 이력에 원격 저장소의 `main` 브랜치
+커밋 이력에는 없는 커밋 하나가 있다는 뜻입니다.
 
-Which makes sense—the remote repo is a clone and so it's independent of
-our local repo unless we explicitly try to sync them up. It doesn't
-magically know that we've made changes to our local repo.
+말이 됩니다. 원격 저장소는 하나의 클론이므로 명시적으로 동기화하지
+않는 한 로컬 저장소와 독립되어 있습니다. 우리가 로컬 저장소를
+바꿨다는 사실을 마법처럼 알아채지는 못합니다.
 
-And Git is helpfully telling us to run `git push` if we want to update
-the remote repo so that it also has our changes.
+그리고 Git은 원격 저장소에도 변경 사항이 있도록 업데이트하려면
+`git push`를 실행하라고 친절하게 알려 줍니다.
 
-So let's try to do that. Let's push our local changes to the remote
-repo.
+그러면 해 봅시다. 로컬 변경 사항을 원격 저장소로 푸시합시다.
 
 [i[Commit]>]
 
-### Step 5: Push Your Changes to the Remote Repo
+### 5단계: 변경 사항을 원격 저장소로 푸시하기 {#step-5-push-your-changes-to-the-remote-repo}
 
 [i[Push]<]
 
-Let's push our local changes to the remote repo:
+로컬 변경 사항을 원격 저장소로 푸시해 봅시다.
 
 ``` {.default}
 $ git push
 ```
 
-And that produces:
+그러면 다음과 같이 나옵니다.
 
 ``` {.default}
 Username for 'https://github.com':
 ```
 
-Uh oh—trouble brewing. Let's try entering our credentials:
+어라, 문제가 생길 조짐입니다. 자격 증명을 입력해 봅시다.
 
 ``` {.default}
 Username for 'https://github.com': my_username
@@ -697,17 +667,16 @@ fatal: Authentication failed for 'https://github.com/beejjorgensen/
        git-example-repo.git/'
 ```
 
-Well, that's all kinds of not-working. Largely this is because you don't
-have permission to write to that repo since you're not the owner. And,
-notably, support for authenticating with a password seems to have been
-removed in 2021 which, last I checked, was in the past.
+이런, 어느 모로 보나 전혀 작동하지 않습니다. 주된 이유는 이 저장소의
+소유자가 아니라서 쓸 권한이 없기 때문입니다. 특히 비밀번호 인증 지원이
+2021년에 제거된 모양인데, 제가 마지막으로 확인했을 때 2021년은 이미
+과거였습니다.
 
-So what do we do? Firstly, we should be the owner of the GitHub repo
-that we've cloned and that'll solve some of the permission problems.
-Secondly, we'd better find another way to authenticate ourselves to
-GitHub that's not plain password.
+그러면 어떻게 해야 할까요? 첫째, 우리가 클론한 GitHub 저장소의
+소유자여야 합니다. 그러면 권한 문제 중 일부가 해결됩니다. 둘째,
+일반 비밀번호가 아닌 다른 방법으로 GitHub에 인증해야 합니다.
 
-Let's try that in the next section.
+다음 절에서 그렇게 해 봅시다.
 
 [i[Push]>]
 [i[Workflow-->Basic]>]

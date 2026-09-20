@@ -1,106 +1,95 @@
-# GitHub: Forking and Pull Requests
+# GitHub: 포크와 풀 리퀘스트 {#github-forking-and-pull-requests}
 
 [i[Fork]<]
 [i[Pull requests]<]
 
-For a lot of projects you're on, maybe you have write permission to the
-main repo that everyone is using. That is, you've been added as a
-collaborator and you can just push directly.
+여러분이 참여하는 많은 프로젝트에서는 모두가 사용하는 주 저장소에 쓰기 권한이
+있을 수 있습니다. 즉, 공동 작업자로 추가되어 바로 push할 수 있습니다.
 
-If that's the case, you don't need to fork GitHub repos or create pull
-requests. You can just keep committing and pushing as always.
+그렇다면 GitHub 저장소를 포크하거나 풀 리퀘스트를 만들 필요가 없습니다. 늘
+하던 대로 계속 커밋하고 push하면 됩니다.
 
-But what if you want to make changes to a repo on GitHub but you don't have
-write permission? This might happen if you forked a repo that you want
-to make changes to. You can write to your fork, but not to the repo you
-forked from. How do you get the changes you made to your fork into the
-original repo?
+하지만 GitHub 저장소를 변경하고 싶은데 쓰기 권한이 없다면 어떨까요? 변경하고
+싶은 저장소를 포크했을 때 이런 상황이 생길 수 있습니다. 내 포크에는 쓸 수
+있지만 포크해 온 저장소에는 쓸 수 없습니다. 내 포크에서 만든 변경 사항을 원래
+저장소에 어떻게 넣을까요?
 
-Let's check it out.
+살펴봅시다.
 
-A ***fork*** is a clone of someone else's GitHub repo that you've made
-on GitHub using their "Fork" command. It's a regular clone except that
-GitHub is doing some bookkeeping to track which repo you forked from.
+***포크***는 다른 사람의 GitHub 저장소에서 "Fork" 명령으로 GitHub에 만든
+clone입니다. GitHub가 어느 저장소에서 포크했는지 추적하는 기록을 관리한다는
+점만 빼면 평범한 clone입니다.
 
-The ***upstream*** is by convention the name of the remote that you
-forked from. I know this conflicts with some other definitions of
-"upstream". But for this chapter, in the context of forks, let's assume
-it means this.
+***업스트림***은 관례상 포크해 온 원격 저장소의 이름입니다. "업스트림"의 다른
+정의와 충돌한다는 것을 압니다. 하지만 이 장에서는 포크의 맥락에서 이런
+뜻이라고 합시다.
 
-A ***pull request*** (or "PR" for short) is a way for you to offer
-changes you've made to your fork to the owner of the original repo.
+***풀 리퀘스트***(줄여서 "PR")는 내 포크에서 만든 변경 사항을 원래 저장소
+소유자에게 제안하는 방법입니다.
 
-> **Forks and Pull Requests are a GitHub thing, not a Git thing.** It's
-> some additional functionality that GitHub has implemented on their
-> website that you can use.
+> **포크와 풀 리퀘스트는 Git이 아니라 GitHub의 기능입니다.** GitHub가 웹
+> 사이트에 구현해 제공하는 추가 기능입니다.
 
-Let's say, for example, you found an open source project you liked and
-there was a bug in it. You don't have permission to write to the
-project's GitHub repo, so how can you change it?
+예를 들어 마음에 드는 오픈 소스 프로젝트를 찾았는데 버그가 있다고 합시다.
+프로젝트의 GitHub 저장소에 쓸 권한이 없다면 어떻게 고칠 수 있을까요?
 
 [i[Fork-->Process]]
 
-The process for someone making a pull request is:
+풀 리퀘스트를 만드는 과정은 다음과 같습니다.
 
-1. On GitHub, fork the repo. Now you have your own clone of it.
-2. Clone your repo to your local machine. Now you have two clones of it:
-   your fork on GitHub and its clone on your local machine. (And you own
-   them both.)
-3. Make the fix on your local machine and test it.
-4. Push your fix to your GitHub fork.
-5. On GitHub, create a pull request. This informs the upstream owner
-   that you have changes you'd like them to merge.
-6. On GitHub, the upstream owner reviews your PR and decides if they
-   want to merge it. If so, they merge it. Otherwise they comment and
-   ask for changes, or delete it.
-7. At this point, if you're done, you can optionally delete your fork.
+1. GitHub에서 저장소를 포크합니다. 이제 나만의 clone이 생겼습니다.
+2. 내 저장소를 로컬 컴퓨터에 clone합니다. 이제 GitHub의 내 포크와 로컬
+   컴퓨터의 clone, 두 개가 있습니다. (둘 다 내 소유입니다.)
+3. 로컬 컴퓨터에서 수정하고 테스트합니다.
+4. 수정 사항을 GitHub 포크에 push합니다.
+5. GitHub에서 풀 리퀘스트를 만듭니다. 병합해 주길 바라는 변경 사항이 있다고
+   업스트림 소유자에게 알립니다.
+6. 업스트림 소유자가 GitHub에서 PR을 검토하고 병합할지 결정합니다. 원하면
+   병합하고, 그렇지 않으면 댓글로 변경을 요청하거나 삭제합니다.
+7. 작업이 끝났다면 선택적으로 포크를 삭제할 수 있습니다.
 
-Let's give it a try! Feel free to issue PRs on my sample repo, used
-below. I'm just going to delete them (they won't be merged); don't take
-it personally—I just don't have time to review them all.
+한번 해 봅시다! 아래에서 사용하는 제 예시 저장소에는 부담 없이 PR을 보내세요.
+저는 그냥 삭제할 것입니다(병합하지 않습니다). 개인적인 일로 받아들이지 마세요.
+모두 검토할 시간이 없을 뿐입니다.
 
-## Making a Fork
+## 포크 만들기 {#making-a-fork}
 
 [i[Fork-->Creating]<]
 
-Head on over to [fl[my test
-repo|https://github.com/beejjorgensen/git-example-repo]] and let's do
-this:
+[fl[제 테스트 저장소|https://github.com/beejjorgensen/git-example-repo]]로
+가서 다음을 해 봅시다.
 
-* In the upper right there should be a button labeled "Fork". Click it.
-* Under "Owner", choose your user name.
-* Under "Repository name", choose the default or make a new name.
-* Optionally, if the repo has multiple branches and you wish to have
-  those in your fork, uncheck the "Copy the main branch only" checkbox.
-  You can always get the branches by hand later if you don't do this.
-* Click the "Create fork" button.
+* 오른쪽 위의 "Fork" 버튼을 클릭합니다.
+* "Owner"에서 사용자 이름을 선택합니다.
+* "Repository name"에서 기본값을 선택하거나 새 이름을 만듭니다.
+* 저장소에 브랜치가 여러 개 있고 포크에도 포함하고 싶다면 선택적으로 "Copy
+  the main branch only" 체크박스를 해제합니다. 지금 하지 않아도 나중에 언제든
+  직접 브랜치를 가져올 수 있습니다.
+* "Create fork" 버튼을 클릭합니다.
 
-> **This can be done with impunity.** That is, you've made your own fork
-> but the original owner is unaware that you did. You can delete it with
-> no damage to the original repo. Remember that a fork is a clone on
-> GitHub that you have ownership of, independent of the original repo.
+> **아무 걱정 없이 해도 됩니다.** 내 포크를 만들었다는 사실을 원래 소유자는
+> 알지 못합니다. 원래 저장소에 아무 피해 없이 삭제할 수 있습니다. 포크는 원래
+> 저장소와 독립적이며 내가 소유한 GitHub상의 clone이라는 점을 기억하세요.
 
-At this point, you should land on the project page for your fork, and
-the fine print on the page reads: "forked from
-beejjorgensen/git-example-repo".
+이제 내 포크의 프로젝트 페이지로 이동하고, 페이지의 작은 글씨에는 "forked
+from beejjorgensen/git-example-repo"라고 표시됩니다.
 
-And now we have our own version of that repo on GitHub to do with as we
-please.
+이제 GitHub에 마음대로 다룰 수 있는 나만의 저장소 버전이 생겼습니다.
 
-We can clone it as normal, pull, push, delete the repo, etc. The owner
-of the original repo will not know about it—our changes affect our repo
-alone. Later we'll see how to issue a pull request to try to get our
-changes merged into the original upstream repo.
+평소처럼 clone, pull, push하거나 저장소를 삭제하는 등 무엇이든 할 수 있습니다.
+원래 저장소 소유자는 알지 못하며, 변경 사항은 내 저장소에만 영향을 줍니다.
+나중에는 풀 리퀘스트를 보내 변경 사항을 원래 업스트림 저장소에 병합해 달라고
+요청하는 방법을 살펴봅니다.
 
 [i[Fork-->Creating]>]
 
-## Making Your Changes
+## 변경 사항 만들기 {#making-your-changes}
 
-Let's make some changes. First, we have to clone *our* repo (that is,
-clone the fork we made) onto our local machine.
+변경 사항을 만들어 봅시다. 먼저 *내* 저장소, 즉 만든 포크를 로컬 컴퓨터에
+clone해야 합니다.
 
-So pull down the "Code" button as usual and select the SSH link to clone
-(or use the GitHub CLI variant if you're using that).
+평소처럼 "Code" 버튼을 열고 clone할 SSH 링크를 선택합니다(GitHub CLI를
+사용한다면 그 방법을 써도 됩니다).
 
 ``` {.default}
 $ git clone git@github.com:user/git-example-repo.git
@@ -112,7 +101,7 @@ $ git clone git@github.com:user/git-example-repo.git
   Receiving objects: 100% (4/4), done.
 ```
 
-And then you can `cd` into that directory and see the files there.
+그런 다음 `cd`로 디렉터리에 들어가 파일을 볼 수 있습니다.
 
 ``` {.default}
 $ cd git-example-repo
@@ -120,7 +109,7 @@ $ ls
   hello.py    README.md
 ```
 
-Let's modify `hello.py` to this:
+`hello.py`를 다음과 같이 수정합시다.
 
 ``` {.py .numberLines}
 #!/usr/bin/env python
@@ -130,7 +119,7 @@ print("This is my program!")
 print("This is my modification")
 ```
 
-And let's add it, make a commit, and push.
+파일을 추가하고 커밋한 뒤 push합시다.
 
 ``` {.default}
 $ git add hello.py
@@ -148,188 +137,168 @@ $ git push
      4332527..5d3fe49  main -> main
 ```
 
-Again, this just pushed to our fork, not the upstream. You can look at
-your fork's page on GitHub and see the change there.
+다시 말하지만 업스트림이 아니라 내 포크에만 push했습니다. GitHub의 내 포크
+페이지에서 변경 사항을 볼 수 있습니다.
 
-## Syncing the Upstream with Your Fork
+## 업스트림과 포크 동기화하기 {#syncing-the-upstream-with-your-fork}
 
 [i[Fork-->Syncing with Upstream]<]
 
-Are you ready to make a PR? Hold up just a moment!
+PR을 만들 준비가 됐나요? 잠깐만 기다리세요!
 
-What if the upstream owner has made changes to their repo in the
-meantime? Don't you want to make sure your code works with the latest
-version of their code?
+그사이 업스트림 소유자가 저장소를 변경했다면 어떨까요? 내 코드가 그쪽 코드의
+최신 버전과 잘 작동하는지 확인하고 싶지 않나요?
 
-Of course you do.
+물론 확인하고 싶을 것입니다.
 
-On your fork's page, you might have noticed that it has a "Sync fork"
-button that you can pull down.
+내 포크 페이지에 펼쳐 볼 수 있는 "Sync fork" 버튼이 있다는 것을 눈치챘을 수
+있습니다.
 
-If you pull it down and it says "This branch is not behind the
-upstream", then congratulations! You're already up to date! Go ahead and
-make a PR, as outlined in the next section.
+버튼을 열었을 때 "This branch is not behind the upstream"이라고 나오면
+축하합니다! 이미 최신 상태입니다! 다음 절의 설명대로 PR을 만드세요.
 
-If you pull it down and it says "This branch is out-of-date" and offers
-you an "Update branch" button, then congratulations! You're out of date,
-but you can be brought up to date without a conflict. Click "Update
-branch" and then go ahead and make a PR, as outlined in the next
-section. (It might also offer you a "Discard" button, but don't press
-that unless you want to discard your changes!)
+"This branch is out-of-date"라고 나오며 "Update branch" 버튼이 보인다면
+축하합니다! 최신 상태는 아니지만 충돌 없이 최신으로 만들 수 있습니다.
+"Update branch"를 클릭한 뒤 다음 절처럼 PR을 만드세요. ("Discard" 버튼도
+보일 수 있지만 변경 사항을 버리고 싶은 것이 아니라면 누르지 마세요!)
 
-If it instead says "This branch has conflicts that must be resolved",
-bad news. You have some changes in your repo that conflict with someone
-else's changes in the upstream. You have some options:
+대신 "This branch has conflicts that must be resolved"라고 나온다면 나쁜
+소식입니다. 내 저장소의 변경 사항이 업스트림에 있는 다른 사람의 변경 사항과
+충돌합니다. 선택지는 다음과 같습니다.
 
-* The UI says you can open a pull request, which will give you a chance
-  to resolve the conflict in-browser as outlined in the next section.
-* It also says you can just throw away your changes and replace them
-  with the upstream. Bummer.
-* Aside from that, you can actually merge your branch from the upstream
-  on the command line and take care of the conflict there without
-  opening a PR first. See [Syncing on the Command Line](#sync-cl),
-  below.
+* UI에서 풀 리퀘스트를 열 수 있다고 알려 줍니다. 다음 절의 설명대로
+  브라우저에서 충돌을 해결할 기회가 생깁니다.
+* 변경 사항을 그냥 버리고 업스트림 내용으로 바꿀 수도 있다고 알려 줍니다.
+  안타깝군요.
+* 또는 먼저 PR을 열지 않고 명령줄에서 업스트림의 브랜치를 내 브랜치에 실제로
+  병합해 그곳에서 충돌을 해결할 수 있습니다. 아래의 [명령줄에서
+  동기화하기](#sync-cl)를 보세요.
 
-In general, it's a good idea to keep in sync with the upstream repo.
-This way you can be sure your changes aren't conflicting with any
-upstream changes as you go. It's way better than waiting to resolve them
-all at the end when you're ready to issue a pull request.
+일반적으로 업스트림 저장소와 계속 동기화하는 것이 좋습니다. 작업하는 동안 내
+변경 사항이 업스트림 변경 사항과 충돌하지 않는지 확인할 수 있습니다. 풀
+리퀘스트를 보낼 준비가 됐을 때까지 기다렸다가 끝에서 충돌을 한꺼번에 해결하는
+것보다 훨씬 낫습니다.
 
 [i[Fork-->Syncing with Upstream]>]
 
-## Making a Pull Request
+## 풀 리퀘스트 만들기 {#making-a-pull-request}
 
 [i[Pull request-->Creating]<]
 
-Now that we've modified our fork to our satisfaction, we can ask the
-upstream maintainer if they're willing to accept it into the official
-repo.
+포크를 만족스럽게 수정했으니 업스트림 관리자에게 공식 저장소로 받아들일
+의향이 있는지 물을 수 있습니다.
 
-> **Maybe they aren't ready!** Don't take it personally if they don't
-> answer or answer with ways they need your patch improved. Work with
-> the owners to get the job done to both of your satisfactions.
+> **아직 준비되지 않았을 수도 있습니다!** 답이 없거나 패치를 개선해 달라는
+> 답이 와도 개인적으로 받아들이지 마세요. 양쪽 모두 만족스럽게 작업을
+> 마치도록 소유자와 협력하세요.
 
-Let's go!
+시작합시다!
 
-* Click the "Contribute" button and then "Open pull request".
-* Look for the text "This branch has conflicts that must be resolved".
-  If you find that text, it means the upstream can't automatically apply
-  your PR and they'll have to do manual work to make it happen. They're
-  far more likely to just reject it. To avoid this, you have some options:
-  * Don't open the PR, go back and sync with the upstream, fix the
-    conflict, and try again.
-  * Or click the "Resolve conflicts" button right there in the UI and
-    use the in-browser editor to manually resolve.
-* Add a nice title.
-* Add a good description. You're asking someone to incorporate your code
-  into their project, so you'll want to describe what the code does here
-  to make their lives easier when they review it. (Since this example
-  goes to my repo, you can just pretend you wrote something nice—I'm
-  just going to close the PR.)
-* Click "Create pull request"!
+* "Contribute" 버튼을 누른 뒤 "Open pull request"를 클릭합니다.
+* "This branch has conflicts that must be resolved"라는 문구가 있는지 찾습니다.
+  이 문구가 있다면 업스트림에서 PR을 자동 적용할 수 없어 수동 작업이
+  필요하다는 뜻입니다. 그냥 거절할 가능성이 훨씬 큽니다. 이를 피할 방법은
+  다음과 같습니다.
+  * PR을 열지 말고 돌아가 업스트림과 동기화하고 충돌을 고친 뒤 다시
+    시도합니다.
+  * 또는 UI의 "Resolve conflicts" 버튼을 클릭하고 브라우저 내 편집기로 직접
+    해결합니다.
+* 좋은 제목을 추가합니다.
+* 훌륭한 설명을 추가합니다. 다른 사람에게 내 코드를 프로젝트에 넣어 달라고
+  요청하는 것이므로, 검토하기 쉽도록 코드가 하는 일을 설명해야 합니다. (이
+  예시는 제 저장소로 오므로 좋은 내용을 썼다고 치면 됩니다. 어차피 저는 PR을
+  닫을 것입니다.)
+* "Create pull request"를 클릭합니다!
 
-This lands us on the PR page. You can add more comments or close the
-request (if you changed your mind about it).
+그러면 PR 페이지로 이동합니다. 댓글을 더 추가하거나 마음이 바뀌었다면 요청을
+닫을 수 있습니다.
 
-The owner of the upstream will see the PR has been issued, and now you
-have to wait for a response.
+업스트림 소유자는 PR이 들어온 것을 보게 되며, 이제 답을 기다려야 합니다.
 
-Maybe they respond with a comment asking for improvements or other
-questions. Maybe they reject the PR and close it, unmerged. Or maybe
-they accept! Happy days!
+개선이나 다른 질문을 담은 댓글로 답할 수도 있습니다. PR을 거절하고 병합하지
+않은 채 닫을 수도 있습니다. 아니면 받아들일 수도 있죠! 신나는 날입니다!
 
 [i[Pull request-->Creating]>]
 
-## Flipside: Merging a Pull Request
+## 반대편: 풀 리퀘스트 병합하기 {#flipside-merging-a-pull-request}
 
 [i[Pull request-->Merging]<]
 
-As the upstream owner, if someone issues a PR you'll be notified (unless
-you've turned those notifications off) with an email and in the
-notifications in GitHub in the upper right.
+업스트림 소유자라면 누군가 PR을 보냈을 때 이메일과 GitHub 오른쪽 위 알림으로
+통지를 받습니다(알림을 꺼 두지 않았다면 말이죠).
 
-When you do, you can visit your project page on GitHub and decide what
-to do with the PR.
+알림을 받으면 GitHub의 프로젝트 페이지로 가서 PR을 어떻게 할지 결정할 수
+있습니다.
 
-At the top of the project page, you'll see a "Pull requests" button with
-a number next to it indicating how many PRs are currently outstanding.
+프로젝트 페이지 위쪽에는 현재 대기 중인 PR 수가 숫자로 표시된 "Pull
+requests" 버튼이 있습니다.
 
-* Click the button to see the list.
-* Click on a PR title to get to the PR.
+* 버튼을 클릭해 목록을 봅니다.
+* PR 제목을 클릭해 해당 PR로 이동합니다.
 
-Now we're looking at the PR. Read the description to see what it does,
-and then, **very importantly** review the code!
+이제 PR을 보고 있습니다. 설명을 읽어 무슨 일을 하는지 확인하고, **매우
+중요하게도** 코드를 검토하세요!
 
-> **You're about to accept code from someone you probably don't know.**
-> On this planet, most people are friendly, but that doesn't mean there
-> aren't some bad actors (the industry term is *a\-\-holes*) out there
-> looking to take advantage of you by introducing some malicious code.
-> Even if you've known the contributor for a year, they might be playing
-> a long game, and if that seems unlikely to you,
-> [flw[read about the XZ utils hack that took place in 2024|XZ_Utils_backdoor]].
+> **아마 모르는 사람이 작성한 코드를 받아들이려는 참입니다.** 이 세상의
+> 대부분 사람은 친절하지만, 악성 코드를 끼워 넣어 여러분을 이용하려는 악의적
+> 행위자(업계 용어로는 *개자식*)가 없다는 뜻은 아닙니다. 기여자를 1년 동안
+> 알고 지냈더라도 긴 계획을 꾸미고 있을 수 있습니다. 그럴 리 없다고 생각한다면
+> [flw[2024년에 일어난 XZ utils 해킹을 읽어 보세요|XZ_Utils_backdoor]].
 
-To review the code, look right below the description to the
-contributor's avatar and the commit message. Click on the commit message
-and you'll see a diff, as described in the [_Comparing Files with Diff_
-chapter](#diff). Lines marked with a `+` are added, and lines marked
-with `-` are removed.
+코드를 검토하려면 설명 바로 아래의 기여자 아바타와 커밋 메시지를 보세요. 커밋
+메시지를 클릭하면 [_Diff로 파일 비교하기_ 장](#diff)에서 설명한 diff가
+보입니다. `+`로 표시된 줄은 추가됐고 `-`로 표시된 줄은 제거됐습니다.
 
-If you just want a straight up view of the file as it was edited by the
-contributor, you can hit the "..." on the right and then "View file".
+기여자가 편집한 파일 자체를 그대로 보고 싶다면 오른쪽의 "..."를 누른 다음
+"View file"을 클릭하세요.
 
-If it's almost right but you need to make a modification, you can also
-hit "Edit file" and add commits directly to the PR.
+거의 맞지만 수정이 필요하다면 "Edit file"을 눌러 PR에 직접 커밋을 추가할
+수도 있습니다.
 
-If everything looks good, scroll down and hopefully you'll see some text
-that reads "This branch has no conflicts with the base branch" and
-"Merging can be performed automatically". This is good news.
+모두 괜찮아 보인다면 아래로 스크롤하세요. 바라건대 "This branch has no
+conflicts with the base branch"와 "Merging can be performed automatically"라는
+문구가 보일 것입니다. 좋은 소식입니다.
 
-If it says that, you can just click "Merge pull request", and that will
-add the changes to your repo and close the PR. It's nice to also add a
-comment thanking the contributor—they just gave you work for free, after
-all!
+그렇게 표시된다면 "Merge pull request"를 클릭하기만 하면 변경 사항이 저장소에
+추가되고 PR이 닫힙니다. 기여자에게 감사하는 댓글도 달면 좋습니다. 결국 무료로
+작업을 제공해 준 셈이니까요!
 
-> **Closing a PR doesn't delete the PR.** You can still reopen it.
+> **PR을 닫아도 삭제되지는 않습니다.** 다시 열 수 있습니다.
 
-But let's say the PR does conflict and can't be automatically merged.
-GitHub complains that "This branch has conflicts that must be resolved"
-and gives you some options.
+하지만 PR이 충돌해 자동으로 병합할 수 없다고 합시다. GitHub가 "This branch
+has conflicts that must be resolved"라고 불평하며 몇 가지 선택지를 줍니다.
 
-As the upstream owner, you can click the "Resolve conflicts" button and
-fix the issue if possible.
+업스트림 소유자는 "Resolve conflicts" 버튼을 클릭해 가능하다면 문제를 고칠 수
+있습니다.
 
-Or you can just reject the PR and ask the person who opened it to
-resolve the conflict so that your life might be made easier with an
-automatic merge.
+아니면 PR을 거절하고 연 사람에게 충돌을 해결해 달라고 요청해 자동 병합으로
+내 삶을 조금 더 편하게 만들 수 있습니다.
 
 [i[Pull request-->Merging]>]
 
-## Making Many Pull Requests with Branches
+## 브랜치로 여러 풀 리퀘스트 만들기 {#making-many-pull-requests-with-branches}
 
 [i[Pull request-->With branches]<]
 
-Here's the thing about pull requests: when you make one, it takes all
-the changes you have on your branch and bundles them together in one.
-Doesn't matter if the changes are doing radically different things; they
-all get rolled into the same PR.
+풀 리퀘스트에는 이런 특징이 있습니다. 하나를 만들면 브랜치의 모든 변경 사항을
+하나로 묶습니다. 변경 사항이 서로 완전히 다른 일을 하더라도 모두 같은 PR에
+들어갑니다.
 
-This is sometimes not so great from an administrative perspective. Maybe
-I want a PR for issue #1 and a different PR for issue #2!
+관리 측면에서는 가끔 그리 좋지 않습니다. 이슈 #1용 PR과 이슈 #2용 PR을 따로
+만들고 싶을 수도 있습니다!
 
-The way to make this happen is to make a local branch on the clone of
-your fork for each individual PR, and push those branches to your fork.
-Then when you create the PR, you choose the branch to use. Even if your
-branch is named something like `feature1`, you can still merge it into
-the `main` branch on the upstream.
+그러려면 포크의 clone에서 PR마다 로컬 브랜치를 만들고 그 브랜치들을 포크에
+push합니다. 그런 다음 PR을 만들 때 사용할 브랜치를 선택합니다. 브랜치 이름이
+`feature1` 같은 것이어도 업스트림의 `main` 브랜치에 병합할 수 있습니다.
 
-So make a new branch for the feature:
+기능을 위한 새 브랜치를 만듭니다.
 
 ``` {.default}
 $ git switch -c feature1
   Switched to a new branch 'feature1'
 ```
 
-Then make your changes, add, and commit.
+그런 다음 변경하고 추가한 뒤 커밋합니다.
 
 ``` {.default}
 $ vim readme.txt
@@ -339,7 +308,7 @@ $ git commit -m "feature 1"
    1 file changed, 1 insertion(+)
 ```
 
-Then push them to your repo, setting up a remote-tracking branch:
+그런 다음 원격 추적 브랜치를 설정하면서 내 저장소에 push합니다.
 
 ``` {.default}
 $ git push -u origin feature1
@@ -361,105 +330,94 @@ $ git push -u origin feature1
   branch 'feature1' set up to track 'origin/feature1'.
 ```
 
-Now you can jump back to GitHub and issue a PR. (And look at the
-response from the remote helpfully telling you the GitHub URL to visit
-to issue the PR!)
+이제 GitHub로 돌아가 PR을 보낼 수 있습니다. (원격 저장소의 응답이 PR을 보낼
+GitHub URL을 친절하게 알려 주는 것도 보세요!)
 
-In the GitHub UI, there might be a handy little popup there saying
-"feature1 had recent pushes 4 minutes ago" and a button "Compare and
-pull request" you can click to make the PR.
+GitHub UI에는 "feature1 had recent pushes 4 minutes ago"라는 편리한 작은 팝업과
+PR을 만들 수 있는 "Compare and pull request" 버튼이 있을 수 있습니다.
 
-But if it's been too long and the popup is gone, not to worry. See the
-branch selector button on the upper left that probably says "main" right
-now? Pull it down and select the branch "feature1" that you want to
-create the PR for. Then click "Contribute" and open the PR.
+시간이 오래 지나 팝업이 사라졌어도 걱정하지 마세요. 왼쪽 위에 지금은 아마
+"main"이라고 표시된 브랜치 선택 버튼이 보이나요? 버튼을 열고 PR을 만들
+"feature1" 브랜치를 선택합니다. 그런 다음 "Contribute"를 클릭해 PR을 여세요.
 
-There's a line at the top of the PR that indicates the repo and branch
-that will be merged into, and, on the right, your repo and branch name
-that you'll be merging from.
+PR 위쪽에는 병합 대상 저장소와 브랜치가 표시되고, 오른쪽에는 병합해 올 내
+저장소와 브랜치 이름이 표시됩니다.
 
-The rest of the PR proceeds as normal.
+나머지 PR 과정은 평소와 같습니다.
 
-**Don't delete your branch until after the merge!** Once it has been
-safely merged, GitHub will pop up a "Delete branch" button for you on
-the PR page. This will delete the branch on GitHub, but you'll still
-have to delete `feature1` and `origin/feature1` on the command line.
+**병합이 끝날 때까지 브랜치를 삭제하지 마세요!** 안전하게 병합되면 GitHub가
+PR 페이지에 "Delete branch" 버튼을 표시합니다. 이 버튼은 GitHub의 브랜치를
+삭제하지만 명령줄의 `feature1`과 `origin/feature1`은 직접 삭제해야 합니다.
 
 [i[Pull request-->With branches]>]
 
-## Deleting a Pull Request
+## 풀 리퀘스트 삭제하기 {#deleting-a-pull-request}
 
 [i[Pull request-->Deleting]<]
 
-Short answer: you can't.
+짧은 답: 할 수 없습니다.
 
-Long answer: you can.
+긴 답: 할 수 있습니다.
 
-The irony is that the short answer is longer. I don't make the rules.
+아이러니하게도 짧은 답이 더 깁니다. 규칙은 제가 만든 게 아닙니다.
 
-Proper long answer: you can if you are the upstream owner and the PR
-contains sensitive information.
+제대로 된 긴 답은 이렇습니다. 업스트림 소유자이고 PR에 민감한 정보가 있다면
+할 수 있습니다.
 
-There's no way in the UI to delete PRs, whether you're the forker or
-forkee. And this can be a bummer especially if you've accidentally
-included some sensitive information like [flw[social security number
-078-05-1120|Social_Security_number#SSNs_used_in_advertising]].
+포크한 사람이든 포크된 쪽이든 UI에서 PR을 삭제할 방법은 없습니다. 실수로
+[flw[사회 보장 번호 078-05-1120|Social_Security_number#SSNs_used_in_advertising]]
+같은 민감한 정보를 넣었다면 특히 낭패입니다.
 
-But hope is not all lost! The upstream owner can visit the virtual
-assistant at GitHub and [fl[ask for a pull request
-removal|https://support.github.com/request?q=pull+request+removals]]
-which apparently works. I haven't tried it.
+하지만 희망이 완전히 사라진 것은 아닙니다! 업스트림 소유자는 GitHub의 가상
+도우미를 찾아가 [fl[풀 리퀘스트 삭제를
+요청할 수 있습니다|https://support.github.com/request?q=pull+request+removals]].
+듣기로는 된다고 합니다. 직접 해 보지는 않았습니다.
 
-If there's a way as the forker to delete the PR they created, I haven't
-seen it. You'll have to plead your case with the upstream owner and get
-them to do it.
+포크한 사람이 자신이 만든 PR을 삭제할 방법이 있다면 저는 본 적이 없습니다.
+업스트림 소유자에게 사정을 호소하고 삭제해 달라고 해야 합니다.
 
-In any case, you most definitely should change your leaked credentials
-right now and let that be a lesson to you.
+어쨌든 유출된 인증 정보는 지금 당장 반드시 바꾸고, 이를 교훈으로 삼아야
+합니다.
 
 [i[Pull request-->Deleting]>]
 
-## Syncing on the Command Line {#sync-cl}
+## 명령줄에서 동기화하기 {#sync-cl}
 
 [i[Fork-->Syncing with Upstream]<]
 
-GitHub has that nice Sync button to bring the upstream changes into your
-fork, and this was a welcome addition. It used to be you had to do it
-the hard way.
+GitHub에는 업스트림 변경 사항을 포크에 가져오는 멋진 Sync 버튼이 있으며,
+반가운 추가 기능이었습니다. 예전에는 어려운 방법으로 해야 했습니다.
 
-But the hard way has an additional benefit: if the upstream conflicts
-with your changes, you can merge them locally before creating the PR.
-The GitHub UI requires you create a PR to resolve the conflict.
+하지만 어려운 방법에는 장점이 하나 더 있습니다. 업스트림이 내 변경 사항과
+충돌하면 PR을 만들기 전에 로컬에서 병합할 수 있습니다. GitHub UI에서는 충돌을
+해결하려면 PR을 만들어야 합니다.
 
-Additionally, if you just like the command line and want to quickly sync
-the upstream to your branch, this can do it.
+또한 명령줄을 좋아하고 업스트림을 내 브랜치에 빠르게 동기화하고 싶다면 이
+방법을 쓸 수 있습니다.
 
-The plan is this:
+계획은 다음과 같습니다.
 
-1. Add an `upstream` remote that points to the upstream repo.
-2. Fetch the data from `upstream`.
-3. Merge the upstream branch into your branch.
-4. Resolve conflicts.
-5. Push your branch.
-6. Go issue a now-hopefully-non-conflicting PR.
+1. 업스트림 저장소를 가리키는 `upstream` 원격 저장소를 추가합니다.
+2. `upstream`에서 데이터를 fetch합니다.
+3. 업스트림 브랜치를 내 브랜치에 병합합니다.
+4. 충돌을 해결합니다.
+5. 내 브랜치를 push합니다.
+6. 이제 바라건대 충돌하지 않을 PR을 보냅니다.
 
-Let's try. I'll be on my `main` branch, and try to sync it with the
-upstream's `main` branch. I'll show what it's like when there's a
-conflict. (If there were no conflict, the merge would succeed
-automatically.)
+해 봅시다. 내 `main` 브랜치에서 업스트림의 `main` 브랜치와 동기화를
+시도하겠습니다. 충돌이 있을 때의 모습을 보여 드립니다. (충돌이 없다면 병합은
+자동으로 성공합니다.)
 
-First things first: if you haven't already, set up the `upstream` remote
-to point to the original owner's repo. This is the repo that you forked
-from. Since you won't be pushing to it, you can use the SSH or HTTP
-methods to access it. (And this remote can be named anything, but
-`upstream` is a common convention.)
+가장 먼저, 아직 하지 않았다면 `upstream` 원격 저장소가 원래 소유자의 저장소를
+가리키도록 설정합니다. 바로 포크해 온 저장소입니다. 여기에 push하지는 않을
+것이므로 SSH나 HTTP 방식으로 접근할 수 있습니다. (이 원격 저장소에는 어떤
+이름이든 붙일 수 있지만 `upstream`이 흔한 관례입니다.)
 
 ``` {.default}
 $ git remote add upstream https://github.com/other/orig-repo.git
 ```
 
-And then we need to get the new commits from the upstream repo and merge
-them into our stuff.
+그런 다음 업스트림 저장소에서 새 커밋을 가져와 내 작업에 병합해야 합니다.
 
 [i[Fetch]]
 
@@ -481,12 +439,11 @@ $ git merge upstream/main
   Automatic merge failed; fix conflicts and then commit the result.
 ```
 
-(You could also rebase if you wanted.)
+(원한다면 리베이스해도 됩니다.)
 
-At this point, we should edit the file and resolve the conflict, and
-complete the resolution as per usual.
+이제 파일을 편집해 충돌을 해결하고 평소처럼 해결 과정을 마칩니다.
 
-And then we push back to our fork on GitHub!
+그런 다음 GitHub의 내 포크로 다시 push합니다!
 
 ``` {.default}
 $ git push
@@ -502,13 +459,11 @@ $ git push
    8b2476c..c8a7e0a  main -> main
 ```
 
-If we jump back to the GitHub UI at this point and open a PR, it should
-tell us "These branches can be automatically merged" which is music to
-everyone's ears.
+이제 GitHub UI로 돌아가 PR을 열면 "These branches can be automatically
+merged"라고 나올 것입니다. 모두의 귀에 음악처럼 들리는 말입니다.
 
-Once you have the `upstream` remote set up, all you have to do to sync
-in the future is do the [i[Fetch]] `git fetch upstream` and then merge
-or rebase your stuff with it.
+`upstream` 원격 저장소를 설정하고 나면 이후 동기화할 때는 [i[Fetch]]
+`git fetch upstream`을 실행한 뒤 내 작업을 병합하거나 리베이스하기만 하면 됩니다.
 
 [i[Fork-->Syncing with Upstream]>]
 

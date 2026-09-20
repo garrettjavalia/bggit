@@ -1,79 +1,49 @@
-# Using Subdirectories with Git
+# Git에서 하위 디렉터리 사용하기 {#using-subdirectories-with-git}
 
 [i[Subdirectories]<]
 
-This is a shorter chapter, but we want to talk about Git's behavior when
-it comes to working in subdirectories and some gotchas that you
-probably don't want to get wrapped up in.
+이번 장은 비교적 짧습니다. 하위 디렉터리에서 작업할 때 Git이 어떻게 동작하는지, 그리고 되도록 휘말리고 싶지 않을 몇 가지 함정을 이야기해 보겠습니다.
 
-## Repos and Subdirectories
+## 저장소와 하위 디렉터리 {#repos-and-subdirectories}
 
-When you run a `git` command, Git looks for a [i[`.git` directory]]
-special directory called `.git` ("dot git") in the current directory. As
-we've already mentioned, this is the directory, created when you create
-the repo, that holds the metadata about the repo.
+`git` 명령을 실행하면 Git은 현재 디렉터리에서 `.git`(“닷 깃”)이라는 [i[`.git` directory]] 특수 디렉터리를 찾습니다. 앞서 말했듯이 이 디렉터리는 저장소를 만들 때 생성되며 저장소의 메타데이터를 담습니다.
 
-But what if you're in a subdirectory in your project, and there's no
-`.git` directory there?
+그런데 프로젝트의 하위 디렉터리에 있고 그곳에는 `.git` 디렉터리가 없다면 어떻게 될까요?
 
-Git starts by looking in the current directory for `.git`. If it can't
-find it there, it looks in the parent directory. And if it's not there,
-it looks in the grandparent, etc., all the way back to the root
-directory.
+Git은 먼저 현재 디렉터리에서 `.git`을 찾습니다. 찾지 못하면 부모 디렉터리를 살펴봅니다. 거기에도 없으면 그 위의 부모를 찾는 식으로 루트 디렉터리에 이를 때까지 계속합니다.
 
-### What about Subprojects?
+### 하위 프로젝트는 어떻게 하나요? {#what-about-subprojects}
 
 [i[Subprojects]]
 
-One common student question is, "Should I make one single repo for CS101
-with subdirectories for each project? Or should I make a different repo
-for every project?"
+학생들이 흔히 묻는 질문이 있습니다. “CS101용 저장소 하나를 만들고 각 프로젝트를 하위 디렉터리에 넣어야 하나요? 아니면 프로젝트마다 별도의 저장소를 만들어야 하나요?”
 
-Firstly, see if your instructor has a requirement or preference, but
-other than that, it doesn't technically matter which approach you use.
+우선 담당 강사가 정해 둔 요구 사항이나 선호 방식이 있는지 확인하세요. 그 외에는 기술적으로 어느 방식을 써도 상관없습니다.
 
-In real life, bigger repos (much bigger than you'll typically be using
-for a class) take a lot longer to clone due to their size.
+실제 환경에서는 큰 저장소(수업에서 보통 다루는 것보다 훨씬 큰 저장소)는 크기 때문에 클론하는 데 훨씬 오래 걸립니다.
 
-What happens if you initialize a new Git repo _inside_ an existing repo?
-It's not great. Don't do this.
+기존 저장소 _안에서_ 새 Git 저장소를 초기화하면 어떻게 될까요? 좋지 않습니다. 그러지 마세요.
 
-For mixing and matching different repos in the same hierarchy, Git has
-the concept of submodules, and you can find more information in the
-[Submodules chapter](#submodules). If you're in school, submodules are
-typically not used.
+같은 디렉터리 계층에서 여러 저장소를 섞어 쓰기 위해 Git에는 서브모듈이라는 개념이 있습니다. 자세한 내용은 [서브모듈 장](#submodules)에서 볼 수 있습니다. 학교 과제에서는 보통 서브모듈을 사용하지 않습니다.
 
-## Accidentally Making a Repo in your Home Directory
+## 실수로 홈 디렉터리에 저장소 만들기 {#accidentally-making-a-repo-in-your-home-directory}
 
-Git won't stop you from making a repo in your home directory, i.e. a
-repo that contains everything in all your directories.
+Git은 홈 디렉터리, 즉 여러분의 모든 디렉터리를 전부 포함하는 저장소를 만드는 일을 막지 않습니다.
 
-But that's probably not what you wanted to do.
+하지만 아마 여러분이 원한 결과는 아닐 것입니다.
 
-How does one make this mistake? Usually it's with `git init .` in your
-home directory. You can also make this error by launching VS Code from
-your home directory and telling it to "Initialize Repository" in that
-location. 
+어떻게 이런 실수를 할까요? 보통 홈 디렉터리에서 `git init .`을 실행해서 생깁니다. 홈 디렉터리에서 VS Code를 실행한 뒤 그 위치에서 “Initialize Repository”를 선택해도 같은 실수를 할 수 있습니다.
 
-This is particularly insidious because if you're in a subdirectory that
-you _think_ is a standalone repo, you might have been misled since Git
-searches parent folder for the `.git` directory and it could be finding
-the spurious one you accidentally made in your home directory.
+이 문제는 특히 알아차리기 어렵습니다. 독립된 저장소라고 _생각한_ 하위 디렉터리에 있더라도, Git은 부모 폴더에서 `.git` 디렉터리를 찾기 때문에 홈 디렉터리에 실수로 만든 엉뚱한 `.git`을 발견할 수 있기 때문입니다.
 
-We[^5d3e] recommend against one big repo from your home directory. You
-should have separate subdirectories for each of your repos.
+우리 모두[^5d3e]는 홈 디렉터리 전체를 하나의 큰 저장소로 만드는 것을 권하지 않습니다. 저장소마다 별도의 하위 디렉터리를 두어야 합니다.
 
-[^5d3e]: All Git enthusiasts collectively, that is.
+[^5d3e]: 여기서 “우리”란 모든 Git 애호가를 통틀어 말합니다.
 
 [i[`.git` directory-->Removing]]
-If you accidentally create a repo where you didn't want to, changing a
-Git repo to a regular subdirectory is as simple as removing the `.git`
-directory. Be careful that you're removing the correct one when you do
-this!
+원하지 않은 곳에 실수로 저장소를 만들었다면 `.git` 디렉터리를 제거하는 것만으로 그 Git 저장소를 일반 하위 디렉터리로 되돌릴 수 있습니다. 이때 올바른 `.git`을 지우고 있는지 꼭 주의하세요!
 
-> [i[`.git` directory-->Preventing in home]]One hack you can do to
-> prevent Git from creating a repo in your home directory is to
-> preemptively put an unwriteable `.git` directory there.
+> [i[`.git` directory-->Preventing in home]]Git이 홈 디렉터리에 저장소를 만들지 못하게 하는 한 가지 요령은 그곳에 쓰기 불가능한 `.git` 디렉터리를 미리 만들어 두는 것입니다.
 >
 > ``` {.default}
 > $ mkdir ~/.git       # Make the .git directory
@@ -81,28 +51,17 @@ this!
 > ```
 > <!-- ` -->
 >
-> This way when Git tries to make its metadata folder there, it'll be
-> stopped because you don't have write permission to that `.git`
-> directory.
+> 이렇게 하면 Git이 그곳에 메타데이터 폴더를 만들려고 해도 해당 `.git` 디렉터리에 쓸 권한이 없으므로 중단됩니다.
 >
-> (You can always delete this directory with `rmdir` even if you don't
-> have write permission to it.)
+> (쓰기 권한이 없더라도 `rmdir`로 이 디렉터리를 언제든 삭제할 수 있습니다.)
 
-## Empty Subdirectories in Repos
+## 저장소의 빈 하위 디렉터리 {#empty-subdirectories-in-repos}
 
 [i[Subdirectories-->Empty]]
-Turns out Git doesn't support this. It only tracks files, so if you want
-a subdirectory represented in your repo, you must have at least one file
-in it.
+알고 보니 Git은 빈 디렉터리를 지원하지 않습니다. Git은 파일만 추적하므로 저장소에 하위 디렉터리를 나타내려면 그 안에 파일이 적어도 하나 있어야 합니다.
 
-A common thing to do is add an empty file called `.gitkeep` ("dot
-git keep") to the subdirectory, then add it to the repo. This will cause
-Git to recreate the subdirectory when it clones or merges the `.gitkeep`
-directory.
+흔히 쓰는 방법은 하위 디렉터리에 `.gitkeep`(“닷 깃 킵”)이라는 빈 파일을 만든 뒤 저장소에 추가하는 것입니다. 그러면 Git이 클론하거나 병합할 때 `.gitkeep` 파일이 들어 있는 하위 디렉터리도 다시 만듭니다.
 
-> The file `.gitkeep` isn't special in any way, other than convention.
-> The file could be called anything. For example, if you know you'll
-> need to eventually put a `.gitignore` in that directory, you might
-> just use that instead. Or a `README`.
+> `.gitkeep` 파일은 관례라는 점 말고는 전혀 특별하지 않습니다. 파일 이름은 무엇이든 될 수 있습니다. 예를 들어 나중에 그 디렉터리에 `.gitignore`가 필요하다는 것을 알고 있다면 처음부터 그것을 사용해도 됩니다. `README`도 괜찮습니다.
 
 [i[Subdirectories]>]

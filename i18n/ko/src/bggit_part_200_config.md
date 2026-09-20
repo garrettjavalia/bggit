@@ -1,29 +1,28 @@
-# Configuration {#configuration}
+# 구성 {#configuration}
 
 [i[Configuration]<]
 
-Waaaaay back at the beginning of this book, we did some Git
-configuration. We did this:
+이 책의 아주아주 먼 앞부분에서 Git 구성을 조금 설정했습니다. 다음과 같이
+했었죠.
 
 ``` {.default}
 $ git config set --global user.name "Your Name"
 $ git config set --global user.email "your-email@example.com"
 ```
 
-When we did, it added that configuration information to a file and the
-info in that file applies to all the Git repos on your system.
+이 명령을 실행하면 구성 정보가 파일에 추가되고, 그 파일의 정보가 시스템의
+모든 Git 저장소에 적용됩니다.
 
-Unless you override them with a local config, that is. But stay tuned
-for more on that later.
+물론 로컬 구성으로 덮어쓰지 않는 한 그렇습니다. 이 내용은 잠시 후 더
+살펴보겠습니다.
 
-> **Some of you might be saying, "Hey, I've never written `set` before
-> to set variables with `git config`!"** And you'd be right. But that's
-> the old, deprecated way of using `git config`. If you're using an
-> older version of Git, the deprecated way might be the only way. So if
-> you're getting errors with the new usage, see [Older Git
-> Versions](#config-old), below.
+> **어떤 분은 "잠깐, 전에는 `git config`로 변수를 설정할 때 `set`을 쓴 적이
+> 없는데요!"라고 말할지도 모릅니다.** 맞습니다. 하지만 그것은 더 이상
+> 권장되지 않는 이전 `git config` 사용법입니다. 오래된 Git 버전에서는 그
+> 방식만 쓸 수 있을지도 모릅니다. 새 사용법에서 오류가 발생한다면 아래의
+> [이전 Git 버전](#config-old)을 보세요.
 
-Let's look at one of those lines again:
+그 명령 중 한 줄을 다시 살펴봅시다.
 
 ``` {.default}
 $ git config set --global user.name "Your Name"
@@ -31,70 +30,65 @@ $ git config set --global user.name "Your Name"
                           variable     value
 ```
 
-There are two main things in this line.
+이 줄에는 중요한 요소가 두 가지 있습니다.
 
-1. A *variable*, that is, the thing we're setting the value of.
-2. A *value*, the value we're giving that variable.
+1. *변수*, 즉 값을 설정하려는 대상입니다.
+2. *값*, 즉 그 변수에 넣는 값입니다.
 
-In that case, the variable is `user.name` and the value is `"Your
-Name"`.
+이 경우 변수는 `user.name`이고 값은 `"Your Name"`입니다.
 
-> **What those two variables, `user.name` and `user.email`, are doing**
-> is they're setting the values that will go in your commit messages!
-> That's your identity when you commit! A side note here it that it's
-> incredibly easy to impersonate anyone else in the world just by
-> putting their name and email there. To mitigate this, one option is to
-> [fl[digitally sign your commits|https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work]],
-> something you can read a little bit more about in the [Changing
-> Identity](#changing-identity) chapter.
+> **`user.name`과 `user.email`, 이 두 변수가 하는 일은** 커밋 메시지에 들어갈
+> 값을 설정하는 것입니다! 커밋할 때 쓰이는 여러분의 신원이죠! 여기에 다른
+> 사람의 이름과 이메일을 적기만 하면 세상 누구든 놀랄 만큼 쉽게 사칭할 수
+> 있다는 점도 덧붙여 둡니다. 이를 완화하는 방법 중 하나는 [fl[커밋에 디지털
+> 서명하기|https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work]]이며,
+> [신원 변경하기](#changing-identity) 장에서 조금 더 알아볼 수 있습니다.
 
-If the commands in this chapter are giving you errors, see the section
-on [older Git versions](#config-old), below.
+이 장의 명령에서 오류가 발생한다면 아래의 [이전 Git 버전](#config-old) 절을
+보세요.
 
-## Local Configuration
+## 로컬 구성 {#local-configuration}
 
 [i[Configuration-->Local]<]
 
-In those `git config` lines, above, you might have noticed the
-`--global` switch:
+위의 `git config` 명령에서 `--global` 스위치를 눈여겨봤을 수도 있습니다.
 
 ``` {.default}
 $ git config set --global user.name "Your Name"
 ```
 
-Unless you explicitly say `--global`, Git assumes you mean the local
-configuration.
+명시적으로 `--global`이라고 하지 않으면 Git은 로컬 구성을 뜻한다고
+가정합니다.
 
-What is the local configuration? It's the configuration that applies to
-the repo that you're currently in, and no others.
+로컬 구성이란 무엇일까요? 현재 들어 있는 저장소에만 적용되고 다른
+저장소에는 적용되지 않는 구성입니다.
 
-*Configuration options in the local config override the global config!*
+*로컬 구성의 구성 옵션은 전역 구성을 덮어씁니다!*
 
-Here's a practical example of why you might do this. Let's say you have
-a personal email for your fun projects, and a contractor email that you
-use for work-for-hire. But since you're an independent contractor, you
-have all these projects on one computer.
+왜 이렇게 설정하는지 실용적인 예를 들어 봅시다. 취미 프로젝트에 쓰는 개인
+이메일과 유료 업무에 쓰는 계약자 이메일이 있다고 합시다. 독립 계약자라서 이
+모든 프로젝트가 한 컴퓨터에 있습니다.
 
-However, you want to use your work identity (name and email) for your
-contract work and your hacker identify for your fun work.
+하지만 계약 업무에는 업무용 신원(이름과 이메일)을 쓰고, 취미 작업에는 해커
+신원을 쓰고 싶습니다.
 
-One thing you might do is set the following globally:
+한 가지 방법은 다음 값을 전역으로 설정하는 것입니다.
 
 ``` {.default}
 $ git config set --global user.name "HAx0rBYnit3"
 $ git config set --global user.email "l333T@example.com"
 ```
 
-and that would be the default for all your repos. And then you might
-have a new repo for a job:
+이 값이 모든 저장소의 기본값이 됩니다. 그리고 업무용 새 저장소가 생겼다고
+합시다.
 
 ``` {.default}
 $ git init corporate_job_12
   Initialized empty Git repository in /user/corporate_job_12/.git/
 ```
 
-And we pop in there, and we set the local config just for that repo
-(it's local because we're not specifying `--global`):
+그곳으로 들어가 해당 저장소에만 로컬 구성을 설정합니다(`--global`을 지정하지
+않았으므로 로컬입니다).
 
 ``` {.default}
 $ cd corporate_job_12
@@ -102,24 +96,22 @@ $ git config set user.name "Professional Name"
 $ git config set user.email "professional@example.com"
 ```
 
-And now, just in the `corporate_job_12` directory, we'll be using our
-professional name and email in our commits. Everywhere else we'll be
-using our elite hacker name.
+이제 `corporate_job_12` 디렉터리에서만 커밋에 업무용 이름과 이메일을
+사용합니다. 다른 모든 곳에서는 최정예 해커 이름을 사용합니다.
 
-You can override all the global configs on a per-repo basis by
-specifying local configs.
+로컬 구성을 지정하면 모든 전역 구성을 저장소별로 덮어쓸 수 있습니다.
 
-Finally, the local config for a repo is found in the `.git/config` file
-out of the repo's root directory.
+마지막으로 저장소의 로컬 구성은 저장소 루트 디렉터리의 `.git/config` 파일에
+있습니다.
 
 [i[Configuration-->Local]>]
 
-## Listing the Current Config
+## 현재 구성 나열하기 {#listing-the-current-config}
 
 [i[Configuration-->Listing]<]
 
-You can view the current config with `git config list`. Add the
-`--global` flag if you want to see the global config.
+`git config list`로 현재 구성을 볼 수 있습니다. 전역 구성을 보고 싶다면
+`--global` 플래그를 추가하세요.
 
 ``` {.default}
 $ git config list
@@ -134,103 +126,94 @@ $ git config list
   user.email=professional@example.com
 ```
 
-You can see in there that `user.name` and `user.email` appear twice. The
-first is from the global config, which is overridden later by the value
-in the local config.
+`user.name`과 `user.email`이 두 번 나오는 것을 볼 수 있습니다. 첫 번째 값은
+전역 구성에서 왔으며, 뒤에 나오는 로컬 구성의 값이 이를 덮어씁니다.
 
 [i[Configuration-->Listing]>]
 
-## Getting, Setting, and Deleting Variables
+## 변수 조회, 설정, 삭제하기 {#getting-setting-and-deleting-variables}
 
 [i[Configuration-->Get]]
-An example "get":
+다음은 "조회" 예시입니다.
 
 ``` {.default}
 $ git config get user.name
   Professional Name
 ```
 
-Note that it is only giving the active value (the local one in this
-case) even though we saw with `git config list` that both the global and
-local values were there.
+`git config list`에서는 전역 값과 로컬 값이 모두 보였지만, 여기서는 활성
+값(이 경우 로컬 값)만 반환한다는 점에 유의하세요.
 
 [i[Configuration-->Set]]
-And we've already seen a "set":
+"설정"은 이미 살펴봤습니다.
 
 ``` {.default}
 $ git config set user.name "Harvey Manfrengensenton"
 ```
 
-The double quotes are there so that the shell delivers the name as a
-single argument. Normally it splits all arguments on spaces. You could
-also use single quotes which is useful if the value has special shell
-characters in it. The grotesquely oversimplified rule, with apologies to
-shell enthusiasts, is to use quotes around the value if it has a space
-in it.
+큰따옴표는 셸이 이름을 인수 하나로 전달하게 합니다. 보통 셸은 공백을 기준으로
+인수를 나눕니다. 작은따옴표도 사용할 수 있으며, 값에 셸 특수 문자가 있을 때
+유용합니다. 셸 애호가 여러분께 사과하며 터무니없이 단순화한 규칙을 말하자면,
+값에 공백이 있으면 따옴표로 감싸세요.
 
-Set will overwrite any previously-existing value of the `user.name`
-variable.
+설정 명령은 기존 `user.name` 변수 값을 덮어씁니다.
 
 [i[Configuration-->Delete]]
 [i[Configuration-->Unset]]
-And last but not least, we can delete a variable with `unset`:
+마지막으로 `unset`을 사용해 변수를 삭제할 수 있습니다.
 
 ``` {.default}
 $ git config unset user.name
 ```
 
-## Some Popular Variables
+## 자주 쓰는 변수 {#some-popular-variables}
 
 [i[Configuration-->Commonly-set variables]<]
 
-To see which variables you can set, look in the manual page for the
-appropriate command. You can usually get there by looking at the first
-hit on your favorite search engine for `man git whatever`. For example,
-you might find configuration variables for `git pull` by searching for
-`man git pull` and bringing up the first hit.
+설정할 수 있는 변수를 알아보려면 해당 명령의 매뉴얼 페이지를 보세요. 즐겨
+쓰는 검색 엔진에서 `man git whatever`를 검색해 첫 번째 결과를 보면 대개 찾을
+수 있습니다. 예를 들어 `man git pull`을 검색해 첫 결과를 열면 `git pull`의
+구성 변수를 찾을 수 있습니다.
 
-That said, there's a [fl[big ol' list of them in the `git config` manual
-page that you can
-peruse|https://git-scm.com/docs/git-config#_variables]].
+또한 [fl[`git config` 매뉴얼 페이지에는 둘러볼 수 있는 아주 긴 변수
+목록이 있습니다|https://git-scm.com/docs/git-config#_variables]].
 
-But here are some fun, common ones.
+그중 재미있고 자주 쓰는 항목은 다음과 같습니다.
 
-Variable        | Description
+변수            | 설명
 ----------------|----------------------------------------------------------
-`user.name`        | Your name
-`user.email`       | Your email
-`pull.rebase`      | Set to `true` to have a pull try to rebase. Set to `false` to have it try to merge.
-`core.editor`      | Your default editor for commit messages, etc. Set to `vim`, `nano`, `code`, `emacs`, or whatever.
-`merge.tool`       | Your default merge tool, e.g. `meld` or whatever.
-`diff.tool`        | Your default diff tool, e.g. `vimdiff`
-`difftool.prompt`  | Set to `false` to stop Git from always asking you if you want to launch your difftool.
-`color.ui`         | Set to `true` for more colorful Git output
-`core.autocrlf`    | Set to `true` if you're on Windows **and** not in WSL **and** the remote repo has Unix-style newlines **and** you want to use Windows-style newlines in your working directory. On other systems, set to `input`. This is all about working around Window's ancient newlines.
-`commit.gpgsign`   | Set to `true` if you've configured [GPG commit signing](#gpg-signing) and want to always sign.
-`help.autocorrect` | Set to `0` to show the command Git thinks you meant to type if you misspelled it. Set to `immediate` to have it run the corrected command right now. Set to `prompt` to ask you if you want to run it.
+`user.name`        | 사용자 이름
+`user.email`       | 사용자 이메일
+`pull.rebase`      | pull할 때 리베이스를 시도하려면 `true`, 병합을 시도하려면 `false`로 설정합니다.
+`core.editor`      | 커밋 메시지 등에 사용할 기본 편집기입니다. `vim`, `nano`, `code`, `emacs` 등으로 설정합니다.
+`merge.tool`       | 기본 병합 도구입니다. 예: `meld` 등.
+`diff.tool`        | 기본 diff 도구입니다. 예: `vimdiff`.
+`difftool.prompt`  | Git이 diff 도구를 실행할지 매번 묻지 않게 하려면 `false`로 설정합니다.
+`color.ui`         | Git 출력을 더 다채롭게 표시하려면 `true`로 설정합니다.
+`core.autocrlf`    | Windows를 사용하고 **WSL은 사용하지 않으며**, 원격 저장소에는 Unix 방식 줄바꿈이 있고, 작업 트리에서는 Windows 방식 줄바꿈을 쓰고 싶다면 `true`로 설정합니다. 다른 시스템에서는 `input`으로 설정하세요. 모두 Windows의 유서 깊은 줄바꿈 문제를 우회하기 위한 것입니다.
+`commit.gpgsign`   | [GPG 커밋 서명](#gpg-signing)을 구성했고 항상 서명하려면 `true`로 설정합니다.
+`help.autocorrect` | 명령을 잘못 입력했을 때 Git이 의도했다고 생각하는 명령을 표시하려면 `0`으로 설정합니다. 수정된 명령을 즉시 실행하려면 `immediate`, 실행할지 물어보게 하려면 `prompt`로 설정합니다.
 
-Again, there are a *lot* more of these. Peruse the docs for more.
+다시 말하지만 이런 변수는 *훨씬* 많습니다. 문서에서 더 둘러보세요.
 
 [i[Configuration-->Commonly-set variables]>]
 
-## Editing the Config Directly
+## 구성 직접 편집하기 {#editing-the-config-directly}
 
 [i[Configuration-->Editing directly]<]
 
-You can launch an editor (the one specified in the `core.editor`
-variable) to edit the config file directly. Some people might find this
-easier.
+편집기(`core.editor` 변수에 지정된 편집기)를 실행해 구성 파일을 직접 편집할
+수 있습니다. 어떤 사람에게는 이 방법이 더 쉬울 수 있습니다.
 
-I can launch the editor like this:
+다음과 같이 편집기를 실행할 수 있습니다.
 
 ``` {.default}
 $ git config edit
 ```
 
-Add the `--global` flag to edit the global config file.
+전역 구성 파일을 편집하려면 `--global` 플래그를 추가하세요.
 
-When you get into the editor, you'll see a config file that might look
-something like this:
+편집기에 들어가면 다음과 비슷한 구성 파일이 보입니다.
 
 ``` {.default .numberLines}
 [core]
@@ -244,67 +227,64 @@ something like this:
     email = user@example.com
 ```
 
-If you look, you can see where `user.name` and `user.email` ended up.
-That's how the config file is organized.
+살펴보면 `user.name`과 `user.email`이 어디에 들어갔는지 알 수 있습니다.
+구성 파일은 이런 식으로 구성됩니다.
 
-So you can edit it here and save those changes. Some people might find
-this easier than adding or modifying variables on the command line.
+여기서 편집하고 변경 사항을 저장할 수 있습니다. 어떤 사람에게는 명령줄에서
+변수를 추가하거나 수정하는 것보다 이 방법이 더 쉬울 수 있습니다.
 
-> **If you corrupt your config with sloppy editing, you're in for an
-> interesting time.** You won't be able to run `git config edit` again.
-> You'll have to manually fix the config file in your favorite text
-> editor.
+> **부주의한 편집으로 구성을 망가뜨리면 흥미로운 시간을 보내게 됩니다.**
+> `git config edit`을 다시 실행할 수 없게 됩니다. 즐겨 쓰는 텍스트 편집기에서
+> 구성 파일을 직접 고쳐야 합니다.
 >
-> The local config file can be found relative to the root directory for
-> the repo in question in `.git/config`.
+> 로컬 구성 파일은 해당 저장소의 루트 디렉터리를 기준으로 `.git/config`에
+> 있습니다.
 >
-> The global config file can be found at `~/.gitconfig` on Unix-like
-> systems and `C:\Users\YourName\.gitconfig` on Windows.
+> 전역 구성 파일은 Unix 계열 시스템에서는 `~/.gitconfig`, Windows에서는
+> `C:\Users\YourName\.gitconfig`에 있습니다.
 >
-> Bring the appropriate file up in your editor, fix the mistake, save
-> it, and then `git config edit` should work again.
+> 편집기에서 해당 파일을 열어 실수를 고치고 저장하면 `git config edit`이
+> 다시 작동할 것입니다.
 
 [i[Configuration-->Editing directly]>]
 
-## Conditional Configuration
+## 조건부 구성 {#conditional-configuration}
 
 [i[Configuration-->Conditional]<]
 
-This is more than I want to talk about, but it's neat enough to point
-out.
+자세히 이야기하고 싶은 범위를 넘지만, 짚고 넘어갈 만큼 멋진 기능입니다.
 
-In Git config files, you can *include* other config files. This gives
-you a way, if your config files are bananas, to break them apart
-logically.
+Git 구성 파일에는 다른 구성 파일을 *포함*할 수 있습니다. 구성 파일이 난장판이
+됐을 때 논리적으로 나눌 방법을 제공합니다.
 
-You can also do *conditional includes*. That is, you can choose to
-include a file based on some condition being true.
+*조건부 포함*도 가능합니다. 즉, 어떤 조건이 참인지에 따라 파일을 포함하도록
+선택할 수 있습니다.
 
-Testable conditions are:
+검사할 수 있는 조건은 다음과 같습니다.
 
-* Which directory this repo is in
-* If you're on a particular branch
-* If there is a particular remote configured
+* 이 저장소가 있는 디렉터리
+* 특정 브랜치에 있는지 여부
+* 특정 원격 저장소가 구성돼 있는지 여부
 
-This gives you all kinds of power. Personally, all of it is more than I
-need, and I've never used this feature, but that's just me.
+이 기능은 온갖 강력한 능력을 제공합니다. 개인적으로는 제게 필요한 수준을
+넘어서서 한 번도 써 본 적이 없지만, 그건 어디까지나 제 이야기입니다.
 
-[fl[Get more info and examples in the official
-book|https://git-scm.com/docs/git-config#_conditional_includes]].
+[fl[공식 책에서 더 많은 정보와 예시를
+확인하세요|https://git-scm.com/docs/git-config#_conditional_includes]].
 
 [i[Configuration-->Conditional]>]
 
-## Older Git Versions {#config-old}
+## 이전 Git 버전 {#config-old}
 
 [i[Configuration-->Deprecated usage]<]
 
-I'm assuming you have a recent version of Git installed. But if you
-don't, these commands might be different.
+최신 버전의 Git이 설치돼 있다고 가정했습니다. 그렇지 않다면 명령이 다를 수
+있습니다.
 
-The [fl[Git manual page for `git config` has a complete summary of the
-changes|https://git-scm.com/docs/git-config#_deprecated_modes]].
+[fl[`git config` Git 매뉴얼 페이지에 변경 사항이 완전히
+정리돼 있습니다|https://git-scm.com/docs/git-config#_deprecated_modes]].
 
-And here are the modern commands we used in this chapter:
+이 장에서 사용한 최신 명령은 다음과 같습니다.
 
 ```{.default}
 git config get user.email                     # Get
@@ -314,7 +294,7 @@ git config list                               # List
 git config edit                               # Edit
 ```
 
-And here are the older equivalents:
+이에 해당하는 이전 명령은 다음과 같습니다.
 
 ``` {.default}
 git config user.email                     # Get
@@ -324,7 +304,7 @@ git config --list                         # List
 git config --edit                         # Edit
 ```
 
-Use the new ones if you can!
+가능하다면 새 명령을 사용하세요!
 
 [i[Configuration-->Deprecated usage]>]
 

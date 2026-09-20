@@ -1,180 +1,158 @@
-# Collaboration across Branches
+# 브랜치를 넘나드는 협업 {#collaboration-across-branches}
 
 [i[Collaboration-->Across branches]<]
 
-Let's say you're on a team of coders and you all have access to the same
-GitHub repo. (One person on the team owns the repo, and they've
-[fl[added you all as collaborators|https://tinyurl.com/y5kzpeyk]].)
+개발자 팀에 속해 있고 모두가 같은 GitHub 저장소에 접근할 수 있다고 합시다.
+(팀원 한 명이 저장소 소유자이며 [fl[여러분 모두를 공동 작업자로
+추가했습니다|https://tinyurl.com/y5kzpeyk]].)
 
-> I'm going to use the term _collaborator_ to mean "someone to whom you
-> have granted write access to your repo".
+> 여기서는 _공동 작업자_라는 말을 "내 저장소에 쓰기 권한을 부여한 사람"이라는
+> 뜻으로 사용하겠습니다.
 
-How can you all structure your work so that you're minimizing conflicts?
+충돌을 최소화하려면 작업을 어떻게 구성해야 할까요?
 
-There are a number of ways to do this.
+여러 가지 방법이 있습니다.
 
-* Everyone is a collaborator on the repo, and:
-  * Everyone uses the same branch, probably `main`, or
-  * Everyone uses their own remote tracking branch and periodically
-    merges with the main branch, or
-  * Everyone uses their own remote tracking branch and periodically
-    merges with a development branch, which itself is periodically
-    merged into `main` for each official release.
-* Or everyone has their own repo (and are not collaborators on the same
-  repo), and:
-  * Everyone uses _pull requests_ or other synchronization methods to
-    get their repos merged into the other devs'.
+* 모두가 저장소의 공동 작업자이며 다음 중 하나를 따릅니다.
+  * 모두가 같은 브랜치, 아마 `main`을 사용합니다.
+  * 각자 원격 추적 브랜치를 사용하고 주기적으로 메인 브랜치와 병합합니다.
+  * 각자 원격 추적 브랜치를 사용하고 주기적으로 개발 브랜치와 병합합니다.
+    개발 브랜치는 공식 릴리스마다 `main`에 병합됩니다.
+* 또는 각자 저장소를 따로 갖고(같은 저장소의 공동 작업자가 아니며) 다음을
+  따릅니다.
+  * _풀 리퀘스트_나 다른 동기화 방법을 사용해 자신의 저장소를 다른 개발자의
+    저장소에 병합합니다.
 
-We'll look at the first few ways in this chapter, but we'll save pull
-requests for later.
+이 장에서는 앞의 몇 가지 방법을 살펴보고 풀 리퀘스트는 나중으로 미루겠습니다.
 
-There's no one-size-fits-all approach to teamwork with Git, and the
-methods outlined below can be mixed and matched with local topic
-branches, or people having multiple remote tracking branches, or
-whatever. Often management will have an approach they want to use for
-collaboration which might be one of the ones in this section, or maybe
-it's a variant, or maybe it's something completely different.
+Git으로 팀 작업을 하는 데 만능인 방법은 없습니다. 아래 방법들은 로컬 토픽
+브랜치나 여러 원격 추적 브랜치를 가진 사람 등과 원하는 대로 조합할 수
+있습니다. 흔히 관리자가 협업 방식을 정해 두는데, 이 절에 나온 방법일 수도,
+그 변형일 수도, 완전히 다른 방식일 수도 있습니다.
 
-In any case, the best strategy for you, the learner, is to just be
-familiar with the tools (branching, merging, conflict resolution,
-pushing, pulling, remote tracking branches) and use them for effect
-where it makes the most sense.
+어쨌든 학습자에게 가장 좋은 전략은 도구(브랜치 만들기, 병합, 충돌 해결,
+push, pull, 원격 추적 브랜치)에 익숙해지고 가장 알맞은 곳에서 효과적으로
+사용하는 것입니다.
 
-And when you're first starting out, your intuition about "where it makes
-the most sense" might not be dead-on, but it probably won't be lethal
-and you'll figure it out in the school of hard knocks.
+처음에는 "어디가 가장 알맞은가"에 대한 직감이 정확하지 않을 수 있지만,
+치명적이지는 않을 것이며 고생하며 배우다 보면 알아낼 것입니다.
 
-> *"Oh great. Another f\-\-\-ing learning experience."* \
-> \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ —Actual quote from my mother
+> *"아, 잘됐네. 또 빌어먹을 학습 경험이군."* \
+> \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ —실제로 어머니가 하신 말씀
 
-Finally, I'll be using GitHub in all these examples, but you could use
-any server or service as the remote instead.
+마지막으로 모든 예시에서 GitHub를 사용하지만, 어떤 서버나 서비스든 원격
+저장소로 사용할 수 있습니다.
 
-## Communication and Delegation
+## 소통과 업무 분담 {#communication-and-delegation}
 
 [i[Communication]]
 
-Git can't save you from poor communication. The only way to minimize
-conflicts in a shared project is to communicate with your team and clearly
-assign different tasks to people in a non-conflicting way.
+Git도 부족한 소통에서 여러분을 구해 주지는 못합니다. 공유 프로젝트에서 충돌을
+최소화하는 유일한 방법은 팀과 소통하고, 서로 충돌하지 않도록 각자에게 다른
+작업을 명확히 배정하는 것입니다.
 
-Two people shouldn't generally be editing the same part of the same
-file, or even any part of the same file. That's more of a guideline than
-a rule, but if you follow it, you will never have a merge conflict.
+일반적으로 두 사람이 같은 파일의 같은 부분은 물론, 같은 파일의 어느 부분도
+함께 편집하지 않는 편이 좋습니다. 규칙이라기보다 지침이지만, 따르면 병합
+충돌은 절대 생기지 않습니다.
 
-As we've seen, it's not the end of the world if there is a merge
-conflict, but life sure is easier if they're just avoided.
+이미 봤듯 병합 충돌이 생겨도 세상이 끝나는 것은 아니지만, 애초에 피하면 삶이
+훨씬 편합니다.
 
-Takeaway: Without good communication and a good distribution of work on
-your team, you're doomed. Make a plan where no one is stepping on toes,
-and stick to it.
+핵심은 이렇습니다. 팀의 원활한 소통과 적절한 업무 분담이 없으면 망합니다.
+서로의 발을 밟지 않는 계획을 세우고 그대로 따르세요.
 
-## Approach: Everyone Uses One Branch
+## 접근법: 모두가 한 브랜치 사용하기 {#approach-everyone-uses-one-branch}
 
 [i[Workflow-->One Branch]<]
 
-This is really easy. Everyone has push access to the repo and does all
-their work on the `main` branch.
+아주 간단합니다. 모두가 저장소에 push할 권한을 가지고 모든 작업을 `main`
+브랜치에서 합니다.
 
-Benefits:
+장점:
 
-* Super simple to set up.
-* Conceptually not much to juggle.
-* All work instantly available to all collaborators upon push.
+* 설정이 무척 간단합니다.
+* 개념적으로 신경 쓸 것이 많지 않습니다.
+* push하는 즉시 모든 작업을 모든 공동 작업자가 이용할 수 있습니다.
 
-Drawbacks:
+단점:
 
-* More potential for merge conflicts.
-* Unless you're rebasing (more on that later), you'll have a lot of
-  merge commits.
-* You can't push non-working code since it will break everything for
-  everyone else.
+* 병합 충돌 가능성이 더 큽니다.
+* 리베이스하지 않는다면(나중에 더 설명합니다) 병합 커밋이 많이 생깁니다.
+* 작동하지 않는 코드를 push하면 다른 모두의 작업이 망가지므로 push할 수
+  없습니다.
 
-Initial setup:
+초기 설정:
 
-* One person makes the GitHub repo.
-* The owner of the GitHub repo adds all the team members as
-  collaborators.
-* Everyone clones the repo.
+* 한 사람이 GitHub 저장소를 만듭니다.
+* GitHub 저장소 소유자가 모든 팀원을 공동 작업자로 추가합니다.
+* 모두가 저장소를 clone합니다.
 
-Workflow:
+작업 흐름:
 
-* Work is delegated to all collaborators. The work should be as
-  non-overlapping as possible.
-* Everyone periodically pulls `main` and resolves any merge conflicts.
-* Everyone pushes their work to `main`.
+* 모든 공동 작업자에게 업무를 배정합니다. 작업은 가능한 한 겹치지 않아야
+  합니다.
+* 모두가 주기적으로 `main`을 pull하고 병합 충돌을 해결합니다.
+* 모두가 작업을 `main`에 push합니다.
 
-In real life, this approach is probably only used on very small teams,
-e.g. three people at most, with frequent and easy communication between
-all members. If you're working on a small team in school, it could very
-well be enough, but I'd still recommend trying a different approach just
-for the experience.
+실제로 이 접근법은 아마 구성원 모두가 쉽고 자주 소통할 수 있는 세 명 이하의
+아주 작은 팀에서만 사용될 것입니다. 학교에서 작은 팀으로 작업한다면 충분할
+수 있지만, 경험을 위해 다른 접근법도 시도해 보길 권합니다.
 
-The other approaches are not that much more complex, and give you a lot
-more flexibility.
+다른 접근법도 그리 복잡하지 않으며 훨씬 큰 유연성을 제공합니다.
 
 [i[Workflow-->One Branch]>]
 
-## Approach: Everyone Uses Their Own Branch
+## 접근법: 각자 자신의 브랜치 사용하기 {#approach-everyone-uses-their-own-branch}
 
 [i[Workflow-->One Branch per Dev]<]
 
-In this scenario, we treat `main` as the working code, and we treat
-contributors' branches as where work is done. When a contributor gets
-their code working, they merge it back into `main`.
+이 시나리오에서는 `main`을 작동하는 코드로 여기고, 기여자의 브랜치를 작업하는
+곳으로 봅니다. 기여자는 코드를 작동하게 만든 뒤 `main`에 다시 병합합니다.
 
-Benefits:
+장점:
 
-* You get to work on your own branch without worrying about messing up
-  other people's work.
-* You can commit non-working code since no one else can see it. (You
-  might be wrapping up the work day and want to push some incomplete
-  code for a backup, for example.)
-* Less merge conflict potential since fewer merges are happening than if
-  everyone were committing to `main`.
+* 다른 사람의 작업을 망칠 걱정 없이 자신의 브랜치에서 일할 수 있습니다.
+* 다른 사람에게 보이지 않으므로 작동하지 않는 코드도 커밋할 수 있습니다.
+  (예를 들어 하루 일을 마치며 미완성 코드를 백업용으로 push하고 싶을 수
+  있습니다.)
+* 모두가 `main`에 커밋할 때보다 병합 횟수가 적어 충돌 가능성도 작습니다.
 
-Drawbacks:
+단점:
 
-* If your branch diverges too far from `main`, merging might become
-  painful.
-* Unless you're [rebasing and squashing](#squashing-commits), the
-  incremental work on your branch might "pollute" the commit history on
-  `main` with a lot of tiny commits.
+* 브랜치가 `main`에서 너무 멀리 갈라지면 병합이 고통스러워질 수 있습니다.
+* [리베이스하고 스쿼시](#squashing-commits)하지 않으면 브랜치의 점진적인 작업이
+  수많은 작은 커밋으로 `main`의 커밋 기록을 "오염"시킬 수 있습니다.
 
-Initial setup:
+초기 설정:
 
-* One person makes the GitHub repo.
-* The owner of the GitHub repo adds all the team members as
-  collaborators.
-* Everyone clones the repo.
-* Everyone makes their own branch, possibly naming it after themselves.
-* Everyone pushes their branch to GitHub, making them remote-tracking
-  branches. (We do this so that your work is effectively backed up on
-  GitHub when you push it.)
+* 한 사람이 GitHub 저장소를 만듭니다.
+* GitHub 저장소 소유자가 모든 팀원을 공동 작업자로 추가합니다.
+* 모두가 저장소를 clone합니다.
+* 모두가 자신의 브랜치를 만들며, 자기 이름을 붙일 수도 있습니다.
+* 모두가 자신의 브랜치를 GitHub에 push해 원격 추적 브랜치로 만듭니다.
+  (push할 때 작업이 사실상 GitHub에 백업되도록 이렇게 합니다.)
 
-Workflow:
+작업 흐름:
 
-* Work is delegated to all collaborators. The work should be as
-  non-overlapping as possible.
-* As collaborators finish their tasks, they will:
-  * Test everything on their branch.
-  * Merge the latest `main` into their branch; do a pull to make sure
-    you have it. (The collaborator might already have the latest `main`
-    if no one else has merged into it, which will cause Git to say
-    there's nothing to do. This is fine.)
-  * Test everything, and fix it if necessary.
-  * Merge their functioning branch into `main`.
-  * Push.
-    * If someone else has modified `main` while you were testing, Git
-      will complain that you have to pull before you can push. If
-      there's a conflict at this point, you'll have to resolve, test,
-      and push it. And you'll have to merge `main` back into your branch
-      so that your branch is up-to-date.
+* 모든 공동 작업자에게 업무를 배정합니다. 작업은 가능한 한 겹치지 않아야
+  합니다.
+* 공동 작업자는 맡은 일을 끝내면 다음을 수행합니다.
+  * 자신의 브랜치에서 모두 테스트합니다.
+  * 최신 `main`을 자신의 브랜치에 병합합니다. pull해서 최신 버전인지
+    확인하세요. (다른 사람이 `main`에 병합하지 않았다면 이미 최신일 수 있고,
+    Git은 할 일이 없다고 말할 것입니다. 괜찮습니다.)
+  * 모두 테스트하고 필요하면 수정합니다.
+  * 작동하는 자신의 브랜치를 `main`에 병합합니다.
+  * push합니다.
+    * 테스트하는 동안 다른 사람이 `main`을 수정했다면 Git은 push 전에
+      pull해야 한다고 불평합니다. 이때 충돌이 생기면 해결하고 테스트한 뒤
+      push해야 합니다. 그리고 브랜치를 최신 상태로 만들기 위해 `main`을 다시
+      자신의 브랜치에 병합해야 합니다.
 
-The result will look something like Figure_#.1 to start, where all the
-collaborators have made their own branches off of `main`.
+처음 결과는 모든 공동 작업자가 `main`에서 자신의 브랜치를 만든 Figure_#.1과
+비슷합니다.
 
-![Collaborators branching off `main`.](img_100_010.pdf "[Collaborators branching off main.]")
+![`main`에서 브랜치를 만드는 공동 작업자들.](img_100_010.pdf "[Collaborators branching off main.]")
 
 <!--
 ``` {.default}
@@ -197,11 +175,10 @@ collaborators have made their own branches off of `main`.
 ```
 -->
 
-Let's say Chris (on branch `chris`) finishes up their work and wants
-other contributors to be able to see it. It's time to merge into `main`,
-as we graphically see in Figure_#.2.
+`chris` 브랜치의 Chris가 작업을 마치고 다른 기여자도 볼 수 있게 하려 한다고
+합시다. Figure_#.2에 그림으로 나타난 것처럼 `main`에 병합할 때입니다.
 
-![Chris merges back into `main`.](img_100_020.pdf "[Chris merges back into main.]")
+![Chris가 `main`에 다시 병합합니다.](img_100_020.pdf "[Chris merges back into main.]")
 
 <!--
 ``` {.default}
@@ -220,100 +197,86 @@ as we graphically see in Figure_#.2.
 ```
 -->
 
-After that, other contributors who pull `main` will see the changes.
+그 뒤 `main`을 pull하는 다른 기여자는 변경 사항을 볼 수 있습니다.
 
 [i[Workflow-->One Branch per Dev]>]
 
-## Approach: Everyone Merges to the Dev Branch
+## 접근법: 모두가 개발 브랜치에 병합하기 {#approach-everyone-merges-to-the-dev-branch}
 
 [i[Workflow-->Dev branch]<]
 
-In this scenario, we treat `main` as the published code that we're
-going to distribute, often tagged with a release version number, and we
-treat a `dev` branch as the working, unreleased code. And, as in the
-previous scenario, everyone has their own branches they're developing
-on.
+이 시나리오에서는 `main`을 배포할 공개 코드로 여기며 흔히 릴리스 버전 번호를
+태그합니다. `dev` 브랜치는 작업 중인 미출시 코드로 봅니다. 앞의 시나리오와
+마찬가지로 모두가 개발에 사용하는 자신의 브랜치를 갖습니다.
 
-The idea is basically we're going to have two versions of the working
-code:
+기본 발상은 작동하는 코드의 두 버전을 갖는 것입니다.
 
-1. The public, released version that's on `main`.
-2. The private, internal version that's on `dev`.
+1. `main`에 있는 공개 출시 버전.
+2. `dev`에 있는 비공개 내부 버전.
 
-And then, of course, we'll have one branch per collaborator.
+물론 공동 작업자마다 브랜치도 하나씩 있습니다.
 
-Another way of thinking about it is that we're going to have our
-internal build on `dev` that is good for testing and then, when it's all
-ready, we'll "bless" it and merge it into `main`.
+다르게 생각하면 테스트하기 좋은 내부 빌드를 `dev`에 두고, 모두 준비되면
+이를 "축복"해 `main`에 병합하는 방식입니다.
 
-So there will be a lot of merges into `dev` from all the developer
-branches, and then every so often there will be a merge from `dev` into
-`main`.
+따라서 모든 개발자 브랜치에서 `dev`로 수많은 병합이 일어나고, 때때로
+`dev`에서 `main`으로 병합합니다.
 
-*The developers will never directly merge into `main`!* Usually
-that is performed by someone in a managerial role.
+*개발자는 절대로 `main`에 직접 병합하지 않습니다!* 보통 관리 역할을 맡은
+사람이 그 일을 합니다.
 
-![Working on the `dev` branch.](img_100_030.pdf "[Working on the dev branch]")
+![`dev` 브랜치에서 작업하기.](img_100_030.pdf "[Working on the dev branch]")
 
-Overall the process works as in Figure_#.3. This is a busy image, but
-notice how Bob and Alice are only merging their work into the `dev`
-branch, and then every so often, their manager merges the `dev` branch
-into `main` and tags that commit with a release number.
+전체 과정은 Figure_#.3과 같습니다. 복잡한 그림이지만 Bob과 Alice가 작업을
+`dev` 브랜치에만 병합하고, 때때로 관리자가 `dev` 브랜치를 `main`에 병합한
+뒤 그 커밋에 릴리스 번호를 태그하는 모습에 주목하세요.
 
-Benefits:
+장점:
 
-* All the benefits of everyone having their own branch.
-* You have an internal branch from which you can make complete builds
-  for internal or external testing.
+* 모두가 자신의 브랜치를 가질 때의 장점을 모두 누립니다.
+* 내부 또는 외부 테스트를 위한 완전한 빌드를 만들 수 있는 내부 브랜치가
+  있습니다.
 
-Drawbacks:
+단점:
 
-* A little more complexity and management.
-* If your branch diverges too far from `dev`, merging might become
-  painful.
-* If the `dev` branch diverges too far from `main`, merging might become
-  painful.
-* Unless you're rebasing, the incremental work on your branch might
-  "pollute" the commit history on `dev` and `main` with a lot of tiny
-  commits.
+* 복잡성과 관리 부담이 조금 늘어납니다.
+* 브랜치가 `dev`에서 너무 멀리 갈라지면 병합이 고통스러워질 수 있습니다.
+* `dev`가 `main`에서 너무 멀리 갈라져도 병합이 고통스러워질 수 있습니다.
+* 리베이스하지 않으면 브랜치의 점진적인 작업이 수많은 작은 커밋으로 `dev`와
+  `main`의 커밋 기록을 "오염"시킬 수 있습니다.
 
-Initial setup:
+초기 설정:
 
-* One person makes the GitHub repo.
-* The owner of the GitHub repo adds all the team members as
-  collaborators.
-* The owner creates the `dev` branch.
-* Everyone clones the repo.
-* Everyone makes their own branch, possibly naming it after themselves.
-* Everyone pushes their branch to GitHub, making them remote-tracking
-  branches. (We do this so that your work is effectively backed up on
-  GitHub when you push it.)
+* 한 사람이 GitHub 저장소를 만듭니다.
+* GitHub 저장소 소유자가 모든 팀원을 공동 작업자로 추가합니다.
+* 소유자가 `dev` 브랜치를 만듭니다.
+* 모두가 저장소를 clone합니다.
+* 모두가 자신의 브랜치를 만들며, 자기 이름을 붙일 수도 있습니다.
+* 모두가 자신의 브랜치를 GitHub에 push해 원격 추적 브랜치로 만듭니다.
+  (push할 때 작업이 사실상 GitHub에 백업되도록 이렇게 합니다.)
 
-Workflow:
+작업 흐름:
 
-* Work is delegated to all collaborators. The work should be as
-  non-overlapping as possible.
-* As collaborators finish their tasks, they will:
-  * Test everything on their branch.
-  * Merge the latest `dev` into their branch; do a pull to make sure
-    you have it. (The collaborator might already have the latest `dev`
-    if no one else has merged into it, which will cause Git to say
-    there's nothing to do. This is fine.)
-  * Test everything, and fix it if necessary.
-  * Merge their functioning branch into `dev`.
-  * Push.
-    * If someone else has modified `dev` while you were testing, Git
-      will complain that you have to pull before you can push. If
-      there's a conflict at this point, you'll have to resolve, test,
-      and push it. And you'll have to merge `dev` back into your branch
-      so that your branch is up-to-date.
+* 모든 공동 작업자에게 업무를 배정합니다. 작업은 가능한 한 겹치지 않아야
+  합니다.
+* 공동 작업자는 맡은 일을 끝내면 다음을 수행합니다.
+  * 자신의 브랜치에서 모두 테스트합니다.
+  * 최신 `dev`를 자신의 브랜치에 병합합니다. pull해서 최신인지 확인하세요.
+    (다른 사람이 `dev`에 병합하지 않았다면 이미 최신일 수 있고, Git은 할
+    일이 없다고 말할 것입니다. 괜찮습니다.)
+  * 모두 테스트하고 필요하면 수정합니다.
+  * 작동하는 자신의 브랜치를 `dev`에 병합합니다.
+  * push합니다.
+    * 테스트하는 동안 다른 사람이 `dev`를 수정했다면 Git은 push 전에
+      pull해야 한다고 불평합니다. 이때 충돌이 생기면 해결하고 테스트한 뒤
+      push해야 합니다. 그리고 브랜치를 최신 상태로 만들기 위해 `dev`를 다시
+      자신의 브랜치에 병합해야 합니다.
 
-Managerial Workflow:
+관리자 작업 흐름:
 
-* Coordinate with all devs to get a candidate release in `dev` tested
-  out and ready.
-* Merge that candidate release (some commit) from `dev` into `main`.
-* Tag the `main` commit with some version number, optionally.
+* 모든 개발자와 조율해 `dev`의 릴리스 후보를 테스트하고 준비합니다.
+* 그 릴리스 후보(어떤 커밋)를 `dev`에서 `main`으로 병합합니다.
+* 선택적으로 `main` 커밋에 버전 번호를 태그합니다.
 
 [i[Workflow-->Dev branch]>]
 [i[Collaboration-->Across branches]>]

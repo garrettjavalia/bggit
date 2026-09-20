@@ -1,26 +1,18 @@
-# Comparing Files with Diff {#diff}
+# Diff로 파일 비교하기 {#diff}
 
 [i[Diff]<]
 
-The powerful `git diff` command can give you differences between two
-files or commits. We mentioned it briefly at the beginning, but here
-we're going to delve more deeply into all the things you can do with it.
+강력한 `git diff` 명령은 파일이나 커밋 두 개의 차이를 보여 줍니다. 앞부분에서 잠깐 언급했지만, 여기서는 이 명령으로 할 수 있는 여러 가지 일을 더 깊이 살펴보겠습니다.
 
-It's not the easiest thing to read at first, but you do get used to it
-after a while. My most common use case is to quickly scan to remember
-what I've changed in the working tree so I know what to add to the stage
-and what commit message to use.
+처음에는 읽기가 쉽지 않지만 시간이 지나면 익숙해집니다. 제가 가장 자주 쓰는 용도는 작업 트리에서 무엇을 바꿨는지 빠르게 훑어보고, 무엇을 스테이징 영역에 추가할지와 어떤 커밋 메시지를 쓸지 떠올리는 것입니다.
 
-## Basic Usage
+## 기본 사용법 {#basic-usage}
 
 [i[Diff-->Understanding the output]<]
 
-The most basic use case is that you've modified some files in your
-working tree and you want to see what the differences are between what
-was there and what you added.
+가장 기본적인 사용 사례는 작업 트리의 파일 몇 개를 수정한 뒤, 원래 내용과 추가한 내용 사이의 차이를 보고 싶은 경우입니다.
 
-For example, let's say I've modified my `hello.py` file (but haven't
-staged it yet). I can check out what I've changed like so:
+예를 들어 `hello.py` 파일을 수정했지만 아직 스테이징하지 않았다고 합시다. 다음과 같이 변경 내용을 확인할 수 있습니다.
 
 ``` {.default}
 $ git diff
@@ -40,34 +32,21 @@ $ git diff
   +goodbye()
 ```
 
-What do we have there? Why, it's an impenetrable mess, of course!
+저게 대체 무엇일까요? 당연히 한 치 앞도 볼 수 없는 난장판입니다!
 
-_The End_
+_끝_
 
-All right, take a deep breath and let's figure it out.
+좋습니다. 심호흡하고 이해해 봅시다.
 
-Since the output is plastered over with `hello.py`, we can safely
-assume this is the file we're talking about. If the diff is reporting on
-multiple files (e.g. you're comparing two commits), each file will have
-its own section in the output.
+출력 전체에 `hello.py`가 도배되어 있으므로 이 파일을 이야기하고 있다고 무리 없이 가정할 수 있습니다. diff가 여러 파일을 보고한다면(예: 커밋 두 개를 비교할 때) 출력에 파일마다 별도의 절이 생깁니다.
 
-> **The `index` line has the blob hashes and file permissions.** A blob
-> hash is the hash of the specific file in the states being compared.
-> This isn't something you need to worry about, typically. Or maybe not
-> even ever.
+> **`index` 줄에는 블롭 해시와 파일 권한이 있습니다.** 블롭 해시는 비교하는 각 상태에서 특정 파일의 해시입니다. 보통은 신경 쓸 필요가 없습니다. 어쩌면 평생 신경 쓰지 않아도 될지 모릅니다.
 
-After that we have a couple lines indicating that the old version of the
-file `a/hello.py` is the one marked with minus signs, and the new
-version (that you haven't staged yet) is `b/hello.py` and is marked with
-plus signs.
+그 뒤의 두 줄은 이전 버전 파일 `a/hello.py`에 빼기 기호가 붙고, 아직 스테이징하지 않은 새 버전 `b/hello.py`에 더하기 기호가 붙는다고 나타냅니다.
 
-Then we have `@@ -1,4 +1,8 @@`. This means that lines 1-4 in the old
-version are shown, and lines 1-8 in the new version are shown. (So
-clearly we've at least added some lines here.)
+다음에는 `@@ -1,4 +1,8 @@`이 있습니다. 이전 버전의 1~4행과 새 버전의 1~8행을 보여 준다는 뜻입니다. (그러니 적어도 줄 몇 개를 추가한 것은 분명합니다.)
 
-Finally, we get to the steak and potatoes of the whole thing—what has
-actually changed? Remembering that the old version is minus and the new
-version is plus, let's look at just that part of the diff again:
+마침내 이 모든 것의 알맹이, 즉 실제로 무엇이 바뀌었는지에 도달했습니다. 이전 버전은 빼기, 새 버전은 더하기라는 점을 기억하면서 diff의 그 부분만 다시 봅시다.
 
 ``` {.default}
    def hello():
@@ -81,176 +60,137 @@ version is plus, let's look at just that part of the diff again:
   +goodbye()
 ```
 
-Rules:
+규칙은 다음과 같습니다.
 
-* If a line is prefixed with `-`, it means this is how the line was in
-  the old version.
+* 줄 앞에 `-`가 있으면 이전 버전에서 그 줄이 이랬다는 뜻입니다.
 
-* If a line is prefixed with `+`, it means this is how the line is in
-  the new, modified version.
+* 줄 앞에 `+`가 있으면 수정된 새 버전에서 그 줄이 이렇다는 뜻입니다.
 
-* If a line is not prefixed with anything, it means it is unchanged
-  between the versions.
+* 줄 앞에 아무것도 없으면 두 버전 사이에서 바뀌지 않았다는 뜻입니다.
 
-> **The diff won't show you all the lines of the file!** It only shows
-> you what's changed and some of the surrounding lines. If there are
-> changes in different parts of the file, the unchanged parts of the
-> file will be skipped over in the diff.
+> **diff는 파일의 모든 줄을 보여 주지 않습니다!** 바뀐 부분과 그 주변의 몇 줄만 보여 줍니다. 파일의 서로 다른 부분에 변경 사항이 있다면 바뀌지 않은 부분은 diff에서 건너뜁니다.
 
-Another way to read the diff is that lines with a `-` have been removed
-and lines with a `+` have been added.
+diff를 읽는 또 다른 방법은 `-`가 붙은 줄은 제거되었고 `+`가 붙은 줄은 추가되었다고 생각하는 것입니다.
 
 [i[Diff-->Understanding the output]>]
 
-## Diffing the Stage
+## 스테이징 영역 Diff 보기 {#diffing-the-stage}
 
 [i[Diff-->The stage]<]
 
-What if you've added some stuff to the stage and you want to diff it
-against the previous commit?
+내용을 스테이징 영역에 추가한 뒤 이전 커밋과 diff를 보고 싶다면 어떻게 할까요?
 
-Just typing `git diff` shows nothing!
+`git diff`만 입력하면 아무것도 나오지 않습니다!
 
-Why? It's because diff, by default, is showing *the difference between
-your working tree and the stage*. You just staged that file, copying it
-from the working tree to the stage, so the two are identical. So a diff
-shows no differences.
+왜일까요? 기본적으로 diff는 *작업 트리와 스테이징 영역의 차이*를 보여 주기 때문입니다. 방금 그 파일을 스테이징하여 작업 트리에서 스테이징 영역으로 복사했으므로 둘은 똑같습니다. 따라서 diff에 차이가 나타나지 않습니다.
 
-How do we diff the stage with the previous commit?
+스테이징 영역과 이전 커밋의 diff는 어떻게 볼까요?
 
-The answer is really easy: `git diff --staged`[^91c6]. Done.
+답은 아주 쉽습니다. `git diff --staged`[^91c6]입니다. 끝.
 
-[^91c6]: The `--staged` flag is more modern. Older versions of Git used
-    `git diff --cached`.
+[^91c6]: `--staged` 플래그가 더 현대적인 방식입니다. 이전 버전의 Git에서는 `git diff --cached`를 사용했습니다.
 
-But I want to use this subsection to dig a little deeper into what's
-happening so you can improve your understanding of how this works.
+하지만 이 하위 절에서는 무슨 일이 일어나는지 조금 더 깊이 파고들어 작동 원리를 더 잘 이해하도록 하겠습니다.
 
-Mental model time!
+사고 모형을 세울 시간입니다!
 
-Let's say that these two things are true. Now, whether or not they're
-true doesn't really matter.
+다음 두 가지가 참이라고 합시다. 실제로 참인지 아닌지는 별로 중요하지 않습니다.
 
-> _"It's only a model."_\
-> \ \ \ \ \ \ \ \ \ \ \ \ —Patsy, _Monty Python and the Holy Grail_
+> _"모형일 뿐이야."_\
+> \ \ \ \ \ \ \ \ \ \ \ \ —팻시, _몬티 파이튼과 성배_
 
-1. The stage contains a _copy_ of **all** unmodified files at your
-   current commit.
+1. 스테이징 영역에는 현재 커밋에서 수정되지 않은 **모든** 파일의 _복사본_이 있습니다.
 
-2. A `git status` or `git diff` only shows files that differ between
-   your working tree and the stage.
+2. `git status`나 `git diff`는 작업 트리와 스테이징 영역 사이에 차이가 있는 파일만 보여 줍니다.
 
-So if you don't have any modifications, `git diff` won't show any
-differences. Because the stage and working tree are the same.
+따라서 수정 사항이 없다면 `git diff`는 차이를 보여 주지 않습니다. 스테이징 영역과 작업 트리가 같기 때문입니다.
 
-Now if you modify a file in your working tree and then `git diff`, you
-*will* see some changes, because the working tree differs from the
-stage.
+이제 작업 트리의 파일을 수정하고 `git diff`를 실행하면 작업 트리가 스테이징 영역과 다르므로 변경 사항이 *나타납니다*.
 
-But then if you add the modified file to the stage, then the stage and
-working tree become the same again. And `git diff` will show no
-differences.
+하지만 수정한 파일을 스테이징 영역에 추가하면 스테이징 영역과 작업 트리가 다시 같아집니다. `git diff`에는 차이가 나타나지 않습니다.
 
-*`git diff` **always** compares the working tree to the stage.* (Unless
-you're diffing specific commits—see below.) And in this case, after
-you've added your modified file to the stage, it's the same as the
-working tree. So no diffs.
+*`git diff`는 **항상** 작업 트리와 스테이징 영역을 비교합니다.* (특정 커밋의 diff를 보는 경우는 예외이며 아래에서 설명합니다.) 이 경우 수정한 파일을 스테이징 영역에 추가했으므로 작업 트리와 같습니다. 따라서 diff가 없습니다.
 
-Contrast this to where you've modified the working tree but *haven't*
-added the file to the stage. In this case, the file on the stage is just
-like the last commit, which is different than your working tree. So `git
-diff` shows the differences.
+작업 트리를 수정했지만 파일을 스테이징 영역에 추가하지 않은 경우와 비교해 보세요. 이 경우 스테이징 영역의 파일은 마지막 커밋과 같고 작업 트리와는 다릅니다. 따라서 `git diff`가 차이를 보여 줍니다.
 
-Well, okay, then... what if you *want* to diff what's on the stage with
-the last commit?  That is, instead of diffing the working tree with the
-stage, you want to diff the stage with the `HEAD`?
+좋습니다. 그러면 스테이징 영역의 내용과 마지막 커밋의 diff를 *보고 싶다면* 어떻게 할까요? 즉 작업 트리와 스테이징 영역 대신 스테이징 영역과 `HEAD`의 diff를 보고 싶습니다.
 
-Back to the punchline:
+다시 결론으로 돌아갑니다.
 
 ``` {.default}
 $ git diff --staged
 ```
 
-And that'll do it. This will run a diff between what's on the stage and
-the last commit, showing you the changes you've staged.
+이것으로 됩니다. 스테이징 영역의 내용과 마지막 커밋 사이의 diff를 실행하여 스테이징한 변경 사항을 보여 줍니다.
 
 [i[Diff-->The stage]>]
 
-## More Diff Fun
+## 더 재미있는 Diff {#more-diff-fun}
 
-Let's speed through some examples of things you can do with diff.
+diff로 할 수 있는 작업의 예를 빠르게 훑어봅시다.
 
-### Diff Any Commits or Branches
+### 임의의 커밋이나 브랜치 Diff 보기 {#diff-any-commits-or-branches}
 
 [i[Diff-->Other commits]]
 [i[Diff-->Other branches]]
-You have more at your disposal than just diffing the working tree or
-stage. You can actually diff any two commits. This will show you all the
-differences between them.
+작업 트리나 스테이징 영역의 diff만 볼 수 있는 것은 아닙니다. 어떤 커밋 두 개든 실제로 비교할 수 있습니다. 두 커밋 사이의 모든 차이를 보여 줍니다.
 
-For example, if you know the commit hashes, you can diff them directly:
+예를 들어 커밋 해시를 안다면 직접 비교할 수 있습니다.
 
 ``` {.default}
 $ git diff d977 27a3
 ```
 
-Or if you have two branch names:
+브랜치 이름 두 개가 있다면 다음과 같이 합니다.
 
 ``` {.default}
 $ git diff main topic
 ```
 
-Or mix and match:
+서로 섞어도 됩니다.
 
 ``` {.default}
 $ git diff main 27a3
 ```
 
-Or use `HEAD`:
+`HEAD`를 사용해도 됩니다.
 
 ``` {.default}
 $ git diff HEAD 27a3
 ```
 
-Or relative `HEAD`... This one diffs the previous-to-`HEAD` commit with
-the `HEAD`:
+상대적인 `HEAD`도 가능합니다. 다음 명령은 `HEAD` 바로 전 커밋과 `HEAD`의 diff를 봅니다.
 
 ``` {.default}
 $ git diff HEAD^ HEAD
 ```
 
-And this one diffs four commits before `HEAD` with three commits before
-`HEAD`:
+다음 명령은 `HEAD`보다 네 커밋 앞선 커밋과 `HEAD`보다 세 커밋 앞선 커밋을 비교합니다.
 
 ``` {.default}
 $ git diff HEAD~4 HEAD~3
 ```
 
-### Diffing Order
+### Diff 순서 {#diffing-order}
 
-These are both valid ways to diff, but they give different (inverted)
-results:
+다음 두 방식 모두 올바르지만 서로 다른(반대 방향의) 결과를 냅니다.
 
 ``` {.default}
 $ git diff main topic
 $ git diff topic main
 ```
 
-One way to think about this is that it's like:
+다음과 같다고 생각할 수 있습니다.
 
 ``` {.default}
 $ git diff FROM TO
 ```
 
-That is, "Hey, Git, tell me the changes I need to make to get from
-commit `FROM` to commit `TO`."
+즉 "Git아, 커밋 `FROM`에서 커밋 `TO`로 가려면 어떤 변경을 해야 하는지 알려 줘"라는 뜻입니다.
 
-Let's say I made a file `foo.md` and committed it with a single line
-`First` in it. And then I overwrote it with `Second` and committed it
-again.
+`foo.md` 파일을 만들어 `First`라는 한 줄을 넣고 커밋했다고 합시다. 그런 다음 내용을 `Second`로 덮어쓰고 다시 커밋했습니다.
 
-In this example, I can ask, "What do I have to change from the
-previous-to-`HEAD` commit to the `HEAD` commit?"
+이 예에서는 "`HEAD` 바로 전 커밋에서 `HEAD` 커밋으로 가려면 무엇을 바꿔야 할까?"라고 물을 수 있습니다.
 
 ``` {.default}
 $ git diff HEAD^ HEAD
@@ -263,11 +203,9 @@ $ git diff HEAD^ HEAD
   +Second
 ```
 
-It's telling me to get from previous-to-`HEAD` to `HEAD`, I would need
-to delete `First` and add `Second`.
+`HEAD` 바로 전 커밋에서 `HEAD`로 가려면 `First`를 삭제하고 `Second`를 추가해야 한다고 알려 줍니다.
 
-But if I reverse it and ask, "What do I have to change from `HEAD` to
-get back to the previous-to-`HEAD` commit?" I'll get the opposite:
+하지만 순서를 뒤집어 "`HEAD`에서 `HEAD` 바로 전 커밋으로 돌아가려면 무엇을 바꿔야 할까?"라고 물으면 반대 결과가 나옵니다.
 
 ``` {.default}
 $ git diff HEAD HEAD^
@@ -280,32 +218,27 @@ $ git diff HEAD HEAD^
   +First
 ```
 
-There it's telling me to get back to the previous-to-`HEAD` I'd need to
-delete `Second` and add `First`.
+여기서는 `HEAD` 바로 전 커밋으로 돌아가려면 `Second`를 삭제하고 `First`를 추가해야 한다고 알려 줍니다.
 
-So remember, `git diff FROM TO` is telling you the changes you have to
-make to get from the `FROM` commit to the `TO` commit.
+그러므로 `git diff FROM TO`는 `FROM` 커밋에서 `TO` 커밋으로 가기 위해 필요한 변경 사항을 알려 준다는 점을 기억하세요.
 
-### Diffing with Parent Commit
+### 부모 커밋과 Diff 보기 {#diffing-with-parent-commit}
 
 [i[Diff-->Parent commit]]
-We just showed this example:
+방금 다음 예를 보았습니다.
 
 ``` {.default}
 $ git diff HEAD~4 HEAD~3
 ```
 
-But since `HEAD~4` is the parent of `HEAD~3`, is there some shorthand we
-can use here? Yes!
+하지만 `HEAD~4`는 `HEAD~3`의 부모이므로 쓸 수 있는 축약 표기가 있을까요? 있습니다!
 
 ``` {.default}
 $ git diff HEAD~4 HEAD~3
 $ git diff HEAD~3^!          # Same thing!
 ```
 
-You can use it anywhere you want to compare a commit with its parent,
-which is really showing just what changes were in that one particular
-commit.
+커밋을 그 부모와 비교하고 싶은 어디에서든 사용할 수 있습니다. 결국 특정 커밋 하나에 어떤 변경 사항이 들어 있는지만 보여 줍니다.
 
 ``` {.default}
 $ git diff HEAD^!
@@ -314,118 +247,100 @@ $ git diff main^!
 $ git diff 27a3^!
 ```
 
-### More Context
+### 문맥 더 보기 {#more-context}
 
 [i[Diff-->Additional context]]
-By default, `git diff` shows 3 lines of context around the changes. If
-you want to see more, like 5 lines, use the `-U` switch.
+기본적으로 `git diff`는 변경 사항 주변의 문맥을 3줄 보여 줍니다. 5줄처럼 더 많이 보고 싶다면 `-U` 옵션을 사용하세요.
 
 ``` {.default}
 $ git diff -U5
 ```
 
-### Just the File Names
+### 파일 이름만 보기 {#just-the-file-names}
 
 [i[Diff-->File names only]]
-If you just want a list of files that have changed, you can use the
-`--name-only` option.
+변경된 파일의 목록만 보고 싶다면 `--name-only` 옵션을 사용할 수 있습니다.
 
 ``` {.default}
 $ git diff --name-only
 ```
 
-### Ignoring Whitespace
+### 공백 무시하기 {#ignoring-whitespace}
 
 [i[Diff-->Ignore whitespace]]
-There might be a time when you get some tabs/spaces confusion in your
-source code, which is always painful. Protip: stick to one and force
-everyone else on the team to do the same under penalty of paying for
-lunch.
+소스 코드에서 탭과 스페이스가 뒤섞이는 혼란을 겪을 때가 있는데, 언제나 고통스럽습니다. 전문가의 비법을 알려 드리죠. 하나만 정해서 쓰고 팀의 다른 사람도 똑같이 쓰게 하세요. 어기면 점심을 사는 벌을 줍시다.
 
-But you can commit `git diff` to ignore whitespace in the comparison:
+하지만 비교할 때 공백을 무시하도록 `git diff`에 명령할 수 있습니다.
 
 ``` {.default}
 $ git diff -w
 $ git diff --ignore-all-space    # Same thing
 ```
-### Just Certain Files
+### 특정 파일만 보기 {#just-certain-files}
 
 [i[Diff-->Specific files]]
-You can just diff certain files.
+특정 파일만 diff로 볼 수 있습니다.
 
-One way is to just put the file names after a `--`:
+한 가지 방법은 `--` 뒤에 파일 이름을 놓는 것입니다.
 
 ``` {.default}
 $ git diff -- hello.py
 $ git diff -- hello.py another_file.py
 ```
 
-You can also specify commits or branches before the `--`:
+`--` 앞에 커밋이나 브랜치를 지정할 수도 있습니다.
 
 ``` {.default}
 $ git diff somebranch -- hello.py
 ```
 
-That'll compare `hello.py` in the working tree with the version on
-`somebranch`.
+작업 트리의 `hello.py`를 `somebranch`의 버전과 비교합니다.
 
-Or you could give two commits or branches to compare the file there:
+또는 커밋이나 브랜치 두 개를 지정하여 그곳의 파일을 비교할 수 있습니다.
 
 ``` {.default}
 $ git diff main somebranch -- hello.py
 ```
 
-Finally, you can restrict to a file extension using a glob and single
-quotes:
+마지막으로 글롭과 작은따옴표를 사용해 특정 파일 확장자로 제한할 수 있습니다.
 
 ``` {.default}
 $ git diff '*.py'
 ```
 
-That will just diff the Python files.
+Python 파일의 diff만 보여 줍니다.
 
-### Inter-branch Diffs
+### 브랜치 사이의 Diff {#inter-branch-diffs}
 
 [i[Diff-->Between branches]]
-This is an interesting version of comparing two branches.
+두 브랜치를 비교하는 흥미로운 방식입니다.
 
-We already showed the following example for comparing the commits at two
-branches:
+브랜치 두 개에 있는 커밋을 비교하는 다음 예는 이미 보았습니다.
 
 ``` {.default}
 $ git diff branch1 branch2
 ```
 
-But sometimes you want to know what changed in a branch *since the
-branches diverged*.
+하지만 때로는 *브랜치가 갈라진 뒤* 어느 브랜치에서 무엇이 바뀌었는지 알고 싶습니다.
 
-That is, you don't want to know what's different *now* between `branch1`
-and `branch2`, which is what the above would give you.
+즉 위 명령이 알려 주는 `branch1`과 `branch2` 사이의 *현재* 차이를 알고 싶은 것이 아닙니다.
 
-You want to know what `branch2` added or deleted that `branch1` did not.
+`branch2`가 추가하거나 삭제했지만 `branch1`에는 없는 내용을 알고 싶은 것입니다.
 
-In order to see this, you can use this notation:
+이를 보려면 다음 표기법을 사용합니다.
 
 ``` {.default}
 $ git diff branch1...branch2
 ```
 
-This means "diff the common ancestor of `branch1` and `branch2` with
-`branch2`."
+"`branch1`과 `branch2`의 공통 조상과 `branch2`의 diff를 본다"는 뜻입니다.
 
-In other words, tell me all the changes that were made in `branch2` that
-`branch1` is unaware of. Don't show me anything that `branch1` has
-changed since they diverged.
+다시 말해 `branch1`이 모르는 사이 `branch2`에서 이루어진 모든 변경 사항을 알려 달라는 것입니다. 두 브랜치가 갈라진 뒤 `branch1`에서 바뀐 것은 보여 주지 않습니다.
 
 ## Difftool {#difftool}
 
-I know the diff output is tough to read. I recommend practice and offer
-myself as living proof that with enough practice, the output becomes
-penetrable. And eventually it even becomes easy to read, which might be
-difficult to imagine. But it does!
+diff 출력이 읽기 어렵다는 것을 압니다. 연습하기를 권하며, 충분히 연습하면 출력을 꿰뚫어 볼 수 있게 된다는 살아 있는 증거로 저 자신을 제시합니다. 결국에는 읽기 쉬워지기까지 합니다. 상상하기 어려울 수도 있지만 정말 그렇습니다!
 
-That said, there are third-party tools that exist to make diffs more
-manageable, and Git supports these tools. You can read more about it in
-the [diff tool](#difftool) chapter.
+그렇다고 해도 diff를 더 다루기 쉽게 만들어 주는 서드 파티 도구가 있고 Git은 이런 도구를 지원합니다. [diff 도구](#difftool) 장에서 더 자세히 읽어 볼 수 있습니다.
 
 [i[Diff]>]

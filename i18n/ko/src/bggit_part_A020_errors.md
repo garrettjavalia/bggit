@@ -1,13 +1,13 @@
-# Appendix: Errors and Scary Messages
+# 부록: 오류와 무서운 메시지 {#appendix-errors-and-scary-messages}
 
 [i[Errors]<]
 
-## Detached Head
+## 분리된 HEAD {#detached-head}
 
 [i[`HEAD`-->Detached]<]
 [i[Errors-->Detached `HEAD`]<]
 
-Did you get this alarmingly guillotinesque message?
+단두대가 떠오를 만큼 섬뜩한 다음 메시지를 보셨나요?
 
 ``` {.default}
 You are in 'detached HEAD' state. You can look around, make
@@ -31,52 +31,50 @@ to false
 HEAD is now at 0da5af9 line 1
 ```
 
-This means that you've checked out a commit directly instead of checking
-out a branch. That is, your `HEAD` is no longer attached to a branch,
-i.e. it is "detached".
+이는 브랜치를 체크아웃하는 대신 커밋을 직접 체크아웃했다는 뜻입니다. 즉, `HEAD`가 더는 브랜치에 붙어 있지 않고 "분리된" 상태입니다.
 
-To get out of this, you can:
+이 상태에서 벗어나는 방법은 다음과 같습니다.
 
-1. Undo the checkout that got you detached:
+1. HEAD를 분리한 체크아웃을 되돌립니다.
 
    ``` {.default}
    git switch -
    ```
 
-2. Switch to another branch entirely:
+2. 완전히 다른 브랜치로 전환합니다.
 
    ``` {.default}
    git switch main
    ```
 
-3. Make a new branch here and check it out:
+3. 현재 위치에 새 브랜치를 만들고 체크아웃합니다.
 
    ``` {.default}
    git switch -c newbranch
    ```
 
-And now your `HEAD` is no longer detached.
+이제 `HEAD`는 더 이상 분리되어 있지 않습니다.
 
 [i[`HEAD`-->Detached]>]
 [i[Errors-->Detached `HEAD`]>]
 
-## Upstream Branch Name Doesn't Match Current
+## 업스트림 브랜치 이름이 현재 브랜치와 일치하지 않음 {#upstream-branch-name-doesnt-match-current}
 
 [i[Errors-->Branch name doesn't match]<]
 
-What if you ran:
+다음 명령을 실행했다면 어떻게 될까요?
 
 ``` {.default}
 git branch -c newbranch
 ```
 
-when you meant to run:
+사실 실행하려던 명령은 다음과 같았는데 말입니다.
 
 ``` {.default}
 git switch -c newbranch
 ```
 
-Because if you did, it could land you here:
+그랬다면 다음 상황에 놓일 수 있기 때문입니다.
 
 ``` {.default}
 fatal: The upstream branch of your current branch does not match
@@ -97,7 +95,7 @@ won't match the local branch, see option 'simple' of
 branch.autoSetupMerge in 'git help config'.
 ```
 
-Let's check our branch names to see what's going on:
+무슨 일인지 알아보도록 브랜치 이름을 확인해 봅시다.
 
 ``` {.default}
 $ git branch -vv
@@ -105,33 +103,27 @@ $ git branch -vv
 * newbranch 7c21054 [origin/main: behind 1] line 1
 ```
 
-That tells us our local branch names and, in brackets, the corresponding
-remote-tracking branch. Notice anything fishy?
+이는 로컬 브랜치 이름과 대괄호 안의 대응하는 원격 추적 브랜치를 알려 줍니다. 수상한 점이 보이나요?
 
-It seems `main` corresponds with `origin/main`.
+`main`은 `origin/main`에 대응하는 것 같습니다.
 
-And that `newbranch` **also** corresponds with `origin/main`! How?!
+그런데 `newbranch`도 **역시** `origin/main`에 대응합니다! 어떻게 된 걸까요?!
 
-Well, when you did `git branch -c newbranch`, that _copies_ the current
-branch (`main` in this example) into the other branch, _including its
-remote-tracking branch_. Bad news, since you really want `newbranch` to
-correlate to `origin/newbranch`, if anything.
+`git branch -c newbranch`를 실행하면 현재 브랜치(이 예에서는 `main`)를 다른 브랜치로 _복사_하는데, 이때 _원격 추적 브랜치까지_ 복사하기 때문입니다. 가능하다면 `newbranch`는 `origin/newbranch`와 연결되어야 하므로 좋지 않은 소식입니다.
 
-You have a few options.
+몇 가지 선택지가 있습니다.
 
-1. You want to push `newbranch` up to the `origin` and track it as
-   `origin/newbranch`.
+1. `newbranch`를 `origin`으로 푸시하고 `origin/newbranch`로 추적하고 싶습니다.
 
-   Just do this to push and change the remote-tracking branch name:
+   다음 명령으로 푸시하면서 원격 추적 브랜치 이름을 바꾸면 됩니다.
 
    ``` {.default}
    $ git push -u origin newbranch
    ```
 
-2. You just want this to be a local branch and don't need it on the
-   remote.
+2. 로컬 브랜치로만 두고 원격 저장소에는 필요하지 않습니다.
 
-   In this case, just unset the upstream:
+   이 경우 업스트림 설정만 해제합니다.
 
    ``` {.default}
    $ git branch --unset-upstream newbranch
@@ -139,11 +131,11 @@ You have a few options.
 
 [i[Errors-->Branch name doesn't match]>]
 
-## Current Branch Has No Upstream Branch
+## 현재 브랜치에 업스트림 브랜치가 없음 {#current-branch-has-no-upstream-branch}
 
 [i[Errors-->No upstream branch]<]
 
-Trying to push and getting this message?
+푸시하려는데 다음 메시지가 나오나요?
 
 ``` {.default}
 fatal: The current branch topic1 has no upstream branch.
@@ -155,14 +147,11 @@ To have this happen automatically for branches without a tracking
 upstream, see 'push.autoSetupRemote' in 'git help config'
 ```
 
-This just means there's no upstream tracking branch for `topic1`—it's
-just a local branch.
+이는 `topic1`에 업스트림 추적 브랜치가 없고 로컬 브랜치일 뿐이라는 뜻입니다.
 
-If you do want to push this branch, just follow the suggested
-instruction.
+이 브랜치를 정말 푸시하려는 것이라면 제안된 지시를 그대로 따르면 됩니다.
 
-If you are pushing from the wrong branch by accident, switch to the
-right one first.
+실수로 잘못된 브랜치에서 푸시하고 있다면 먼저 올바른 브랜치로 전환하세요.
 
 [i[Errors-->No upstream branch]>]
 

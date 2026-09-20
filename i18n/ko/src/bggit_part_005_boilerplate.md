@@ -1,4 +1,4 @@
-# Foreword
+# 머리말 {#foreword}
 <!-- Beej's guide to Git
 # vim: ts=4:sw=4:nosi:et:tw=72
 -->
@@ -54,154 +54,85 @@
 [is[`git tag`==>see Tag]]
 [is[`git worktree`==>see Worktree]]
 
-Hello again, everyone! In my role as an industry
-professional-turned-college instructor, I definitely see my fair share
-of students struggling with Git.
+여러분, 다시 만났군요! 업계 전문가에서 대학 강사로 전향한 저는 Git 때문에 애를 먹는 학생들을 정말 많이 봅니다.
 
-And who can blame 'em? It's a seemingly-overcomplicated system with lots
-of pitfalls and merge conflicts and detached heads and remotes and
-cherrypicks and rebases and an endless array of other commands that do
-who-knows-what.
+그 학생들을 누가 탓할 수 있을까요? Git은 함정과 병합 충돌, 분리된 헤드, 원격 저장소, 체리픽, 리베이스, 그리고 무슨 일을 하는지 알 수 없는 끝없는 명령이 가득한, 보기에는 지나치게 복잡한 시스템입니다.
 
-Which leads us directly to the goal: let's make sense of all this and go
-from complete Git novice up to intermediate! We'll start off easy
-(allegedly) with commands mixed in with some theory of operation. And
-we'll see that understanding what Git does under the hood is critical to
-using it correctly.
+그래서 곧바로 이 책의 목표가 나옵니다. 이 모든 것을 이해하고 Git 완전 초보에서 중급자로 올라가 봅시다! 명령과 약간의 동작 원리를 섞어 (적어도 말로는) 쉬운 내용부터 시작합니다. 그리고 Git 내부에서 무슨 일이 일어나는지 이해하는 것이 Git을 올바르게 사용하는 데 매우 중요하다는 사실을 살펴볼 것입니다.
 
-And I *promise* there's definitely a chance that after you get through
-some of this guide, you might actually start to appreciate Git and like
-using it.
+이 안내서를 어느 정도 읽고 나면 실제로 Git을 높이 평가하고 즐겨 쓰게 될 가능성이 분명히 있다고 제가 *약속*합니다.
 
-I've been using it for years (I'm using it for the source code for this
-guide right now) and I can certainly vouch for it becoming easier over
-time, and then, even, second nature.
+저는 Git을 여러 해 사용해 왔고(지금도 이 안내서의 소스 코드에 사용하고 있습니다), 시간이 지날수록 쉬워지다가 마침내는 제2의 천성이 된다고 자신 있게 말할 수 있습니다.
 
-But first, some boilerplate!
+하지만 먼저, 몇 가지 기본 안내부터 하겠습니다!
 
-## Audience
+## 독자 {#audience}
 
-The initial draft of this guide was put online for the university
-students where I worked (or maybe still work, depending on when you're
-reading this) as an instructor. So it's pretty natural to assume that's
-the audience I had in mind.
+이 안내서의 초안은 제가 강사로 일했던(여러분이 이 글을 읽는 시점에 따라 지금도 일하고 있을지 모르는) 대학의 학생들을 위해 온라인에 공개했습니다. 그러니 제가 그들을 독자로 염두에 두었다고 보는 것이 자연스럽습니다.
 
-But I'm also hoping that there are enough other folks out there who
-might get something of use from the guide as well, and I've written it
-in a more general sense with all you non-college students in mind.
+하지만 대학생이 아닌 여러분을 생각해 좀 더 일반적인 관점에서 썼으며, 이 안내서에서 쓸모 있는 무언가를 얻는 다른 분도 충분히 많기를 바랍니다.
 
-This guide assumes that you have basic POSIX shell (i.e. Bash, Zsh,
-etc.) usage skills, i.e.:
+이 안내서는 여러분에게 다음과 같은 기본적인 POSIX 셸(즉 Bash, Zsh 등) 사용 능력이 있다고 가정합니다.
 
-* You know basic commands like `cd`, `ls`, `mkdir`, `cp`, etc.
-* You can install more software.
+* `cd`, `ls`, `mkdir`, `cp` 같은 기본 명령을 알고 있습니다.
+* 소프트웨어를 추가로 설치할 수 있습니다.
 
-It also assumes you're in a Unix-like environment, e.g. Linux, BSD,
-Unix, macOS, WSL, etc. with a POSIX shell. The farther you are away from
-that (e.g. PowerShell, Commodore 64), the more manual translation you'll
-have to do.
+또한 POSIX 셸을 갖춘 Linux, BSD, Unix, macOS, WSL 같은 유닉스 계열 환경에 있다고 가정합니다. 여기서 멀어질수록(가령 PowerShell이나 Commodore 64를 쓸수록) 여러분이 직접 바꾸어 적용해야 할 내용이 많아집니다.
 
-Windows is naturally the sticking point, there. Luckily Git for Windows
-comes with a Bash shell variant called Git Bash. You can also install
-[fl[WSL|https://learn.microsoft.com/en-us/windows/wsl/]] to get a Linux
-environment running on your Windows box. I wholeheartedly recommend this
-for hacker types, since Unix-like systems are hacker-awesome, and
-additionally I recommend you all become hacker types.
+여기서 걸림돌은 당연히 Windows입니다. 다행히 Git for Windows에는 Git Bash라는 Bash 셸 변형이 들어 있습니다. [fl[WSL|https://learn.microsoft.com/en-us/windows/wsl/]]을 설치해 Windows 컴퓨터에서 Linux 환경을 실행할 수도 있습니다. 유닉스 계열 시스템은 해커에게 끝내주게 멋지므로 해커 기질이 있는 분께 이를 진심으로 권합니다. 더 나아가 여러분 모두 해커가 되기를 권합니다.
 
-## Official Homepage
+## 공식 홈페이지 {#official-homepage}
 
-This official location of this document is (currently)
-[fl[https://beej.us/guide/bggit/|https://beej.us/guide/bggit/]].
+이 문서의 공식 위치는 (현재) [fl[https://beej.us/guide/bggit/|https://beej.us/guide/bggit/]]입니다.
 
-## Email Policy
+## 이메일 방침 {#email-policy}
 
-I'm generally available to help out with email questions so feel free to
-write in, but I can't guarantee a response. I lead a pretty busy life
-and there are times when I just can't answer a question you have. When
-that's the case, I usually just delete the message. It's nothing
-personal; I just won't ever have the time to give the detailed answer
-you require.
+저는 보통 이메일 질문을 도울 수 있으니 편하게 보내셔도 되지만, 답장을 보장할 수는 없습니다. 상당히 바쁘게 살다 보니 여러분의 질문에 도저히 답할 수 없는 때가 있습니다. 그럴 때는 보통 메시지를 그냥 삭제합니다. 개인적인 감정은 없습니다. 여러분에게 필요한 자세한 답을 드릴 시간이 앞으로도 나지 않을 뿐입니다.
 
-As a rule, the more complex the question, the less likely I am to
-respond. If you can narrow down your question before mailing it and be
-sure to include any pertinent information (like platform, compiler,
-error messages you're getting, and anything else you think might help me
-troubleshoot), you're much more likely to get a response.
+대체로 질문이 복잡할수록 제가 답할 가능성은 낮아집니다. 메일을 보내기 전에 질문의 범위를 좁히고, 관련 정보(플랫폼, 컴파일러, 나타나는 오류 메시지, 문제 해결에 도움이 되리라 생각하는 그 밖의 정보)를 빠짐없이 넣으면 답을 받을 가능성이 훨씬 커집니다.
 
-If you don't get a response, hack on it some more, try to find the
-answer, and if it's still elusive, then write me again with the
-information you've found and hopefully it will be enough for me to help
-out.
+답장을 받지 못했다면 조금 더 파고들어 답을 찾아보세요. 그래도 찾기 어렵다면 알아낸 정보를 담아 다시 메일을 보내 주세요. 그러면 제가 도울 만큼 충분한 정보가 되기를 바랍니다.
 
-Now that I've badgered you about how to write and not write me, I'd just
-like to let you know that I _fully_ appreciate all the praise the guide
-has received over the years. It's a real morale boost, and it gladdens
-me to hear that it is being used for good! `:-)` Thank you!
+메일을 어떻게 쓰고 쓰지 말아야 하는지 잔소리를 늘어놓았으니, 이제 이 안내서가 여러 해 동안 받은 모든 찬사에 제가 _진심으로_ 감사한다는 말씀도 드리고 싶습니다. 사기가 크게 오르며, 좋은 일에 쓰인다는 소식을 들으면 기쁩니다! `:-)` 감사합니다!
 
-## Mirroring
+## 미러링 {#mirroring}
 
-You are more than welcome to mirror this site, whether publicly or
-privately. If you publicly mirror the site and want me to link to it
-from the main page, drop me a line at
-[`beej@beej.us`](mailto:beej@beej.us).
+이 사이트는 공개든 비공개든 얼마든지 미러링하셔도 됩니다. 공개 미러를 만들고 메인 페이지에서 링크해 주기를 원한다면 [`beej@beej.us`](mailto:beej@beej.us)로 연락해 주세요.
 
-## Note for Translators
+## 번역자를 위한 안내 {#note-for-translators}
 
 [i[Translations]<]
-If you want to translate the guide into another language, write me at
-[`beej@beej.us`](mailto:beej@beej.us) and I'll link to your translation
-from the main page. Feel free to add your name and contact info to the
-translation.
+이 안내서를 다른 언어로 번역하고 싶다면 [`beej@beej.us`](mailto:beej@beej.us)로 메일을 보내 주세요. 메인 페이지에서 번역본으로 링크하겠습니다. 번역본에 번역자의 이름과 연락처를 자유롭게 덧붙여도 됩니다.
 
-Please note the license restrictions in the Copyright and Distribution
-section, below.
+아래 저작권 및 배포 절의 라이선스 제한에 유의하세요.
 [i[Translations]>]
 
-## Copyright and Distribution
+## 저작권 및 배포 {#copyright-and-distribution}
 
-Beej's Guide to Git is Copyright © 2024 Brian "Beej Jorgensen" Hall.
+Beej's Guide to Git의 저작권은 © 2024 Brian "Beej Jorgensen" Hall에게 있습니다.
 
-With specific exceptions for source code and translations, below, this
-work is licensed under the Creative Commons Attribution-Noncommercial-No
-Derivative Works 3.0 License. To view a copy of this license, visit
-[`https://creativecommons.org/licenses/by-nc-nd/3.0/`](https://creativecommons.org/licenses/by-nc-nd/3.0/)
-or send a letter to Creative Commons, 171 Second Street, Suite 300, San
-Francisco, California, 94105, USA.
+아래에 명시한 소스 코드와 번역에 관한 예외를 제외하면, 이 저작물은 크리에이티브 커먼즈 저작자표시-비영리-변경금지 3.0 라이선스에 따라 이용할 수 있습니다. 라이선스 사본은 [`https://creativecommons.org/licenses/by-nc-nd/3.0/`](https://creativecommons.org/licenses/by-nc-nd/3.0/)에서 보거나 Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA로 편지를 보내 요청할 수 있습니다.
 
-One specific exception to the "No Derivative Works" portion of the
-license is as follows: this guide may be freely translated into any
-language, provided the translation is accurate, and the guide is
-reprinted in its entirety. The same license restrictions apply to the
-translation as to the original guide. The translation may also include
-the name and contact information for the translator.
+라이선스의 “변경금지” 조항에는 다음과 같은 명시적인 예외가 하나 있습니다. 번역이 정확하고 안내서 전체를 빠짐없이 다시 게재한다면 이 안내서를 어떤 언어로든 자유롭게 번역할 수 있습니다. 원본 안내서와 동일한 라이선스 제한이 번역본에도 적용됩니다. 번역본에는 번역자의 이름과 연락처를 포함해도 됩니다.
 
-The programming source code presented in this document is hereby granted
-to the public domain, and is completely free of any license restriction.
+이 문서에 제시된 프로그래밍 소스 코드는 이로써 퍼블릭 도메인에 기증하며, 어떠한 라이선스 제한도 전혀 받지 않습니다.
 
-Educators are freely encouraged to recommend or supply copies of this
-guide to their students.
+교육자는 이 안내서를 학생들에게 자유롭게 추천하거나 사본을 제공하시기 바랍니다.
 
-Contact [`beej@beej.us`](mailto:beej@beej.us) for more information.
+자세한 내용은 [`beej@beej.us`](mailto:beej@beej.us)로 문의하세요.
 
-## Dedication
+## 헌사 {#dedication}
 
-The hardest things about writing these guides are:
+이런 안내서를 쓸 때 가장 어려운 일은 다음과 같습니다.
 
-* Learning the material in enough detail to be able to explain it
-* Figuring out the best way to explain it clearly, a seemingly-endless
-  iterative process
-* Putting myself out there as a so-called _authority_, when really
-  I'm just a regular human trying to make sense of it all, just like
-  everyone else
-* Keeping at it when so many other things draw my attention
+* 설명할 수 있을 만큼 충분히 자세하게 내용을 배우기
+* 명확하게 설명할 최선의 방법을 찾아내기. 끝이 없어 보이는 반복 과정입니다
+* 사실은 다른 모든 사람과 마찬가지로 이 모든 것을 이해하려 애쓰는 평범한 사람일 뿐인데도, 이른바 _권위자_로서 자신을 세상에 내놓기
+* 수많은 다른 일이 관심을 끄는 와중에도 계속해 나가기
 
-A lot of people have helped me through this process, and I want to
-acknowledge those who have made this book possible:
+많은 분이 이 과정에서 저를 도왔습니다. 이 책이 나올 수 있게 해 준 분들께 감사를 표하고 싶습니다.
 
-* Everyone on the Internet who decided to help share their knowledge in
-  one form or another. The free sharing of instructive information is
-  what makes the Internet the great place that it is.
-* Everyone who submitted corrections and pull-requests on everything
-  from misleading instructions to typos.
+* 어떤 형태로든 지식을 나누기로 한 인터넷의 모든 분. 유익한 정보를 자유롭게 나누는 일이 인터넷을 훌륭한 곳으로 만듭니다.
+* 오해를 부르는 설명부터 오타까지 온갖 문제에 수정 사항과 풀 리퀘스트를 보내 주신 모든 분.
 
-Thank you! ♥
+감사합니다! ♥

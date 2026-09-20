@@ -1,22 +1,20 @@
-# Merging and Conflicts {#merge}
+# 병합과 충돌 {#merge}
 
 [i[Merge]<]
 
-We've seen how a fast-forward merge can bring two branches into sync with
-no possibility of conflict.
+빨리 감기 병합으로 충돌 가능성 없이 두 브랜치를 동기화하는 방법을 살펴봤습니다.
 
-But what if we can't fast-forward because two branches are not direct
-ancestors? In other words, what if the branches have _diverged_? What if
-a change in one branch _conflicts_ with a change in the other?
+하지만 두 브랜치가 직계 조상 관계가 아니라서 빨리 감기할 수 없다면 어떨까요?
+다시 말해 브랜치가 _갈라졌다_면요? 한 브랜치의 변경 사항이 다른 브랜치의 변경
+사항과 _충돌_한다면 어떻게 할까요?
 
-## An Example of Divergent Branches
+## 갈라진 브랜치의 예 {#an-example-of-divergent-branches}
 
 [i[Branch-->Divergent]]
 
-Let's look at a commit graph where things are still OK to fast-forward
-in Figure_#.1.
+아직 빨리 감기해도 괜찮은 커밋 그래프를 Figure_#.1에서 살펴봅시다.
 
-![A direct ancestor branch.](img_040_010.pdf "[A direct ancestor branch.]")
+![직계 조상 브랜치.](img_040_010.pdf "[A direct ancestor branch.]")
 
 <!--
 ``` {.default}
@@ -29,12 +27,12 @@ in Figure_#.1.
 ```
 -->
 
-Yes, I've bent the graph a bit there, but we can merge `somebranch`
-into `main` as a fast-forward because `main` is a direct ancestor and
-`somebranch` is therefore a direct descendant.
+네, 그래프를 조금 구부려 놓기는 했지만 `main`이 직계 조상이고 따라서
+`somebranch`가 직계 자손이므로 `somebranch`를 `main`에 빨리 감기로 병합할 수
+있습니다.
 
-But what if, **before** we merged, someone made another commit on the
-`main` branch? And now it looks like it does in Figure_#.2.
+하지만 병합하기 **전에** 누군가 `main` 브랜치에 커밋을 하나 더 만들었다면
+어떨까요? 이제 Figure_#.2와 같은 모습입니다.
 
 <!--
 ``` {.default}
@@ -47,51 +45,48 @@ But what if, **before** we merged, someone made another commit on the
 ```
 -->
 
-![Not a direct ancestor branch.](img_040_020.pdf "[Not a direct ancestor branch.]")
+![직계 조상이 아닌 브랜치.](img_040_020.pdf "[Not a direct ancestor branch.]")
 
-There's a common ancestor at commit `(2)`, but there's no direct line of
-descent. `main` and `somebranch` have diverged.
+커밋 `(2)`라는 공통 조상이 있지만 직접 이어지는 자손 관계는 없습니다. `main`과
+`somebranch`가 갈라졌습니다.
 
-Is all hope lost? How can we merge?
+모든 희망이 사라진 걸까요? 어떻게 병합할 수 있을까요?
 
-## Merging Divergent Branches
+## 갈라진 브랜치 병합하기 {#merging-divergent-branches}
 
-Turns out you do it the exact same way as always.
+알고 보면 늘 하던 것과 정확히 같은 방식으로 하면 됩니다.
 
-1. Check out the branch you want to merge _into_.
-2. `git merge` the branch you want to merge _from_.
+1. 병합할 _대상_ 브랜치를 체크아웃합니다.
+2. 병합해 올 _출발_ 브랜치에 `git merge`를 실행합니다.
 
-In our Figure_#.2 example above, let's say we've done this:
+위의 Figure_#.2 예시에서는 다음을 실행했다고 합시다.
 
 ``` {.default}
 $ git switch main
 $ git merge somebranch    # into main
 ```
 
-> The `#` is a shell comment delimiter. You can paste that in if you
-> want, but it does nothing.
+> `#`은 셸 주석 구분자입니다. 원한다면 함께 붙여 넣어도 되지만 아무 일도 하지
+> 않습니다.
 
-The difference here is that Git can't simply fast-forward. It has to
-somehow, magically, bring together the changes from commit `(6)` **and**
-commit `(7)` even if they're radically different than one other.
+여기서 다른 점은 Git이 단순히 빨리 감기할 수 없다는 것입니다. 커밋 `(6)`과
+커밋 `(7)`의 변경 사항이 서로 완전히 다르더라도 어떻게든 마법처럼 합쳐야
+합니다.
 
-This means that after we bring those two commits together, the code will
-look like it's never looked before, a combination of two sets of
-changes.
+두 커밋을 합치고 나면 코드는 이전에 한 번도 없었던 모습, 즉 두 변경 사항
+묶음을 조합한 모습이 됩니다.
 
-And because it looks like it hasn't before, we need _another commit_
-(another snapshot of the working tree) to represent the joining of both
-sets of changes.
+이전에는 없던 모습이므로 두 변경 사항 묶음의 결합을 나타낼 _또 다른 커밋_,
+즉 작업 트리의 또 다른 스냅샷이 필요합니다.
 
-We call this the _merge commit_, and Git will automatically make it for
-you. (When this happens, you'll see an editor pop up with some text in
-it. This text is the commit message. Edit it (or just accept it as-is)
-and save the file and exit the editor. See [Getting Out of
-Editors](#editor-get-out) if you need help with this.)
+이를 _병합 커밋_이라고 부르며 Git이 자동으로 만들어 줍니다. (이때 텍스트가
+들어 있는 편집기가 열립니다. 이 텍스트가 커밋 메시지입니다. 편집하거나 그대로
+받아들인 뒤 파일을 저장하고 편집기를 종료하세요. 도움이 필요하다면 [편집기에서
+나오기](#editor-get-out)를 보세요.)
 
-So after our merge, we end up with Figure_#.3.
+병합하고 나면 Figure_#.3과 같은 상태가 됩니다.
 
-![Creating a merge commit.](img_040_030.pdf "[Creating a merge commit.]")
+![병합 커밋 만들기.](img_040_030.pdf "[Creating a merge commit.]")
 
 <!--
 
@@ -108,55 +103,51 @@ So after our merge, we end up with Figure_#.3.
 ```
 -->
 
-Commit labeled `(8)` is the merge commit. It contains both the changes
-from `(7)` and `(6)`. And has the commit message you saved in the
-editor.
+`(8)`이라고 표시된 커밋이 병합 커밋입니다. `(7)`과 `(6)`의 변경 사항이 모두
+들어 있고, 편집기에서 저장한 커밋 메시지도 갖습니다.
 
-And we see `main` has been updated to point to it. And that `somebranch`
-is unaffected.
+`main`이 이 커밋을 가리키도록 갱신된 것도 볼 수 있습니다. `somebranch`에는
+영향이 없습니다.
 
-Importantly, we see that commit `(8)` has **two parents**, the commits
-that were merged together to make it.
+중요하게도 커밋 `(8)`에는 **부모가 두 개** 있습니다. 이 커밋을 만들기 위해
+병합한 두 커밋입니다.
 
-And look! If we want, we can now fast-forward `somebranch` to `main`
-because it's now a direct ancestor!
+그리고 보세요! 이제 `somebranch`가 직계 조상이므로 원한다면 `main`까지 빨리
+감기할 수 있습니다!
 
-In this example, Git was able to determine how to do the merge
-automatically. But there are some cases where it cannot, and this
-results in a _merge conflict_ that requires manual intervention. By you.
+이 예시에서는 Git이 병합 방법을 자동으로 알아낼 수 있었습니다. 하지만 그럴 수
+없는 경우도 있으며, 그러면 수동 개입이 필요한 _병합 충돌_이 발생합니다.
+바로 여러분의 개입이 필요합니다.
 
-## Merge Conflicts
+## 병합 충돌 {#merge-conflicts}
 
 [i[Merge-->Conflicts]<]
 
-If two branches have changes that are "far apart" from one another, Git
-can figure it out. If I edit line 20 of a file in one branch, and you
-edit line 3490 of the same file in another, Git can bring both edits in
-automatically.
+두 브랜치의 변경 지점이 서로 "멀리 떨어져" 있다면 Git이 처리할 수 있습니다.
+제가 한 브랜치에서 파일의 20번째 줄을 편집하고 여러분이 다른 브랜치에서 같은
+파일의 3490번째 줄을 편집하면 Git은 두 편집 내용을 자동으로 가져올 수
+있습니다.
 
-But let's say I edit line 20 in one commit, and you edit line 20 (the
-same line) in another commit.
+하지만 제가 한 커밋에서 20번째 줄을 편집하고 여러분도 다른 커밋에서 같은
+20번째 줄을 편집했다고 합시다.
 
-Which one is "right"? Git has no idea because it's just dumb software
-and doesn't know our business needs.
+어느 쪽이 "올바를까요"? Git은 그저 멍청한 소프트웨어이고 우리의 비즈니스
+요구 사항을 모르므로 전혀 알 수 없습니다.
 
-So it asks us, during the merge, to fix it. After we fix it, Git can
-complete the merge.
+그래서 병합 도중 우리에게 고쳐 달라고 요청합니다. 우리가 고치면 Git이 병합을
+완료할 수 있습니다.
 
-> **When you're merging, if a conflict occurs, _you're still merging_**.
-> Git is in the "merge" state, waiting for more merge-specific commands.
+> **병합 중 충돌이 발생하면 여러분은 _여전히 병합 중_입니다.** Git은 "병합"
+> 상태에서 병합 전용 명령을 더 기다리고 있습니다.
 >
-> You can resolve the conflict then commit the changes to complete the
-> merge. Or you can back out of the merge making as if you'd never
-> started it in the first place.
+> 충돌을 해결하고 변경 사항을 커밋해 병합을 완료할 수 있습니다. 또는 애초에
+> 병합을 시작하지 않은 것처럼 병합에서 빠져나올 수 있습니다.
 >
-> The important point is that you're aware Git is in a special state and
-> you have to either complete or abort the merge to get back to normal
-> before you continue to use it. 
+> 중요한 점은 Git이 특별한 상태에 있다는 것을 알고, 계속 사용하기 전에
+> 병합을 완료하거나 중단해 정상 상태로 돌아와야 한다는 것입니다.
 
-Let's have an example where both `main` and `newbranch` have added a
-line to end of file, i.e. they both added line 4. Git doesn't know which
-one is correct, so there's a conflict.
+`main`과 `newbranch`가 모두 파일 끝에 한 줄, 즉 4번째 줄을 추가한 예를
+살펴봅시다. Git은 어느 쪽이 맞는지 모르므로 충돌이 발생합니다.
 
 ``` {.default}
 $ git merge newbranch
@@ -165,9 +156,10 @@ $ git merge newbranch
   Automatic merge failed; fix conflicts and then commit the result.
 ```
 
-Now if I look at my status, I see we're in merge state, as noted by `You
-have unmerged paths`. We're in the middle of merge; we have to either go
-out the front or back out the back to get back to normal.
+이제 상태를 보면 `You
+have unmerged paths`라는 문구가 알려 주듯 병합 상태입니다.
+병합 도중이므로 정상으로 돌아가려면 앞으로 나아가 끝내거나 뒤로 물러나야
+합니다.
 
 ``` {.default}
 $ git status
@@ -183,47 +175,45 @@ $ git status
   no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-It's also hinting that I can do one of two things:
+다음 두 가지 중 하나를 할 수 있다는 힌트도 줍니다.
 
-1. Fix conflicts and run `git commit`.
-2. Use `git merge --abort` to abort the merge.
+1. 충돌을 고치고 `git commit`을 실행합니다.
+2. `git merge --abort`로 병합을 중단합니다.
 
-The second just rolls back the merge making it as if I hadn't run `git
-merge` in the first place.
+두 번째 방법은 애초에 `git
+merge`를 실행하지 않은 것처럼 병합을 되돌립니다.
 
-So let's focus on the first. What are these conflicts and how do I
-resolve them?
+첫 번째 방법에 집중해 봅시다. 이 충돌은 무엇이며 어떻게 해결할까요?
 
-## What a Conflict Looks Like
+## 충돌은 어떤 모습인가요? {#what-a-conflict-looks-like}
 
-My error message above is telling me that `foo.py` has unmerged paths.
-So look at what's happened with that file.
+위 오류 메시지는 `foo.py`에 병합되지 않은 경로가 있다고 알려 줍니다. 이
+파일에 무슨 일이 일어났는지 살펴봅시다.
 
-Before I started any of this, the file `foo.py` only had this in it on
-branch `main`:
+이 모든 작업을 시작하기 전에 `main` 브랜치의 `foo.py`에는 다음 내용만
+있었습니다.
 
 ``` {.default}
 print("Commit 1")
 ```
 
-And I added a line so it looked like this:
+한 줄을 추가해 다음과 같은 모습으로 만들었습니다.
 
 ``` {.default}
 print("Commit 1")
 print("Commit 4")
 ```
 
-And committed it.
+그리고 커밋했습니다.
 
-But what I didn't realize was that my teammate had also made another
-commit on `newbranch` that added different lines to the bottom of the
-file.
+하지만 제가 모르는 사이 팀원도 `newbranch`에 다른 커밋을 만들어 파일 아래에
+서로 다른 줄을 추가했습니다.
 
-So when I went to merge `newbranch` into `main`, I got this conflict.
-Git doesn't know which additional lines are correct.
+그래서 `newbranch`를 `main`에 병합하려 하자 이 충돌이 발생했습니다. Git은
+어느 추가 줄이 올바른지 모릅니다.
 
-**Here's where the fun begins.** Let's edit `foo.py` here in the middle
-of the merge and see what it looks like:
+**재미는 지금부터입니다.** 병합 도중에 `foo.py`를 편집해 어떤 모습인지
+살펴봅시다.
 
 ``` {.default}
 print("Commit 1")
@@ -235,36 +225,35 @@ print("Commit 3")
 >>>>>>> newbranch
 ```
 
-What the giblets is all that? Git has totally screwed with the contents
-of my file!
+이게 대체 무슨 난리일까요? Git이 파일 내용을 완전히 헤집어 놓았습니다!
 
-Yes, it has! But not for no reason; let's examine what's in there.
+네, 정말 그랬습니다! 하지만 이유 없이 그런 것은 아닙니다. 안에 무엇이 있는지
+살펴봅시다.
 
-We have three delimiters: `<<<<<<`, `======`, and `>>>>>>`.
+구분자가 세 개 있습니다. `<<<<<<`, `======`, `>>>>>>`입니다.
 
-Everything from the top delimiter to the middle one is what's in `HEAD`
-(the branch you're on and merging _into_).
+위쪽 구분자부터 가운데 구분자까지는 `HEAD`에 있는 내용입니다(현재 있는 브랜치,
+즉 병합 _대상_ 브랜치입니다).
 
-Everything from the middle delimiter to the bottom one is what's in
-`newbranch` (the branch you're merging _from_).
+가운데 구분자부터 아래쪽 구분자까지는 `newbranch`에 있는 내용입니다(병합해
+오는 _출발_ 브랜치입니다).
 
-So Git has "helpfully" given us the information we need to make a
-semi-informed decision about what to do.
+그러므로 Git은 어떻게 할지 어느 정도 근거 있는 결정을 내리는 데 필요한
+정보를 "친절하게" 제공한 셈입니다.
 
-And here's exactly the steps we must follow:
+반드시 따라야 할 정확한 단계는 다음과 같습니다.
 
-1. Edit the conflicting file(s), remove all those extra lines, and
-   **make the file(s) Right**.
-2. Do a `git add` to add the file(s).
-3. Do a `git commit` to finalize the merge.
+1. 충돌하는 파일을 편집해 추가된 줄을 모두 제거하고 **파일을 올바르게
+   만듭니다**.
+2. `git add`로 파일을 추가합니다.
+3. `git commit`으로 병합을 마무리합니다.
 
-Now, when I say "make the file *Right*", what does that mean? It means
-that I need to have a chat with my teammate and figure out what this
-code is supposed to do. We clearly have different ideas, and only one of
-them is right.
+그런데 "파일을 *올바르게* 만든다"는 말은 무슨 뜻일까요? 팀원과 이야기해 이
+코드가 무엇을 해야 하는지 알아내야 한다는 뜻입니다. 서로 생각이 분명 다르고,
+그중 하나만 옳습니다.
 
-So we have a chat and hash it out. We finally decide the file should
-look like this:
+그래서 대화하며 의견을 조율합니다. 마침내 파일이 다음과 같아야 한다고
+결정합니다.
 
 ``` {.default}
 print("Commit 1")
@@ -272,11 +261,11 @@ print("Commit 4")
 print("Commit 3")
 ```
 
-And then I (since I'm the one doing the merge), edit `foo.py` and remove
-all the merge delimiters and everything else, and make it look exactly
-like we agreed upon. I make it look *Right*.
+그런 다음 병합을 수행하는 제가 `foo.py`를 편집해 모든 병합 구분자와 불필요한
+내용을 제거하고, 합의한 모습과 정확히 같게 만듭니다. 파일을 *올바르게*
+만듭니다.
 
-Then I add the file to the stage:
+그런 다음 파일을 스테이징 영역에 추가합니다.
 
 ``` {.default}
 $ git add foo.py
@@ -289,35 +278,32 @@ $ git status
 	  modified:   foo.py
 ```
 
-Notice that `git status` is telling me we're still in the merging state,
-but I've resolved the conflicts. It tells me to `git commit` to finish
-the merge.
+`git status`는 충돌을 해결했지만 아직 병합 상태라고 알려 줍니다. 병합을
+끝내려면 `git commit`을 실행하라고 합니다.
 
-> **What if I added the conflict file too soon?** For example, what if
-> you add it but then you realize there are still unresolved conflicts
-> or the file isn't _Right_? If you haven't committed yet, you have a
-> couple options. (If you have committed, all you can do is
-> [reset](#reset) or [revert](#revert).)
+> **충돌 파일을 너무 일찍 추가했다면 어떻게 할까요?** 예를 들어 파일을 추가한
+> 뒤 아직 해결되지 않은 충돌이 있거나 파일이 _올바르지_ 않다는 것을 깨달았다면
+> 어떻게 할까요? 아직 커밋하지 않았다면 몇 가지 방법이 있습니다. (이미
+> 커밋했다면 [리셋](#reset)하거나 [되돌리기](#revert)하는 수밖에 없습니다.)
 >
-> One option is to just edit the file again, and re-add it when it's
-> done. (After editing the file will show up as a "change not staged for
-> commit" until you add it again.)
+> 한 가지 방법은 파일을 다시 편집하고 끝난 뒤 다시 추가하는 것입니다. (편집한
+> 뒤 다시 추가할 때까지 파일은 "커밋하도록 스테이징되지 않은 변경 사항"으로
+> 표시됩니다.)
 >
-> Another option is to move the file off the stage with `git checkout
-> --merge` on the file to get it back to the "both modified" state.
-> Helpfully, this won't delete the changes you already added. This is
-> especially useful if you're using a [merge tool](#mergetool).
+> 다른 방법은 파일에 `git checkout
+> --merge`를 실행해 스테이징 영역에서 빼고
+> "양쪽에서 수정됨" 상태로 되돌리는 것입니다. 다행히 이미 추가한 변경 사항은
+> 삭제하지 않습니다. [병합 도구](#mergetool)를 사용한다면 특히 유용합니다.
 
-So now that we've added the file, let's make the merge commit. Here
-we're manually making the merge commit, unlike above where Git was able
-to automatically make it.
+파일을 추가했으니 병합 커밋을 만들어 봅시다. 위에서는 Git이 자동으로 만들 수
+있었지만 여기서는 병합 커밋을 직접 만듭니다.
 
 ``` {.default}
 $ git commit -m "Merged with newbranch"
   [main 668b506] Merged with newbranch
 ```
 
-And that's it! Let's check status just to be sure:
+이게 전부입니다! 확실히 하기 위해 상태를 확인해 봅시다.
 
 ``` {.default}
 $ git status
@@ -325,9 +311,9 @@ $ git status
   nothing to commit, working tree clean
 ```
 
-Success!
+성공입니다!
 
-Just to wrap up, let's take a look at the log at this point:
+마무리하면서 이 시점의 로그를 살펴봅시다.
 
 ``` {.default}
 $ git log
@@ -357,49 +343,43 @@ $ git log
       Commit 1
 ```
 
-We see a few things. One is that our merge commit is pointed to by
-`main` (and `HEAD`). And looking down a couple commits, we see our
-now-direct ancestor, `newbranch` back on Commit 3.
+몇 가지가 보입니다. 먼저 `main`과 `HEAD`가 병합 커밋을 가리킵니다. 커밋을 몇
+개 아래로 내려가 보면 이제 직계 조상이 된 `newbranch`가 커밋 3에 있습니다.
 
-We also see a `Merge:` line on that top commit. It lists the commit
-hashes for the two commits that it came from (the first 7 digits,
-anyway), since the merge commit has two parents.
+맨 위 커밋에는 `Merge:` 줄도 있습니다. 병합 커밋에는 부모가 둘이므로 이 줄은
+병합의 출발점인 두 커밋의 해시를 나열합니다(어쨌든 앞 7자리만 표시합니다).
 
-## Why Merge Conflicts Happen
+## 병합 충돌이 발생하는 이유 {#why-merge-conflicts-happen}
 
-Generally, it's because you haven't coordinated with your team about who
-is responsible for which pieces of code. Generally two people shouldn't
-be editing the same lines of code in the same file at once.
+일반적으로 코드의 어느 부분을 누가 담당하는지 팀과 조율하지 않았기 때문에
+발생합니다. 보통 두 사람이 같은 파일의 같은 코드 줄을 동시에 편집해서는 안
+됩니다.
 
-That said, there are absolutely cases where it does happen and is
-expected. The key is to communicate with your team when resolving the
-conflict if you don't know what is _Right_.
+그렇기는 해도 충돌이 실제로 발생하며 예상되는 경우도 분명 있습니다. 무엇이
+_올바른지_ 모른다면 충돌을 해결할 때 팀과 소통하는 것이 핵심입니다.
 
-## Merging with IDEs or other Merge Tools
+## IDE나 다른 병합 도구로 병합하기 {#merging-with-ides-or-other-merge-tools}
 
-IDEs like VS Code might have a special merge mode where you can choose
-one set of changes or another, or both. Likely "both" is what you want,
-but make an informed decision on the matter.
+VS Code 같은 IDE에는 한쪽 변경 사항이나 다른 쪽 변경 사항, 또는 둘 다를 선택할
+수 있는 특별한 병합 모드가 있을 수 있습니다. 아마 "둘 다"가 원하는 선택일
+가능성이 크지만, 정보를 충분히 확인하고 결정하세요.
 
-Also, even when selecting "both", it could be that the editor puts them
-in the wrong order. It's up to you to make sure the file is _Right_
-before making the final commit to complete the merge.
+또한 "둘 다"를 선택해도 편집기가 잘못된 순서로 배치할 수 있습니다. 병합을
+완료하는 최종 커밋을 만들기 전에 파일이 _올바른지_ 확인할 책임은 여러분에게
+있습니다.
 
-You can do this by, after the tool has been used to resolve the
-conflict, opening the file again in a new window and making sure it's as
-you want it, and editing it to be if it's not.
+도구로 충돌을 해결한 뒤 새 창에서 파일을 다시 열어 원하는 모습인지 확인하고,
+그렇지 않다면 편집해서 원하는 모습으로 만들면 됩니다.
 
-For more information about merge tools, see the [Mergetool](#mergetool)
-chapter.
+병합 도구에 관한 자세한 내용은 [병합 도구](#mergetool) 장을 보세요.
 
-## Merge Big Ideas
+## 병합의 핵심 개념 {#merge-big-ideas}
 
-***DON'T PANIC!*** If you have a merge conflict, you can totally work it
-out. They're a common occurrence, and the more of them you do, the
-better at them you get.
+***당황하지 마세요!*** 병합 충돌이 발생해도 충분히 해결할 수 있습니다. 흔히
+있는 일이며, 많이 해결할수록 더 능숙해집니다.
 
-Nothing to worry about. Everything is in Git's commit history, so even
-if you botch it, you can always get things back the way they were.
+걱정할 것 없습니다. 모든 것이 Git 커밋 기록에 있으므로 일을 망쳐도 언제든
+원래 상태로 되돌릴 수 있습니다.
 
 [i[Merge-->Conflicts]>]
 [i[Merge]>]

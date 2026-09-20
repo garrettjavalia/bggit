@@ -1,19 +1,18 @@
-# Cherry-Pick: Bringing in Specific Commits
+# 체리픽: 특정 커밋 가져오기 {#cherry-pick-bringing-in-specific-commits}
 
 [i[Cherry-pick]<]
 
-Let's say you're working on `branch1` and you have made a bug fix to
-`branch2`. You're not ready to merge _all_ the changes in from `branch2`
-into `branch1`, but you really want just that bug fixed.
+`branch1`에서 작업 중이고 `branch2`에서 버그를 수정했다고 합시다.
+`branch2`의 변경 사항을 _모두_ `branch1`에 병합할 준비는 되지 않았지만,
+그 버그 수정만큼은 꼭 가져오고 싶습니다.
 
-Luckily, there's a way to do that! You can merge a single commit into
-your branch with `git cherry-pick`. You just have to tell it which
-commit to bring in.
+다행히 방법이 있습니다! `git cherry-pick`을 사용하면 커밋 하나만 내 브랜치에
+병합할 수 있습니다. 어떤 커밋을 가져올지만 알려 주면 됩니다.
 
-## Cherry-Pick Example
+## 체리픽 예시 {#cherry-pick-example}
 
-Let's have a file on the `main` branch called `foo.txt` that has the
-following contents stored in an initial commit:
+`main` 브랜치에 `foo.txt`라는 파일이 있고, 초기 커밋에 다음 내용이 저장돼
+있다고 합시다.
 
 ``` {.default}
 Line 1
@@ -28,12 +27,11 @@ Line 9
 Line 10
 ```
 
-Very exciting file, that.
+참으로 흥미진진한 파일입니다.
 
-Now let's switch to another branch, call it `branch`, inspirationally.
+이제 다른 브랜치로 전환합시다. 영감 넘치게도 이름은 `branch`라고 하겠습니다.
 
-And on this branch, we do some things. First, we add a couple lines to
-the end and commit.
+이 브랜치에서 몇 가지 작업을 합니다. 먼저 끝에 두 줄을 추가하고 커밋합니다.
 
 ``` {.default}
 Line 1
@@ -50,7 +48,7 @@ Branch: Line 101
 Branch: Line 102
 ```
 
-And then we add a line to the middle, and commit again.
+그런 다음 중간에 한 줄을 추가하고 다시 커밋합니다.
 
 ``` {.default}
 Line 1
@@ -68,22 +66,20 @@ Branch: Line 101
 Branch: Line 102
 ```
 
-**Additionally** let's create a branch here called `checkpoint` to make
-this demo a little easier. You don't *have* to do this, but it'll enable
-us to cherry-pick this commit by its branch name instead of by its
-commit hash. Or you could skip this step and just use the hash.
+**추가로** 데모를 조금 쉽게 만들기 위해 여기서 `checkpoint`라는 브랜치를
+만듭시다. 꼭 해야 하는 일은 아니지만, 커밋 해시 대신 브랜치 이름으로 이
+커밋을 체리픽할 수 있게 됩니다. 이 단계를 건너뛰고 해시를 사용해도 됩니다.
 
 ``` {.default}
 $ git branch checkpoint
 ```
 
-> **This doesn't switch branches.** It just makes a new branch on this
-> commit. `HEAD` is still pointing to `branch` like before.
+> **이 명령은 브랜치를 전환하지 않습니다.** 현재 커밋에 새 브랜치만 만듭니다.
+> `HEAD`는 이전과 마찬가지로 여전히 `branch`를 가리킵니다.
 
-Lastly, let's add a couple more lines to the end, and commit one last
-time.
+마지막으로 끝에 몇 줄을 더 추가하고 한 번 더 커밋합시다.
 
-So here's the file as it exists on `branch`:
+이제 `branch`에 있는 파일은 다음과 같습니다.
 
 ``` {.default}
 Line 1
@@ -103,7 +99,7 @@ Branch: Line 103
 Branch: Line 104
 ```
 
-And let's look at the log to see what we have:
+로그를 살펴보고 무엇이 있는지 확인합시다.
 
 ``` {.default}
 commit 9336292f73b4ace717644336f72458681c1bb761 (HEAD -> branch)
@@ -131,14 +127,13 @@ Date:   Sun Oct 20 13:08:30 2024 -0700
     added
 ```
 
-Okay—that's the set-up part of the demo. Now it's time to cherry-pick!
+좋습니다. 데모 준비가 끝났습니다. 이제 체리픽할 시간입니다!
 
-What we're going to want to do for the demo is switch back to `main` and
-then cherry-pick the one commit that inserts line 5 in the middle. You
-can always use its commit hash (`407f2`) for this, but we left behind
-that branch `checkpoint` there we can use instead.
+이 데모에서는 `main`으로 돌아간 다음 중간에 5번 줄을 삽입한 커밋 하나만
+체리픽하겠습니다. 언제든 커밋 해시(`407f2`)를 사용할 수 있지만, 대신 쓸 수
+있도록 `checkpoint` 브랜치를 남겨 뒀습니다.
 
-Let's do it.
+해 봅시다.
 
 ``` {.default}
 $ git switch main
@@ -151,8 +146,8 @@ $ git cherry-pick checkpoint
    1 file changed, 1 insertion(+)
 ```
 
-What that *should* have done is bring in that newly-inserted line 5, and
-none of the other changes. Let's look at `foo.txt` from `main`:
+이 명령은 새로 삽입된 5번 줄만 가져오고 다른 변경 사항은 하나도 가져오지
+*않았어야* 합니다. `main`의 `foo.txt`를 살펴봅시다.
 
 ``` {.default}
 Line 1
@@ -168,15 +163,14 @@ Line 9
 Line 10
 ```
 
-And there it is!
+바로 저기 있군요!
 
-> **Wait—wasn't that just a merge?** Not quite! Notice that we had added
-> lines 101-102 in `branch` *before* we inserted line 5. And yet that
-> earlier commit is not reflected in `main`. We *cherry-picked* that
-> single commit with line 5 out of the stream of commits, ignoring the
-> other ones before and after it!
+> **잠깐, 이건 그냥 병합 아닌가요?** 꼭 그렇지는 않습니다! `branch`에서
+> 5번 줄을 삽입하기 *전에* 101~102번 줄을 추가했다는 점에 주목하세요. 그런데
+> 그 앞선 커밋은 `main`에 반영되지 않았습니다. 앞뒤의 다른 커밋은 무시하고,
+> 커밋 흐름에서 5번 줄이 든 커밋 하나만 *체리픽*한 것입니다!
 
-Now let's look at `git log` on `main`:
+이제 `main`에서 `git log`를 살펴봅시다.
 
 ``` {.default}
 commit 92546636d05fa85218ca18a0cd705ddc14fa8b64 (HEAD -> main)
@@ -192,42 +186,36 @@ Date:   Sun Oct 20 13:08:30 2024 -0700
     added
 ```
 
-There are two amazing things to notice here:
+여기서 눈여겨볼 놀라운 점이 두 가지 있습니다.
 
-1. The author information was preserved in the log message. Notice it's
-   `branch-user@example.com` and not `user@example.com`, even though it
-   was the latter who did the cherry-pick. This might not be entirely
-   surprising, except...
+1. 로그 메시지에 작성자 정보가 보존됐습니다. 체리픽을 실행한 사람은 후자지만
+   `user@example.com`이 아니라 `branch-user@example.com`이라는 점에
+   주목하세요. 아주 놀라운 일은 아닐 수도 있지만...
 
-2. The cherry-picked commit hash is different in `main` than in
-   `branch`! In `branch`, it's `407f2`, and here it's `92546`. But it
-   **has** to be that way because it's got all new content. That is,
-   there's no other commit anywhere in the commit graph where `foo.txt`
-   looks like this, so it has to have a unique commit hash[^5472].
+2. 체리픽한 커밋의 해시는 `main`과 `branch`에서 서로 다릅니다! `branch`에서는
+   `407f2`이고 여기서는 `92546`입니다. 내용이 완전히 새로우므로 **반드시**
+   그래야 합니다. 즉, 커밋 그래프 어디에도 `foo.txt`가 이런 모습인 다른
+   커밋이 없으므로 고유한 커밋 해시를 가져야 합니다[^5472].
 
-[^5472]: Even if the changes were identical, the commit hash would still
-    be different because the hash takes all kinds of other metadata into
-    account.
+[^5472]: 변경 사항이 같더라도 해시는 온갖 다른 메타데이터까지 고려하므로
+    커밋 해시는 여전히 달라집니다.
 
-But not every cherry-pick will go as smoothly as that!
+하지만 모든 체리픽이 이렇게 순조롭지는 않습니다!
 
-## Cherry-Pick Conflicts
+## 체리픽 충돌 {#cherry-pick-conflicts}
 
 [i[Cherry-pick-->Conflicts]<]
 
-Yes, you can get conflicts with a cherry-pick, of course. This might
-happen because you've changed some of the same lines as the commit
-you're cherry-picking, or maybe because the cherry-picked commit has
-some contextual lines of code that you don't have.
+물론 체리픽에서도 충돌이 생길 수 있습니다. 체리픽하려는 커밋과 같은 줄을
+일부 변경했거나, 체리픽한 커밋에는 있지만 현재 브랜치에는 없는 주변 코드 줄이
+있기 때문일 수 있습니다.
 
-In any case, conflict resolution happens in the much the same way as
-with `merge` or `rebase`. If you need to, refamiliarize yourself with
-the content from those chapters.
+어떤 경우든 충돌 해결은 `merge`나 `rebase` 때와 거의 같은 방식으로
+진행됩니다. 필요하다면 해당 장의 내용을 다시 익히세요.
 
-But by now I hope the process seems familiar. First, make the file
-_Right_, then add it, and then you'll _continue_ (like with a `rebase`)
-with `git cherry-pick --continue`. Keep doing that until everything's
-merged together cleanly.
+하지만 이제 이 과정이 익숙하게 느껴지길 바랍니다. 먼저 파일을 _올바르게_
+만든 다음 추가하고, `git cherry-pick --continue`로 (`rebase` 때처럼)
+_계속_ 진행합니다. 모든 것이 깔끔하게 병합될 때까지 이 과정을 반복하세요.
 
 [i[Cherry-pick-->Conflicts]>]
 

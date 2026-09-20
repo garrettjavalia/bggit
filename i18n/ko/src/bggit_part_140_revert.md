@@ -1,36 +1,32 @@
-# Reverting: Undoing Commits {#revert}
+# 되돌리기: 커밋 취소하기 {#revert}
 
 [i[Revert]<]
 
-Let's say you made some changes and committed them, but they actually
-botched everything up. You want to just revert to an earlier version of
-the file.
+변경 사항을 만들어 커밋했는데 그 때문에 모든 것이 엉망이 됐다고 합시다.
+파일을 이전 버전으로 되돌리고 싶습니다.
 
-There's the cheesy way to do this that might have already occurred to
-you: detach the head to an earlier commit where the file was like you
-wanted it, make a copy of the file someplace safe, then reattach the
-head to `main`, then copy the old file over the existing one in your
-working tree. And add and commit! And this would work...
+이미 떠올렸을 법한 조금 촌스러운 방법이 있습니다. 파일이 원하는 모습이던
+이전 커밋으로 HEAD를 분리하고, 파일을 안전한 곳에 복사한 다음, HEAD를 다시
+`main`에 연결하고 이전 파일을 작업 트리의 기존 파일 위에 복사합니다. 그리고
+추가하고 커밋하면 됩니다! 실제로 작동하는 방법이긴 합니다...
 
-But let's be more proper, and we can do that with `git revert`.
+하지만 더 정석적인 방법인 `git revert`를 사용해 봅시다.
 
-Reverting allows us to actually undo the changes of a single commit,
-even if it wasn't the one that got you to the point you're at now. That
-is, let's say you've made 30 commits, but it turns out you don't
-actually want commit number 4 to be there any longer. You can revert
-just that one!
+되돌리기를 사용하면 현재 상태를 만든 바로 직전 커밋이 아니더라도 커밋 하나의
+변경 사항을 실제로 취소할 수 있습니다. 이를테면 커밋을 30개 만들었는데 네
+번째 커밋은 더 이상 원하지 않는다는 사실을 알게 됐다고 합시다. 그 커밋만
+되돌릴 수 있습니다!
 
-Performing a standard revert will actually make a new commit, and
-doesn't erase any old commits. In this way, it's not rewriting history
-so using this method is safe to revert commits that have already been
-pushed.
+일반적인 되돌리기는 새 커밋을 만들며 이전 커밋을 지우지 않습니다. 따라서
+기록을 다시 쓰지 않으므로 이미 push한 커밋도 이 방법으로 안전하게 되돌릴 수
+있습니다.
 
-## Performing the Revert
+## 되돌리기 실행하기 {#performing-the-revert}
 
-It's pretty straightforward. You look back in the log for the commit ID
-you're interested in reverting, and revert it.
+상당히 간단합니다. 로그를 거슬러 올라가 되돌리려는 커밋 ID를 찾고 되돌리면
+됩니다.
 
-For example, if you have this in the log:
+예를 들어 로그에 다음 내용이 있다고 합시다.
 
 ``` {.default}
 commit 9fef4fe6d42b91c12b5217829e8d98d738f84d61
@@ -40,9 +36,8 @@ Date:   Fri Jul 26 16:59:44 2024 -0700
     Added Line 50
 ```
 
-and you decided you didn't want that commit any longer, you could revert
-it by its commit ID. Here I'll just type the first few characters of the
-hash because that's enough:
+이 커밋을 더 이상 원하지 않는다면 커밋 ID로 되돌릴 수 있습니다. 해시의 앞
+몇 글자만으로 충분하므로 여기서는 그 부분만 입력하겠습니다.
 
 ``` {.default}
 $ git revert 9fef4
@@ -51,9 +46,8 @@ $ git revert 9fef4
    1 file changed, 1 deletion(-)
 ```
 
-There's no conflict (more on that, below) in this example, so it just
-pops me into my editor and allows me to edit the commit message.
-Remember that the revert makes a new commit!
+이 예시에서는 충돌이 없으므로(아래에서 더 설명합니다) 편집기가 열리고 커밋
+메시지를 수정할 수 있습니다. 되돌리기는 새 커밋을 만든다는 사실을 기억하세요!
 
 ``` {.default .numberLines}
 Revert "Added Line 50"
@@ -61,9 +55,9 @@ Revert "Added Line 50"
 This reverts commit 9fef4fe6d42b91c12b5217829e8d98d738f84d61.
 ```
 
-I save the file and `git status` tells me we're clean.
+파일을 저장하면 `git status`는 깨끗한 상태라고 알려 줍니다.
 
-Another `git log` will show the revert commit:
+다시 `git log`를 실행하면 되돌리기 커밋이 보입니다.
 
 ``` {.default}
 $ git log
@@ -76,32 +70,29 @@ $ git log
     This reverts commit 9fef4fe6d42b91c12b5217829e8d98d738f84d61.
 ```
 
-You can revert any commit, even commits that were themselves reverts!
-Revert the revert!
+어떤 커밋이든 되돌릴 수 있으며, 심지어 그 자체가 되돌리기인 커밋도 가능합니다!
+되돌리기를 되돌리는 것이죠!
 
-Now that was an example where the revert went smoothly. But what if
-you've made some changes since the revert commit that were close to the
-changes in the revert commit itself? Can it conflict? Of course it can!
+지금은 되돌리기가 순조롭게 진행된 예시였습니다. 하지만 되돌릴 커밋 이후에 그
+커밋의 변경 지점과 가까운 곳을 수정했다면 어떨까요? 충돌할 수 있을까요?
+물론입니다!
 
-## Revert Conflicts
+## 되돌리기 충돌 {#revert-conflicts}
 
 [i[Revert-->Conflicts]<]
 
-Like with merging or rebasing, you can have conflicts with a revert. If
-you're not familiar with conflict resolution, please review the
-[Rebasing Conflicts](#rebasing-conflicts) section, because it's closest
-to how revert conflicts work.
+병합이나 리베이스와 마찬가지로 되돌리기에서도 충돌이 생길 수 있습니다. 충돌
+해결에 익숙하지 않다면 되돌리기 충돌과 가장 비슷한 [리베이스
+충돌](#rebasing-conflicts) 절을 다시 살펴보세요.
 
-An example of a conflict might be that if you changed line 37 in your
-code, then revert a commit that also changed line 37 in the code, Git
-can't figure out what to do with that. Should it revert it to what it
-was before your commit, or before the earlier commit?
+예를 들어 코드의 37번째 줄을 변경한 다음, 역시 37번째 줄을 변경했던 커밋을
+되돌리면 Git은 어떻게 해야 할지 판단할 수 없습니다. 내 커밋 이전 상태로
+되돌려야 할까요, 아니면 더 앞선 그 커밋 이전 상태로 되돌려야 할까요?
 
-So there's a revert conflict that must be resolved. And it works very
-much like the other conflicts we've already seen.
+따라서 해결해야 할 되돌리기 충돌이 생깁니다. 해결 방식은 이미 살펴본 다른
+충돌과 매우 비슷합니다.
 
-If you try to revert and get a conflict, it will say something like
-this:
+되돌리기를 시도하다 충돌이 생기면 다음과 같은 메시지가 나옵니다.
 
 ``` {.default}
 $ git revert 5af89a8985c001ec02409d77e093fb7be45495ff
@@ -118,8 +109,8 @@ $ git revert 5af89a8985c001ec02409d77e093fb7be45495ff
   hint: "git config advice.mergeConflict false"
 ```
 
-And it points out we have a few options here. We can get even more info
-with our friend `git status`:
+여기서 선택할 수 있는 몇 가지 방법도 알려 줍니다. 우리의 친구 `git
+status`로 더 많은 정보를 얻을 수 있습니다.
 
 ``` {.default}
 $ git status
@@ -137,26 +128,25 @@ $ git status
   no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-So what we can do here is one of these:
+여기서는 다음 중 하나를 할 수 있습니다.
 
-* Edit the file, fix the conflict, then `git add` it, then
-  `git revert --continue` to go to the next commit to be reverted (if any).
-* Bail out completely with `git revert --abort`.
-* Skip reverting this particular commit with `git revert --skip`. If you
-  skip all the commits you were reverting, it's just like an abort.
+* 파일을 편집해 충돌을 해결하고 `git add`한 뒤 `git revert --continue`로
+  되돌릴 다음 커밋이 있다면 그 커밋으로 넘어갑니다.
+* `git revert --abort`로 작업을 완전히 중단합니다.
+* `git revert --skip`으로 이 특정 커밋의 되돌리기를 건너뜁니다. 되돌리려던
+  모든 커밋을 건너뛰면 중단한 것과 같습니다.
 
-If you fix the conflict, you'll get to enter a commit message for the
-new commit just like before.
+충돌을 해결하면 이전과 마찬가지로 새 커밋의 커밋 메시지를 입력하게 됩니다.
 
 [i[Revert-->Conflicts]>]
 
-## Reverting Multiple Commits
+## 여러 커밋 되돌리기 {#reverting-multiple-commits}
 
 [i[Revert-->Multiple commits]<]
 
-You can specify multiple reverts at the same time on the command line.
+명령줄에서 되돌릴 커밋을 여러 개 한꺼번에 지정할 수 있습니다.
 
-Here's an example that reverts two commits:
+다음은 커밋 두 개를 되돌리는 예시입니다.
 
 ``` {.default}
 $ git revert 4c0b3 81d2a
@@ -168,12 +158,11 @@ $ git revert 4c0b3 81d2a
    1 file changed, 1 deletion(-)
 ```
 
-And there will be two new revert commits after that. You'll edit two
-revert commit messages over the course of that revert.
+그러면 새 되돌리기 커밋 두 개가 생깁니다. 되돌리기 과정에서 커밋 메시지도 두
+번 편집합니다.
 
-You can also specify a range of commits. Be sure to do this in
-oldest-to-newest order, or you'll get an `empty commit set passed`
-error.
+커밋 범위를 지정할 수도 있습니다. 반드시 오래된 것부터 최신 것 순서로
+지정하세요. 그렇지 않으면 `empty commit set passed` 오류가 발생합니다.
 
 ``` {.default}
 $ git revert 4c0b3^..81d2a
@@ -185,9 +174,9 @@ $ git revert 4c0b3^..81d2a
    1 file changed, 1 deletion(-)
 ```
 
-Again, that will make a lot of commits, one per revert. You can [squash
-those commits](#squashing-commits) if you want to, or you can use `-n`
-("no commit") to keep Git from committing until you're ready.
+이 경우에도 되돌리기마다 하나씩 많은 커밋이 생깁니다. 원한다면 [이 커밋들을
+스쿼시](#squashing-commits)할 수 있고, `-n`("커밋 없음")을 사용해 준비될
+때까지 Git이 커밋하지 않게 할 수도 있습니다.
 
 ``` {.default}
 $ git revert -n ee71e 123e8
@@ -195,12 +184,12 @@ $ git revert -n ee71e 123e8
   Auto-merging foo.txt
 ```
 
-At this point, the file is staged with those two commits reverted. And
-you can now make a single commit that holds them. And you can do the
-same thing specifying a range.
+이 시점에는 두 커밋이 되돌려진 상태로 파일이 스테이징돼 있습니다. 이제 이
+두 변경을 담은 커밋 하나를 만들 수 있습니다. 범위를 지정했을 때도 같은
+방법을 쓸 수 있습니다.
 
-Of course, there might be a conflict, and you'll have to resolve those in
-the super fun way we've already discussed.
+물론 충돌이 생길 수도 있고, 이미 살펴본 그 무척 재미있는 방법으로 해결해야
+합니다.
 
 [i[Revert-->Multiple commits]>]
 [i[Revert]>]
