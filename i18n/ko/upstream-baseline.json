@@ -1,0 +1,389 @@
+{
+  "schema_version": 1,
+  "guide_id": "bggit",
+  "upstream_commit": "756463786f1dcb44a59b8ed136a119219101aace",
+  "source_root": "src",
+  "translation_root": "i18n/ko/src",
+  "files": {
+    "bggit_part_005_boilerplate.md": {
+      "sha256": "5069e0b17b1a047fa427f43823d7234daa7847ac47d2d6a7ab87571c6555d255",
+      "status": "untranslated"
+    },
+    "bggit_part_010_git_basics.md": {
+      "sha256": "535d9b75f000162242f4be3e3f0724fba56a1bad17ccabcba295587009861f7e",
+      "status": "untranslated"
+    },
+    "bggit_part_020_using_github.md": {
+      "sha256": "7cb248a44ad11db5c9afae78993cdd39c6fff515c56e683fa6941efd047b7334",
+      "status": "untranslated"
+    },
+    "bggit_part_025_headlog.md": {
+      "sha256": "2d833d6fcc83992f811e0926df8afe85cbdfde7041fef251b0c846cdc5d7bf47",
+      "status": "untranslated"
+    },
+    "bggit_part_030_branches.md": {
+      "sha256": "d5e7127c5b78a21de3daf8603c05e504457241a84e9b88af8a4667de75f27b63",
+      "status": "untranslated"
+    },
+    "bggit_part_040_merging.md": {
+      "sha256": "e2faf66338c592997a8373424559660eff3aac62601c9ee4faa6921359f7d608",
+      "status": "untranslated"
+    },
+    "bggit_part_050_subdir.md": {
+      "sha256": "eefe57caf6655ae796dfdfe3e44a4a85c73b8284ec6ecaee37133a756628dc00",
+      "status": "untranslated"
+    },
+    "bggit_part_060_gitignore.md": {
+      "sha256": "1e49378e91dd14892f67d0ca83ca8fb234a54b48891a2d3243488a45704c8f26",
+      "status": "untranslated"
+    },
+    "bggit_part_070_remotes.md": {
+      "sha256": "c000c7fa77c3954745cb5b118ea7d6dbcdea3cc2df7ddbc1da14c4626ee461a2",
+      "status": "untranslated"
+    },
+    "bggit_part_080_remote_branch.md": {
+      "sha256": "d4bf72b08d7bedb8c1289f891c75f97a8608faab4463ca1593b413d03b375cb5",
+      "status": "untranslated"
+    },
+    "bggit_part_090_file_states.md": {
+      "sha256": "8deeba312b4d2917c5ef6f096551be5b27b46b6a62c23ae920ec948c4826eec6",
+      "status": "untranslated"
+    },
+    "bggit_part_092_diff.md": {
+      "sha256": "a445c4ee02b5545b7aa7e4018a215bfe8f187e7c4ad98bda90d0dc34a5ab70b5",
+      "status": "untranslated"
+    },
+    "bggit_part_095_renaming_removing.md": {
+      "sha256": "46000c5fce99d16c7ff66ae5aae42ba44ed61d4890e5210a843bc0bab0eb7d46",
+      "status": "untranslated"
+    },
+    "bggit_part_100_collaboration.md": {
+      "sha256": "3aa1190cb88aa2f740acb92431294b3f10c6bb915e3685494f38b12c59db6c84",
+      "status": "untranslated"
+    },
+    "bggit_part_110_rebase.md": {
+      "sha256": "7e30a52e3f80071f6a20b7615e932c24c6c6d52eb5033174d95f38dadd6beba0",
+      "status": "untranslated"
+    },
+    "bggit_part_120_stash.md": {
+      "sha256": "85a15917aafde551960bd202896545ab0dc31fea2c167bc4cee5875cc45e0fa1",
+      "status": "untranslated"
+    },
+    "bggit_part_130_pullreq.md": {
+      "sha256": "73fdfb8ddee3b62601fca452daf4be418969779d24d7b288857f1fd27ab065bc",
+      "status": "untranslated"
+    },
+    "bggit_part_140_revert.md": {
+      "sha256": "13f657231afcdd17f06f0c7da0a960be5e31ef00656a8978b2a4a9c468066ab6",
+      "status": "untranslated"
+    },
+    "bggit_part_150_reset.md": {
+      "sha256": "74c972a48cf615cbb69717d3336d98c00f45e03225f691fb6e8cfdc84968546b",
+      "status": "untranslated"
+    },
+    "bggit_part_160_reflog.md": {
+      "sha256": "e7c33613ed0dddc0185083f45eaf92de90d4a6fb1169133794e642225c42fef7",
+      "status": "untranslated"
+    },
+    "bggit_part_170_patch.md": {
+      "sha256": "095f8ed917659be1db0c8f7756b1d91c1b56a50da30b803da0f805e86a1c669c",
+      "status": "untranslated"
+    },
+    "bggit_part_180_cherrypick.md": {
+      "sha256": "92de403ddcbfc8138f8321a1a0877bc58f08feb93b4b024646e04f340bb7332d",
+      "status": "untranslated"
+    },
+    "bggit_part_190_blame.md": {
+      "sha256": "47a317fc5e145919baa49e2fb9825b4dcae81320dbfafb2c1ab242f52f04594a",
+      "status": "untranslated"
+    },
+    "bggit_part_200_config.md": {
+      "sha256": "91925238d5b581b5f2df992c31093957bc0606589e3e89c9a6f3c28c736534fb",
+      "status": "untranslated"
+    },
+    "bggit_part_210_alias.md": {
+      "sha256": "288e25aa022a46247dc3a7334db46bab50a043da08c734b42733296486969525",
+      "status": "untranslated"
+    },
+    "bggit_part_220_id.md": {
+      "sha256": "48a1cb282d1993675c6826c6e3551210ba88bd4fb6299867e8ca8883f56b02e3",
+      "status": "untranslated"
+    },
+    "bggit_part_230_amend.md": {
+      "sha256": "ecb6cdd467f2a985a8a07dbb6e2feaeaa02c0b0ee736ec0eece5ad4cab2321aa",
+      "status": "untranslated"
+    },
+    "bggit_part_240_difftool.md": {
+      "sha256": "dddfce419baddba71a1be9137fc448ff4439d4556ac3ddb91e3439e195399e85",
+      "status": "untranslated"
+    },
+    "bggit_part_250_mergetool.md": {
+      "sha256": "a12f848369e65d212e69e4a5c70ab7e646631c66e0d443480beeebdbadd4e321",
+      "status": "untranslated"
+    },
+    "bggit_part_260_submodules.md": {
+      "sha256": "d856a28daf64ac7cd17649dc2a405cad2b8c98f9f1212ccbdbfebd119e833d9a",
+      "status": "untranslated"
+    },
+    "bggit_part_270_tags.md": {
+      "sha256": "b5e7ddd983b979978aa643594e1877652809800a0994eb92ca6eb173e1cffb3f",
+      "status": "untranslated"
+    },
+    "bggit_part_280_worktrees.md": {
+      "sha256": "c83bf577ab2dbc0dc7107ddfa90248fe8d152a3d455bea76a9ab834ee4e2cb09",
+      "status": "untranslated"
+    },
+    "bggit_part_A005_playground.md": {
+      "sha256": "075369fe7a554444296400f2da404b378b9dfda91f3f70f9455dd0645a95153c",
+      "status": "untranslated"
+    },
+    "bggit_part_A010_editors.md": {
+      "sha256": "aae1053a128a3ac2e00e27aa0f1d31412d7a10b33ba1d1696a49b5e43a1ca70c",
+      "status": "untranslated"
+    },
+    "bggit_part_A020_errors.md": {
+      "sha256": "c128c5826475200834b8b29af87d1d438c7a00d5e9c31bad266ea56d1e1d42d3",
+      "status": "untranslated"
+    },
+    "bggit_part_A030_vim.md": {
+      "sha256": "457ef0701391c50419e0eb5b00d5250182809e2e4897901d3a24669ba86492b5",
+      "status": "untranslated"
+    },
+    "bggit_part_A800_refs.md": {
+      "sha256": "f27b0d142c2a501d9c33c2d1b9b8a8e1a60f0973b615a81bca55381f6c9139d0",
+      "status": "untranslated"
+    },
+    "bggit_part_A900_reference.md": {
+      "sha256": "2ae4c2fb76055ed36881928ba05dad9fef843478e8cd2bf7f3678360c1676e33",
+      "status": "untranslated"
+    },
+    "img_030_010.pdf": {
+      "sha256": "c9079eee42a3d263fc9c7a98c5cd082e45700c47c7de1bbe5194f8bf840ef8f1",
+      "status": "copied-asset"
+    },
+    "img_030_010.svg": {
+      "sha256": "f344db7b6182aa0599df14745b600e35c7f0cfa8c215495f61123edc438d3923",
+      "status": "copied-asset"
+    },
+    "img_030_020.pdf": {
+      "sha256": "b22a98149709322fe8c4b3bd18356eb8057f46e4b5799d3583f0ed9b62930829",
+      "status": "copied-asset"
+    },
+    "img_030_020.svg": {
+      "sha256": "095c0f3d82e8a16073777d7c2202362ed95f748f09aff3ff0d62005313d3417e",
+      "status": "copied-asset"
+    },
+    "img_030_030.pdf": {
+      "sha256": "82b0b165fb33023b89a434d868553d32eac8757f4102b09f63787e03135dbf9b",
+      "status": "copied-asset"
+    },
+    "img_030_030.svg": {
+      "sha256": "330e04d907f053d0369fbbdbeab39d1534a144c7ff217b9b7ec94fdf71701843",
+      "status": "copied-asset"
+    },
+    "img_030_040.pdf": {
+      "sha256": "e11446693e9d3d5702d204d7fe757ffb2a0ab41b649ecef1e206a0576f0baca9",
+      "status": "copied-asset"
+    },
+    "img_030_040.svg": {
+      "sha256": "8d14fd7b9a5b4e485a3440f775df489a26ee6d1eb774c1b874edf5dd89daa915",
+      "status": "copied-asset"
+    },
+    "img_030_050.pdf": {
+      "sha256": "a0bf0e36ab84957e24dc207f4e3c32715f7b52d9993ff7ca7660a80d4f420457",
+      "status": "copied-asset"
+    },
+    "img_030_050.svg": {
+      "sha256": "a886d3a1263b7aab3e68ca9771af296f831f867104aac312b33447f58c6d22bc",
+      "status": "copied-asset"
+    },
+    "img_030_060.pdf": {
+      "sha256": "10fb331ccf136130297d0136e7a10260be130853ecac1536d39eb4f7f674ca1d",
+      "status": "copied-asset"
+    },
+    "img_030_060.svg": {
+      "sha256": "a8f160f4917560032837ad45154fd24fb7ff3cef097a956992b343130fcd0701",
+      "status": "copied-asset"
+    },
+    "img_030_070.pdf": {
+      "sha256": "b01f07e9b29f12713a913c9084bf14fff7988b5f46bd8b54e770e1068d8b3e7c",
+      "status": "copied-asset"
+    },
+    "img_030_070.svg": {
+      "sha256": "302b120a4e1413478f8837ab8019d2a571f8944afe8195b5789bb712b39e5c38",
+      "status": "copied-asset"
+    },
+    "img_030_080.pdf": {
+      "sha256": "19c848214ce62212f81fdd69a621cb7eb9f88eae74e8208721c037fec3556388",
+      "status": "copied-asset"
+    },
+    "img_030_080.svg": {
+      "sha256": "f87dc3833d0d812d7f53e606dd6a0342950ad593fbd9a70f35813cfba30a07dc",
+      "status": "copied-asset"
+    },
+    "img_030_090.pdf": {
+      "sha256": "13be1222cfa6c3a57791c1db25e1135232190af93ee3c6f6c7d358f0141f4f33",
+      "status": "copied-asset"
+    },
+    "img_030_090.svg": {
+      "sha256": "2dd9b43b4584d8b64d56298dbb1bb4e66e5d0da6ccf68da106738de268d99709",
+      "status": "copied-asset"
+    },
+    "img_030_100.pdf": {
+      "sha256": "6ff2469cf72ded1cbe60f020cd5383e803de03f590fede6098c5cedf421214d6",
+      "status": "copied-asset"
+    },
+    "img_030_100.svg": {
+      "sha256": "e4e8aea5dc24533bc9ff8a624f880e303616e2a939b67bbf533f164e12103f3f",
+      "status": "copied-asset"
+    },
+    "img_030_110.pdf": {
+      "sha256": "06c8b19557665c93d4a194f0a0afebf03d5bfa5c23e44782f1540718b1176c52",
+      "status": "copied-asset"
+    },
+    "img_030_110.svg": {
+      "sha256": "3a4a52000873c60f34df971aec27d9da80902d1cae00880fc6fd2106725d2776",
+      "status": "copied-asset"
+    },
+    "img_030_120.pdf": {
+      "sha256": "4b3513ea826c9fb0bbcb0d2a3d74d192811c6db615024eb50c2e231a3133b041",
+      "status": "copied-asset"
+    },
+    "img_030_120.svg": {
+      "sha256": "4f4169b6e2a809cc62f52ee3587a1160bcd2da8e931233874ccf1a6bb827a528",
+      "status": "copied-asset"
+    },
+    "img_030_130.pdf": {
+      "sha256": "816c92a61cf4a2ce4b17d7b51f6a1567c2f1ab6243cee40c2b068c4f7c3e03c8",
+      "status": "copied-asset"
+    },
+    "img_030_130.svg": {
+      "sha256": "c1de8246f477916a3324e8bddc26c296447ccc5c5d0903f32ec465cd7b75369f",
+      "status": "copied-asset"
+    },
+    "img_030_140.pdf": {
+      "sha256": "1119f4a1e0d8ab33b7a51e67f549b2bb337dff95c01236a12212e7e5c907a3b4",
+      "status": "copied-asset"
+    },
+    "img_030_140.svg": {
+      "sha256": "078bfd5cdfc52249a5e12f26a82beaaad7b57537dbe70b9b179f8a4ef4c526e8",
+      "status": "copied-asset"
+    },
+    "img_030_150.pdf": {
+      "sha256": "d749c893e46424774c02d06e8164950b5034443f6521fd6799347a5faf7de07b",
+      "status": "copied-asset"
+    },
+    "img_030_150.svg": {
+      "sha256": "d069d11031ddd8176595a5fbf3dfd8c521574893a2efafde4b577b94fb52d6c0",
+      "status": "copied-asset"
+    },
+    "img_040_010.pdf": {
+      "sha256": "7900f9ccb8fd1bd07f9736f15f56e8f12060733dc659abd7c774775cdf9166cb",
+      "status": "copied-asset"
+    },
+    "img_040_010.svg": {
+      "sha256": "f0d9ac61411c1e89d5cc65fa8489f5890762b6ccba071005531aea2352af4e45",
+      "status": "copied-asset"
+    },
+    "img_040_020.pdf": {
+      "sha256": "a23e0fdf5ed6098380a5f60a562e35bc91be13dc8e21a453454588519b48119c",
+      "status": "copied-asset"
+    },
+    "img_040_020.svg": {
+      "sha256": "9eb36a23b776a4f15dc4d919e36c94cef18ac7826848f92633636d45cc246b00",
+      "status": "copied-asset"
+    },
+    "img_040_030.pdf": {
+      "sha256": "ac0535674aa46d10b1953df647e5557065795bed816a801054a143062ff16d9e",
+      "status": "copied-asset"
+    },
+    "img_040_030.svg": {
+      "sha256": "4350bd3637bee1d8af47ff657b665e9de2ac6f359eb132ce77af0363f0decf09",
+      "status": "copied-asset"
+    },
+    "img_080_010.png": {
+      "sha256": "f6ef6142d8aefc14bbf83d22a89ffd67eb133b1b2dc6f6370492c6eea6610666",
+      "status": "copied-asset"
+    },
+    "img_100_010.pdf": {
+      "sha256": "42c33827effcef8cae2c5f7287a2d8e9110949c3da17fd8bd5173cc7087f5ff7",
+      "status": "copied-asset"
+    },
+    "img_100_010.svg": {
+      "sha256": "a4a31c2729b484d18cfeb55dbeba81a39d5d1096e3b28aca468e2e576b11cc90",
+      "status": "copied-asset"
+    },
+    "img_100_020.pdf": {
+      "sha256": "fc7845740f3d926a055f64dac2905bfaf8ec51396dec308c2bd548018c05c282",
+      "status": "copied-asset"
+    },
+    "img_100_020.svg": {
+      "sha256": "362175516f4ca17715a418136341546e95636612916657ac6471a45b993fbd0d",
+      "status": "copied-asset"
+    },
+    "img_100_030.pdf": {
+      "sha256": "7f5f7fc57ee8279d90335ba8d789c81ccd43e2ba6e491d9e99133c2d125ffa71",
+      "status": "copied-asset"
+    },
+    "img_100_030.svg": {
+      "sha256": "f7fec28a18823e79541ed9f0f2c3b2f78998459a92c6e4ffceb604496f2f0803",
+      "status": "copied-asset"
+    },
+    "img_110_010.pdf": {
+      "sha256": "4dd53cc9b180933f4c8812bb2ca4a00b5922dd849e41100c5ec6e2a919c2171d",
+      "status": "copied-asset"
+    },
+    "img_110_010.svg": {
+      "sha256": "590111c8f8262edb33a224615dfb8c0ef1faccbd9fcb11b69a6289be14fd5dca",
+      "status": "copied-asset"
+    },
+    "img_110_020.pdf": {
+      "sha256": "f2c82795da68f5d0ada4fd64d16abdd568b5a989b5b3e7cbc55fd257fd2b8f5f",
+      "status": "copied-asset"
+    },
+    "img_110_020.svg": {
+      "sha256": "660666b4673af0ea8f321848519d90f50453d1a9cf833c425d13366875b89fab",
+      "status": "copied-asset"
+    },
+    "img_110_030.pdf": {
+      "sha256": "abdf46f892bc45d196ccf58618dbcdc627ada15085362b8f19cc5f081b9fdb3a",
+      "status": "copied-asset"
+    },
+    "img_110_030.svg": {
+      "sha256": "238564ae2ebd1642e9de1324949a1e7aa06cef62e68f9dd88d887e2e82ea5874",
+      "status": "copied-asset"
+    },
+    "img_110_040.pdf": {
+      "sha256": "328cf4e8cd0b24cd4b366d76e299c3413db89f0ca779dcdbd65f835bef2c912f",
+      "status": "copied-asset"
+    },
+    "img_110_040.svg": {
+      "sha256": "d9f7a6aad037412e19d670275759dbcfbdb4981924745ee381c1e98e7e3ec5a9",
+      "status": "copied-asset"
+    },
+    "img_110_050.pdf": {
+      "sha256": "bb106c9685dc4ad5d3b9101df78b940e370641c61c0b850bf6f1796929ddc3ab",
+      "status": "copied-asset"
+    },
+    "img_110_050.svg": {
+      "sha256": "407abda2fa9edebe4d44c83ea80d626dfb25e2521beb683c129e205fdd2f2a86",
+      "status": "copied-asset"
+    },
+    "img_150_010.pdf": {
+      "sha256": "b01f07e9b29f12713a913c9084bf14fff7988b5f46bd8b54e770e1068d8b3e7c",
+      "status": "copied-asset"
+    },
+    "img_150_010.svg": {
+      "sha256": "302b120a4e1413478f8837ab8019d2a571f8944afe8195b5789bb712b39e5c38",
+      "status": "copied-asset"
+    },
+    "img_difftool.png": {
+      "sha256": "94610fc66eeee249b435ebbca34c9e8d4d65793860ca6a933128025aa8f578e4",
+      "status": "copied-asset"
+    },
+    "Makefile": {
+      "sha256": "7b386d3fef9fccaee255a5206c728677ec6cd31cd1e4957c19ce93b12f18c4e0",
+      "status": "metadata"
+    }
+  }
+}
