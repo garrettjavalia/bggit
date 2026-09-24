@@ -109,7 +109,7 @@ $ git branch -vv
 
 그런데 `newbranch`도 **역시** `origin/main`에 대응합니다! 어떻게 된 걸까요?!
 
-`git branch -c newbranch`를 실행하면 현재 브랜치(이 예에서는 `main`)를 다른 브랜치로 _복사_하는데, 이때 _원격 추적 브랜치까지_ 복사하기 때문입니다. 가능하다면 `newbranch`는 `origin/newbranch`와 연결되어야 하므로 좋지 않은 소식입니다.
+`git branch -c newbranch`를 실행하면 현재 브랜치(이 예에서는 `main`)를 다른 브랜치로 *복사*하는데, 이때 _원격 추적 브랜치까지_ 복사하기 때문입니다. 가능하다면 `newbranch`는 `origin/newbranch`와 연결되어야 하므로 좋지 않은 소식입니다.
 
 몇 가지 선택지가 있습니다.
 
