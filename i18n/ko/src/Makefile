@@ -1,4 +1,4 @@
-TITLE="Beej's Guide to Git"
+TITLE="Beej의 Git 안내서"
 SUBTITLE=""
 AUTHOR='Brian “Beej Jorgensen” Hall'
 VERSION_DATE="v1.2.8, Copyright © April 18, 2026"

@@ -1,103 +1,99 @@
-# GitHub: How To Use It
+# GitHub: 사용 방법 {#github-how-to-use-it}
 
 [i[GitHub]<]
 
-Now, we've said that GitHub (which is a proprietary web front-end to Git
-run and owned by Microsoft) is not Git, and it's true. It's also true
-that you never even need to touch GitHub in order to use Git.
+앞에서 GitHub(Microsoft가 소유하고 운영하는 Git용 독점 웹
+프런트엔드)는 Git이 아니라고 했는데, 사실입니다. Git을 사용하는 데
+GitHub를 건드릴 필요조차 전혀 없다는 말도 사실입니다.
 
-That said, it's *really* common for people to use GitHub, so we'll get
-it set up in this chapter.
+그렇기는 해도 사람들이 GitHub를 사용하는 일이 *정말* 흔하므로, 이
+장에서는 GitHub를 설정하겠습니다.
 
-Here we'll make a new GitHub account and see how authentication works.
-This involves some one-time setup.
+여기서는 새 GitHub 계정을 만들고 인증이 어떻게 작동하는지 살펴봅니다.
+한 번만 하면 되는 설정이 몇 가지 있습니다.
 
-If you already have a GitHub account, you can skip that section.
+이미 GitHub 계정이 있다면 해당 절은 건너뛰어도 됩니다.
 
-If you already have authentication set up with GitHub CLI or with SSH
-keys, you can skip that section, as well.
+GitHub CLI나 SSH 키로 이미 인증을 설정했다면 그 절도 건너뛰어도 됩니다.
 
-If you don't need to use GitHub, you can skip the entire chapter!
+GitHub를 사용할 필요가 없다면 이 장 전체를 건너뛰어도 됩니다!
 
-## Making a GitHub Account
+## GitHub 계정 만들기 {#making-a-github-account}
 
 [i[GitHub-->Account creation]]
 
-Head on over to [fl[GitHub|https://github.com/]] and click `Sign Up`.
-Follow those instructions.
+[fl[GitHub|https://github.com/]]로 가서 `Sign Up`을 클릭하세요. 안내에
+따라 진행합니다.
 
-Eventually you'll end up on your home screen dashboard.
+마지막에는 홈 화면 대시보드에 도착합니다.
 
-## Creating a New Repo on GitHub
+## GitHub에 새 저장소 만들기 {#creating-a-new-repo-on-github}
 
 [i[GitHub-->Repo creation]]
 
-This will make a repository on GitHub that you own. It does not make a
-local repository—you'll have to clone the repo for that, something we'll
-do later.
+여기서는 자신이 소유하는 저장소를 GitHub에 만듭니다. 로컬 저장소를
+만드는 것은 아닙니다. 로컬 저장소를 만들려면 저장소를 클론해야 하며,
+그 작업은 나중에 하겠습니다.
 
-In GitHub, there's a green `New` button on the left of the dashboard.
+GitHub 대시보드 왼쪽에는 초록색 `New` 버튼이 있습니다.
 
-Also, there's a `+` pulldown on the upper right center that has a "New
-Repository" option. Click one of those.
+또한 오른쪽 위 가운데에 `+` 드롭다운이 있고 그 안에는 "New
+Repository" 옵션이 있습니다. 둘 중 하나를 클릭하세요.
 
-On the subsequent page:
+그다음 페이지에서 다음과 같이 합니다.
 
-1. Enter a "Repository name", which can be anything as long as you don't
-   already have a repo by that name. Let's use `test-repo` for this
-   example.
+1. "Repository name"을 입력합니다. 이미 같은 이름의 저장소만 없다면
+   어떤 이름이든 괜찮습니다. 이 예제에서는 `test-repo`를 사용합시다.
 
-2. Check the "Add a README file" checkbox.
+2. "Add a README file" 체크박스를 선택합니다.
 
-   (In the future, you might already have a local repo you're going to
-   push to this new repo. If that's the case, do **not** check this box
-   or it'll prevent the push from happening.)
+   (나중에는 이 새 저장소로 푸시할 로컬 저장소가 이미 있을 수도
+   있습니다. 그런 경우에는 이 체크박스를 선택하지 **마세요**. 선택하면
+   푸시가 되지 않습니다.)
 
-3. Click `Create repository` at the bottom.
+3. 아래쪽의 `Create repository`를 클릭합니다.
 
-And there you have it.
+이것으로 끝입니다.
 
-## Authentication
+## 인증 {#authentication}
 
 [i[GitHub-->Authentication]]
 
-Before we get to cloning, let's talk authentication. In the previous
-part of the intro, we saw that username/password logins were disabled,
-so we have to do something different.
+클론으로 넘어가기 전에 인증에 관해 이야기해 봅시다. 도입부의 앞 장에서
+사용자 이름과 비밀번호를 이용한 로그인이 비활성화되었다는 것을
+보았으므로, 다른 방법을 써야 합니다.
 
-There are a few options:
+몇 가지 선택지가 있습니다.
 
-* Use a tool called GitHub CLI
-* Use SSH keys
-* Use Personal Authentication Tokens
+* GitHub CLI라는 도구 사용하기
+* SSH 키 사용하기
+* 개인 인증 토큰 사용하기
 
-GitHub CLI is likely easier. SSH keys are geektacular. I only recently
-learned that you could authenticate with personal access tokens, so I
-can't really speak to them much.
+GitHub CLI가 아마 더 쉽습니다. SSH 키는 괴짜미가 넘칩니다. 저는 개인
+액세스 토큰으로 인증할 수 있다는 사실을 최근에야 알았기 때문에 그에
+대해서는 사실 별로 할 말이 없습니다.
 
-Personally, I use SSH keys. But other people... don't. It's up to you.
+개인적으로 저는 SSH 키를 사용합니다. 하지만 다른 사람들은...
+안 쓰기도 합니다. 선택은 여러분의 몫입니다.
 
-If you already have authentication working with GitHub, skip these
-sections.
+GitHub 인증이 이미 작동한다면 이 절들은 건너뛰세요.
 
-Otherwise, choose one of them (like SSH) and use it.
+그렇지 않다면 이 중 하나(가령 SSH)를 골라 사용하세요.
 
-### GitHub CLI
+### GitHub CLI {#github-cli}
 
 [i[GitHub-->GitHub CLI setup]]
 
-This is a command line interface to GitHub. It does a number of things,
-but one of them is providing an authentication helper so you can do
-things like actually push to a remote repo.
+GitHub를 위한 명령줄 인터페이스입니다. 여러 가지 일을 하는데, 그중
+하나는 원격 저장소에 실제로 푸시하는 등의 작업을 할 수 있도록 인증
+도우미를 제공하는 것입니다.
 
-[fl[Visit the GitHub CLI page|https://cli.github.com/]] and follow the
-installation instructions. If you're using WSL, Linux, or another Unix
-variant, see their [fl[installation
-instructions|https://github.com/cli/cli#installation]] for other
-platforms.
+[fl[GitHub CLI 페이지를 방문하고|https://cli.github.com/]] 설치 안내에
+따르세요. WSL, Linux 또는 다른 Unix 계열을 사용한다면 다른 플랫폼용
+[fl[설치 안내|https://github.com/cli/cli#installation]]를 참고하세요.
 
-Once you have it installed, you should be able to run 'gh --version' and
-see some version information, e.g.:
+설치하고 나면 'gh --version'을 실행해 다음과 같은 버전 정보를 볼 수
+있어야 합니다.
 
 ``` {.default}
 $ gh --version
@@ -105,74 +101,71 @@ $ gh --version
   https://github.com/cli/cli/releases/tag/v2.42.1
 ```
 
-Then you'll want to run the following two commands:
+그런 다음 다음 두 명령을 실행해야 합니다.
 
 ``` {.default}
 $ gh auth login
 $ gh auth setup-git
 ```
 
-The first command (`login`) will take you through the login process.
-You'll have to do this again if you log out.
+첫 번째 명령(`login`)은 로그인 과정을 안내합니다. 로그아웃하면 이
+과정을 다시 거쳐야 합니다.
 
-It's going to ask you if you want to use SSH or HTTP. If you have SSH
-keys set up, I recommend using that. If you don't,
-choose "HTTP" when it asks. The main difference is that with HTTP, the
-login credentials are stored unencrypted, whereas with SSH, you can
-protect them with a passphrase. See below for setting up SSH keys.
+SSH와 HTTP 중 어느 것을 사용할지 물을 것입니다. SSH 키를 설정해
+두었다면 SSH를 권합니다. 설정하지 않았다면 질문이 나올 때 "HTTP"를
+선택하세요. 주된 차이는 HTTP를 사용하면 로그인 자격 증명이 암호화되지
+않은 채 저장되지만, SSH를 사용하면 암호로 보호할 수 있다는 점입니다.
+SSH 키 설정 방법은 아래를 참고하세요.
 
-And logging in with a web browser is easiest, when it asks.
+로그인 방법을 물으면 웹 브라우저로 로그인하는 것이 가장 쉽습니다.
 
-The second command (`setup-git`) is one-time only. This just adds to
-your global config some stuff to help with authentication.
+두 번째 명령(`setup-git`)은 한 번만 실행하면 됩니다. 인증에 도움이
+되는 몇 가지 설정을 전역 구성에 추가할 뿐입니다.
 
-### SSH Keys
+### SSH 키 {#ssh-keys}
 
 [i[GitHub-->SSH setup]]
 
-If you don't want to install and use GitHub CLI, you can take this
-approach instead. This is more involved, but has more geek cred. This is
-what I use.
+GitHub CLI를 설치하고 사용하고 싶지 않다면 이 방법을 대신 택할 수
+있습니다. 과정은 더 복잡하지만 괴짜 세계에서는 더 인정받습니다. 제가
+쓰는 방법이기도 합니다.
 
-If you already have an SSH keypair, you can skip the key generation
-step. You'd know you had one if you ran `ls ~/.ssh` and you saw a file
-like `id_rsa.pub` or `id_ed25519.pub`.
+SSH 키 쌍이 이미 있다면 키 생성 단계는 건너뛰어도 됩니다. `ls ~/.ssh`를
+실행했을 때 `id_rsa.pub`이나 `id_ed25519.pub` 같은 파일이 보인다면 키
+쌍이 있는 것입니다.
 
-To make a new keypair, run the following command:
+새 키 쌍을 만들려면 다음 명령을 실행하세요.
 
 ``` {.default}
 $ ssh-keygen -t ed25519 -C youremail@example.com
 ```
 
-(The `-C` sets a "comment" in the key. It can be anything, but an email
-address is common.)
+(`-C`는 키에 "주석"을 설정합니다. 어떤 내용이든 쓸 수 있지만 이메일
+주소를 흔히 사용합니다.)
 
-This results in a lot of prompts, but you can just hit ENTER for all of
-them.
+그러면 많은 프롬프트가 나오지만 모두 ENTER만 눌러도 됩니다.
 
-> **Best practice is to use a password to access this key**, otherwise
-> anyone with access to the private key can impersonate you and access
-> your GitHub account, and any other account you have set up to use that
-> key. But it's a pain to type the password every time you want to use
-> the key (which is any time you do anything with GitHub from the
-> command line), so people use a _key agent_ which remembers the
-> password for a while.
+> **모범 사례는 이 키에 접근할 때 비밀번호를 사용하는 것입니다.**
+> 그렇지 않으면 비밀 키에 접근할 수 있는 누구나 여러분 행세를 하며
+> GitHub 계정과 이 키를 사용하도록 설정한 다른 모든 계정에 접근할 수
+> 있습니다. 하지만 키를 쓸 때마다(명령줄에서 GitHub 관련 작업을 할
+> 때마다) 비밀번호를 입력하는 것은 번거롭습니다. 그래서 사람들은
+> 비밀번호를 한동안 기억하는 *키 에이전트*를 사용합니다.
 >
-> If you don't have a password on your key, you're relying on the fact
-> that no one can get a copy of the private portion of your key that's
-> stored on your computer. If you're confident that your computer is
-> secure, then you don't need a password on the key. Do you feel lucky?
+> 키에 비밀번호를 설정하지 않는다면 컴퓨터에 저장된 키의 비밀 부분을
+> 아무도 복사해 가지 못할 것이라는 사실에 의존하는 셈입니다. 자신의
+> 컴퓨터가 안전하다고 확신한다면 키에 비밀번호를 둘 필요가 없습니다.
+> 운이 좋을 것 같나요?
 >
-> Setting up the key agent is outside the scope of this document, and
-> the author is unsure of how it even works in WSL. [fl[GitHub has
-> documentation on the
-> matter|https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent]].
+> 키 에이전트 설정은 이 문서의 범위를 벗어나며, 저자는 WSL에서 이것이
+> 대체 어떻게 작동하는지도 확신하지 못합니다. [fl[GitHub에 이 주제에
+> 관한 문서가
+> 있습니다|https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent]].
 >
-> For this demo, we'll just leave the password blank. All of this can be
-> redone with a new key with a password if you choose to do that later.
+> 이 시연에서는 비밀번호를 비워 두겠습니다. 나중에 원한다면 비밀번호가
+> 있는 새 키를 만들어 이 모든 과정을 다시 할 수 있습니다.
 
-Anyway, just hitting ENTER for all the prompts gets you something like
-this:
+어쨌든 모든 프롬프트에서 ENTER만 누르면 다음과 같은 결과가 나옵니다.
 
 ``` {.default}
 Generating public/private ed25519 key pair.
@@ -197,33 +190,30 @@ The key's randomart image is:
 +----[SHA256]-----+
 ```
 
-> **If you chose any file name other than the default for your key**,
-> you'll have to do some [fl[additional configuration to get it to work
-> with
-> GitHub|https://www.baeldung.com/linux/ssh-private-key-git-command]].
+> **키에 기본값이 아닌 다른 파일 이름을 선택했다면** GitHub에서
+> 작동하도록 [fl[몇 가지 추가
+> 설정|https://www.baeldung.com/linux/ssh-private-key-git-command]]을
+> 해야 합니다.
 
-> **What's that randomart thing with all the weird characters?** It's a
-> visual representation of that key. There are ways to configure SSH so
-> that you see the randomart every time you log in. And the idea is
-> that if one day you see it looks different, something could be amiss
-> security-wise. I doubt most people every look at it again once it's
-> been generated, though.
+> **이상한 문자가 가득한 랜덤아트라는 건 뭔가요?** 해당 키를 시각적으로
+> 표현한 것입니다. 로그인할 때마다 랜덤아트를 보도록 SSH를 설정하는
+> 방법도 있습니다. 어느 날 모양이 달라 보인다면 보안상 무언가 잘못됐을
+> 수 있다는 발상입니다. 하지만 대부분의 사람은 랜덤아트가 생성된 뒤
+> 다시 보는 일조차 없을 것 같군요.
 
-Now if you type `ls ~/.ssh` you should see something like this:
+이제 `ls ~/.ssh`를 입력하면 다음과 같은 내용이 보여야 합니다.
 
 ``` {.default}
 id_ed25519    id_ed25519.pub
 ```
 
-The first file is your _private key_. This is never to be shared with
-anyone. You have no reason to even copy it.
+첫 번째 파일은 *비밀 키*입니다. 절대로 누구와도 공유해서는 안 됩니다.
+복사할 이유조차 없습니다.
 
-The second file is your _public key_. This can be freely shared with
-anyone, and we're going to share it with GitHub in a second so that you
-can log in with it.
+두 번째 파일은 *공개 키*입니다. 누구와든 자유롭게 공유할 수 있으며,
+이 키로 로그인할 수 있도록 잠시 후 GitHub와 공유하겠습니다.
 
-> **If you have trouble in the following subsections**, try running
-> these two commands:
+> **다음 하위 절에서 문제가 생긴다면** 다음 두 명령을 실행해 보세요.
 >
 > ``` {.default}
 > $ chmod 700 ~/.ssh
@@ -231,204 +221,200 @@ can log in with it.
 > ```
 > <!-- ` -->
 >
-> You only have to do that once, but SSH can be a bit picky if the file
-> permissions on those files aren't locked down.
+> 한 번만 하면 되지만, 해당 파일의 권한이 엄격하게 제한되어 있지 않으면
+> SSH가 조금 까다롭게 굴 수 있습니다.
 
-Now in order to make this work, you have to tell GitHub what your public
-key is.
+이제 이 방법이 작동하도록 자신의 공개 키가 무엇인지 GitHub에 알려
+주어야 합니다.
 
-First, get a copy of your public key in the clipboard. ***Be sure you're
-getting the file with the `.pub` extension!***
+먼저 공개 키를 클립보드에 복사하세요. ***반드시 `.pub` 확장자가 있는
+파일을 가져와야 합니다!***
 
 ``` {.default}
 $ cat ~/.ssh/id_ed25519.pub
 ```
 
-You should see something like this:
+다음과 같은 내용이 보일 것입니다.
 
 ``` {.default}
 ssh-ed25519 AAAC3N[a bunch of letters]V+znpoO youremail@example.com
 ```
 
-Copy the entire thing into the clipboard so you can paste it later.
+전체 내용을 클립보드에 복사해 두었다가 나중에 붙여 넣으세요.
 
-Now go to GitHub, and click on your avatar icon in the upper right.
+이제 GitHub로 가서 오른쪽 위에 있는 아바타 아이콘을 클릭합니다.
 
-Choose "Settings".
+"Settings"를 선택합니다.
 
-Then on the left, choose "SSH and GPG keys".
+그런 다음 왼쪽에서 "SSH and GPG keys"를 선택합니다.
 
-Click "New SSH Key".
+"New SSH Key"를 클릭합니다.
 
-For the title, enter something identifying, like, "My laptop key".
+제목에는 "My laptop key"처럼 알아볼 수 있는 내용을 입력합니다.
 
-Key type is "Authentication Key".
+키 유형은 "Authentication Key"입니다.
 
-Then paste your key into the "Key" field.
+그런 다음 "Key" 필드에 키를 붙여 넣습니다.
 
-And click "Add SSH key".
+그리고 "Add SSH key"를 클릭합니다.
 
-We'll be using SSH to clone URLs later. Remember that.
+나중에 SSH를 사용해 URL에서 클론할 것입니다. 기억해 두세요.
 
-### Using Personal Access Tokens
+### 개인 액세스 토큰 사용하기 {#using-personal-access-tokens}
 
-Remember last chapter when we tried to clone an HTTPS repo URL on the
-command line and it prompted for a username and password that didn't
-work?
+지난 장에서 명령줄로 HTTPS 저장소 URL을 클론하려다가 작동하지 않는
+사용자 이름과 비밀번호를 입력하라는 프롬프트가 나왔던 것을 기억하나요?
 
-Well, we get to actually make new passwords that *will* work in that case.
-They're called *personal access tokens*.
+그 경우에 실제로 *작동하는* 새 비밀번호를 만들 수 있습니다. 이를
+*개인 액세스 토큰*이라고 합니다.
 
-[fl[GitHub has a lot of documentation on
-this|https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens]]
-but the gist of it is that you're going to create a _token_ that
-represents some kind of access, e.g. "ability to read and write my
-repos", and you're going to use that in lieu of the password on the
-command line.
+[fl[GitHub에는 이에 관한 문서가 많이
+있지만|https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens]],
+요점은 "내 저장소를 읽고 쓸 수 있는 권한" 같은 특정 접근 권한을
+나타내는 _토큰_을 만들고 명령줄에서 비밀번호 대신 사용한다는 것입니다.
 
-So that last failed example would look like this:
+그러면 앞에서 실패한 예제는 다음과 같은 모습이 됩니다.
 
 ``` {.default}
 Username for 'https://github.com': [MY USERNAME]
 Password for 'https://beejjorgensen@github.com': [MY TOKEN]
 ```
 
-In other words:
+다시 말하면 다음과 같습니다.
 
-1. Generate a token.
-2. Use that token as your password.
+1. 토큰을 생성합니다.
+2. 그 토큰을 비밀번호로 사용합니다.
 
-Your computer might automatically save those credentials so you don't
-have to enter them every time. Or it might not.
+컴퓨터가 이 자격 증명을 자동으로 저장해 매번 입력하지 않아도 될 수
+있습니다. 아닐 수도 있고요.
 
-One of the main things personal access tokens can give you is
-fine-grained control over access. You can limit access to read-only, or
-just to certain repos, and so on.
+개인 액세스 토큰이 주는 주된 이점 중 하나는 접근 권한을 세밀하게
+제어할 수 있다는 것입니다. 읽기 전용으로 제한하거나 특정 저장소에만
+접근하도록 제한하는 등의 설정이 가능합니다.
 
-Additionally, you can use GitHub CLI authentication with a token as
-well. You just have to feed it in there on standard input. Let's say you
-have your token in a file called `mytoken.txt`. You can authenticate
-with GitHub CLI like so:
+또한 토큰으로 GitHub CLI 인증을 할 수도 있습니다. 표준 입력으로 토큰을
+전달하기만 하면 됩니다. 토큰이 `mytoken.txt`라는 파일에 있다고 해
+봅시다. 다음처럼 GitHub CLI로 인증할 수 있습니다.
 
 ``` {.default}
 $ gh auth login --with-token < mytoken.txt
 ```
 
-Like with SSH keys, if you lose a laptop that uses a particular access
-token, you can simply invalidate that token through GitHub's UI so that
-mean people can't use it.
+SSH 키와 마찬가지로 특정 액세스 토큰을 사용하는 노트북을 잃어버렸다면,
+나쁜 사람들이 그 토큰을 쓰지 못하도록 GitHub UI에서 해당 토큰을
+무효화하기만 하면 됩니다.
 
-## Make a Local Clone of the Repo
+## 저장소의 로컬 클론 만들기 {#make-a-local-clone-of-the-repo}
 
 [i[GitHub-->Cloning]]
 
-We need to figure out the URL to the repo so we can clone it.
+저장소를 클론할 수 있도록 저장소 URL을 알아내야 합니다.
 
-If you click on your icon in the upper right, then "My Repositories", you
-should see a page with all your repos. At this point, it might just be
-your `test-repo` repo. Click on the name.
+오른쪽 위의 아이콘을 클릭한 다음 "My Repositories"를 클릭하면 자신의
+모든 저장소가 있는 페이지가 보일 것입니다. 지금은 `test-repo` 저장소
+하나뿐일 수도 있습니다. 그 이름을 클릭하세요.
 
-And you should then be on the repo page. You can browse the files here,
-among other things, but really we want to get the clone URL.
+그러면 저장소 페이지로 이동합니다. 여기서 파일을 둘러보는 등 여러 일을
+할 수 있지만, 우리가 정말 원하는 것은 클론 URL입니다.
 
-Click the big blue "Code" button.
+커다란 파란색 "Code" 버튼을 클릭합니다.
 
-What you do next depends on if you're using GitHub CLI or SSH keys.
+다음에 할 일은 GitHub CLI와 SSH 키 중 어느 것을 사용하는지에 따라
+달라집니다.
 
-### Cloning from GitHub with GitHub CLI
+### GitHub CLI로 GitHub에서 클론하기 {#cloning-from-github-with-github-cli}
 
 [i[GitHub-->Cloning with GitHub CLI]]
 
-You have two options.
+두 가지 선택지가 있습니다.
 
-* **Option 1**: Earlier when we authenticated with `gh auth login` I
-  said to remember if you chose HTTPS or SSH. Depending on which you
-  chose, you should choose that tab on this window.
+* **선택지 1**: 앞에서 `gh auth login`으로 인증할 때 HTTPS와 SSH 중
+  무엇을 선택했는지 기억해 두라고 했습니다. 선택한 방식에 해당하는
+  탭을 이 창에서 선택해야 합니다.
 
-  Copy the URL.
+  URL을 복사합니다.
 
-  Go to the command line and run `git clone [URL]` where `[URL]` is what
-  you copied. So it'll be this for HTTPS:
+  명령줄로 가서 `git clone [URL]`을 실행합니다. 여기서 `[URL]`은 복사한
+  내용입니다. 따라서 HTTPS의 경우 다음과 같습니다.
 
   ``` {.default}
   $ git clone https://github.com/user/test-repo.git
   ```
 
-  or this for SSH:
+  SSH의 경우에는 다음과 같습니다.
 
   ``` {.default}
   $ git clone git@github.com:user/test-repo.git
   ```
 
-* **Option 2**: Choose the "GitHub CLI" tab. Run the command as they
-  have it, which will be something like:
+* **선택지 2**: "GitHub CLI" 탭을 선택합니다. 표시된 명령을 그대로
+  실행하면 다음과 비슷할 것입니다.
 
   ``` {.default}
   $ gh repo clone user/test-repo
   ```
 
-### Cloning from GitHub with SSH Keys
+### SSH 키로 GitHub에서 클론하기 {#cloning-from-github-with-ssh-keys}
 
 [i[GitHub-->Cloning with SSH]]
 
-If you set up an SSH key earlier, you can use this method.
+앞에서 SSH 키를 설정했다면 이 방법을 사용할 수 있습니다.
 
-After hitting the green "Code" button, make sure the "SSH" tab is
-selected.
+초록색 "Code" 버튼을 누른 다음 "SSH" 탭이 선택되어 있는지 확인합니다.
 
-Copy that URL.
+그 URL을 복사합니다.
 
-Go to the command line and run `git clone [URL]` where `[URL]` is what
-you copied. So it'll be something like this:
+명령줄로 가서 `git clone [URL]`을 실행합니다. 여기서 `[URL]`은 복사한
+내용입니다. 따라서 다음과 비슷할 것입니다.
 
 ``` {.default}
 $ git clone git@github.com:user/test-repo.git
 ```
 
-## Make Changes and Push!
+## 변경하고 푸시하기! {#make-changes-and-push}
 
 [i[Push]]
 
-Now that you've cloned the repo, you should be able to `cd` into that
-directory, edit a file, `git add` it to the stage, then `git commit -m
-message` to make a commit...
+이제 저장소를 클론했으므로 `cd`로 해당 디렉터리에 들어가 파일을
+편집하고, `git add`로 스테이징 영역에 추가한 다음 `git commit -m
+message`로 커밋을 만들 수 있어야 합니다...
 
-And then `git push` to push it back to the clone on GitHub!
+그런 다음 `git push`로 GitHub에 있는 클론에 다시 푸시합니다!
 
-And after that if you go to the repo page on GitHub and hit reload, you
-should be able to see your changes there!
+그 뒤 GitHub의 저장소 페이지로 가서 새로 고침하면 그곳에서 변경
+사항을 볼 수 있어야 합니다!
 
-And now we're back to that standard common flow:
+이제 그 표준적인 일반 작업 흐름으로 돌아왔습니다.
 
-1. _Clone_ a _remote_ repo.
-2. Make some local changes.
-3. Add those changes to the _stage_.
-4. _Commit_ those changes.
-5. _Push_ your changes back to the remote repo.
-6. Go back to Step 2.
+1. _원격_ 저장소를 *클론*합니다.
+2. 로컬 변경 사항을 만듭니다.
+3. 그 변경 사항을 *스테이징 영역*에 추가합니다.
+4. 변경 사항을 *커밋*합니다.
+5. 변경 사항을 원격 저장소로 다시 *푸시*합니다.
+6. 2단계로 돌아갑니다.
 
-## Collaboration on GitHub
+## GitHub에서 협업하기 {#collaboration-on-github}
 
-There are two main techniques for this:
+두 가지 주요 방법이 있습니다.
 
-1. Fork/pull request
-2. Add a collaborator
+1. 포크/풀 리퀘스트
+2. 협업자 추가
 
-We'll talk about the first one in the future.
+첫 번째 방법은 나중에 이야기하겠습니다.
 
 [i[GitHub-->Adding collaborators]]
-For now, the easiest way to add collaborators is to just add them to
-your repo.
+지금으로서는 협업자를 추가하는 가장 쉬운 방법은 자신의 저장소에 바로
+추가하는 것입니다.
 
-On the repo page on GitHub, choose "Settings", then "Collaborators" on
-the left.
+GitHub 저장소 페이지에서 "Settings"를 선택한 다음 왼쪽의
+"Collaborators"를 선택합니다.
 
-After authenticating, you can click "Add people". Enter the username of
-the person you want to collaborate with.
+인증을 마치면 "Add people"을 클릭할 수 있습니다. 함께 작업하고 싶은
+사람의 사용자 이름을 입력하세요.
 
-They'll have to accept the invitation from their GitHub inbox, but then
-they'll have access to the repo.
+상대방이 GitHub 받은 편지함에서 초대를 수락해야 하지만, 수락하고 나면
+저장소에 접근할 수 있습니다.
 
-Be sure to only do this with people you trust!
+반드시 신뢰하는 사람에게만 이렇게 하세요!
 
 [i[GitHub]>]

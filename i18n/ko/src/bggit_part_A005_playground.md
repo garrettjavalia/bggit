@@ -1,50 +1,39 @@
-# Appendix: Making a Playground {#making-playground}
+# 부록: 연습장 만들기 {#making-playground}
 
 [i[Playground]<]
 
-In programming circles in general, a *playground* is a place you can go
-to mess with code and tech and not worry about messing up your
-production system.
+프로그래밍 분야에서 일반적으로 *연습장(playground)*은 실제 운영 시스템을 망가뜨릴 걱정 없이 코드와 기술을 이것저것 만져 볼 수 있는 곳입니다.
 
-And there are places you can go online to find these, but with Git, I
-find it's just as easy to make your own local repo.
+온라인에도 이런 곳이 있지만, Git에서는 로컬 저장소를 직접 만드는 것도 똑같이 쉽다고 생각합니다.
 
-Here's a way to make a new local repo called `playground` out of the
-current directory. (You should **not** be under a Git repo at this
-time; create the playground outside other existing repos.)
+현재 디렉터리에 `playground`라는 새 로컬 저장소를 만드는 방법은 다음과 같습니다. (이때 Git 저장소 안에 **있으면 안 됩니다**. 기존의 다른 저장소 바깥에 연습장을 만드세요.)
 
 ``` {.default}
 $ git init playground
   Initialized empty Git repository in /user/playground/.git/
 ```
 
-`playground` isn't a special name. You can call it `foo` or anything.
-I'll just use it for this example.
+`playground`는 특별한 이름이 아닙니다. `foo`든 무엇이든 원하는 이름을 쓸 수 있습니다. 이 예에서는 그저 playground를 사용하겠습니다.
 
-What that command did was create a new subdirectory called `playground`
-and create a Git repo in it.
+이 명령은 `playground`라는 새 하위 디렉터리를 만들고 그 안에 Git 저장소를 만들었습니다.
 
-Let's continue at the end: how do you delete the repo? You just remove
-the directory.
+결말부터 살펴봅시다. 저장소는 어떻게 삭제할까요? 디렉터리를 지우기만 하면 됩니다.
 
 ```
 $ rm -rf playground   # delete the playground repo
 ```
 
-And let's create it again:
+다시 만들어 봅시다.
 
 ``` {.default}
 $ git init playground
 ```
 
-We have all the power!
+우리에게는 모든 권한이 있습니다!
 
-> **This repo only exists on this computer**; it has no remotes and no
-> way to push. You could add that stuff later, if you wanted, but
-> playgrounds tend to be temporary areas where you're just trying things
-> out.
+> **이 저장소는 이 컴퓨터에만 존재합니다.** 원격 저장소가 없고 푸시할 방법도 없습니다. 원한다면 나중에 그런 것을 추가할 수 있지만, 연습장은 보통 무언가를 시험해 보는 임시 공간입니다.
 
-Let's go into the playground and check it out.
+연습장으로 들어가 살펴봅시다.
 
 ``` {.default}
 $ cd playground
@@ -55,22 +44,20 @@ $ ls -la
   drwxr-xr-x  7 user group  119 Jul 13 14:43 .git
 ```
 
-There's a directory there called `.git` that has all the metadata in it.
+모든 메타데이터가 담긴 `.git`이라는 디렉터리가 있습니다.
 
-> **If we wanted to change this directory from a Git repo to
-> just a normal directory**, we could run this:
+> **이 디렉터리를 Git 저장소에서 평범한 디렉터리로 바꾸고 싶다면** 다음 명령을 실행할 수 있습니다.
 >
 > ``` {.default}
 > $ rm -rf .git       # Delete the .git directory
 > ```
 >
 > <!-- ` -->
-> Again, we have all the power! But let's show some restraint and not do
-> that yet.
+> 다시 말하지만 우리에게는 모든 권한이 있습니다! 하지만 자제력을 발휘해서 아직은 이 명령을 실행하지 맙시다.
 
-What can we do?
+무엇을 할 수 있을까요?
 
-What *can't* we do? Let's make a file and see where we stand:
+무엇인들 *못* 하겠습니까? 파일을 만들고 현재 상태를 확인해 봅시다.
 
 ``` {.default}
 $ echo "Hello, world" > hello.txt   # Create a file
@@ -94,42 +81,34 @@ $ git status
   add" to track)
 ```
 
-Now we have an untracked file.
+이제 추적되지 않는 파일이 하나 생겼습니다.
 
-We can `git add` it, we can `git commit` it, we can create branches, we
-can merge them and make conflicts and resolve them and `git rebase` and
-`git reset` and all kinds of stuff.
+`git add`로 추가하고 `git commit`으로 커밋할 수 있습니다. 브랜치를 만들고 병합하고, 충돌을 만들어 해결하고, `git rebase`와 `git reset`을 실행하는 등 온갖 일을 할 수 있습니다.
 
-We don't have a remote, so the only things we can't do involve pushing
-and pulling.
+원격 저장소가 없으므로 할 수 없는 것은 푸시와 풀에 관련된 일뿐입니다.
 
-But it turns out we can even make that happen! Let's see how.
+그런데 이것조차 가능하게 만들 수 있습니다! 방법을 살펴봅시다.
 
-## Cloning Bare Repos
+## 베어 저장소 클론하기 {#cloning-bare-repos}
 
 [i[Bare repo]] [i[Playground-->Cloning]]
 
-A *bare repo* is one without a working tree. You can't go in there to
-see files, because they don't exist in there in a normal sense. The only
-thing that's there is metadata and the commit snapshots.
+*베어 저장소*는 작업 트리가 없는 저장소입니다. 일반적인 의미의 파일이 그 안에 존재하지 않으므로 들어가 파일을 볼 수 없습니다. 메타데이터와 커밋 스냅숏만 있습니다.
 
 [i[Clone]]
 
-You can clone, push, and pull bare repos.
+베어 저장소도 클론하고 푸시하고 풀할 수 있습니다.
 
-Let's make one (again, you could name it anything you want), noting the
-`--bare` command line option:
+`--bare` 명령줄 옵션에 주목하면서 하나 만들어 봅시다(이 역시 원하는 이름을 붙여도 됩니다).
 
 ``` {.default}
 $ git init --bare origin_repo
   Initialized empty Git repository in /user/origin_repo/
 ```
 
-If you look in there (to be clear, you have no reason to) you'll just see
-metadata and directories.
+그 안을 들여다보면(분명히 말하지만 그럴 이유는 없습니다) 메타데이터와 디렉터리만 보입니다.
 
-Before we can use it, we'd better clone it. For ease, we'll do this from
-the same directory we created it.
+사용하려면 먼저 클론하는 편이 좋습니다. 편의를 위해 이를 만든 바로 그 디렉터리에서 다음 작업을 하겠습니다.
 
 ``` {.default}
 $ git clone origin_repo playground
@@ -138,14 +117,14 @@ $ git clone origin_repo playground
   done.
 ```
 
-It is empty, naturally. We haven't made any commits.
+당연히 비어 있습니다. 아직 어떤 커밋도 만들지 않았기 때문입니다.
 
-Now we have two repos in this directory:
+이제 이 디렉터리에는 저장소가 두 개 있습니다.
 
-* `origin_repo`: the bare repo we cloned, and:
-* `playground`: the repo we cloned from it.
+* `origin_repo`: 우리가 클론한 베어 저장소
+* `playground`: 그 베어 저장소로부터 만든 클론
 
-Let's jump in there and see what's up:
+그 안으로 들어가 무슨 상태인지 봅시다.
 
 ``` {.default}
 $ cd playground
@@ -154,17 +133,13 @@ $ git remote -v
   origin    /user/origin_repo (push)
 ```
 
-We have remotes! Of course we do. We cloned this repo, and Git
-automatically sets up the `origin` remote.
+원격 저장소가 있습니다! 당연하지요. 이 저장소를 클론했고 Git이 `origin` 원격 저장소를 자동으로 설정했기 때문입니다.
 
-And remember that `origin` is just an alias for some remote that's
-identified somehow. We're used to seeing remotes that start with `https`
-or `ssh`, but here's an example of a remote that's just another
-subdirectory on your disk.
+`origin`은 어떤 방식으로 식별되는 원격 저장소의 별칭일 뿐이라는 점을 기억하세요. `https`나 `ssh`로 시작하는 원격 저장소는 익숙하지만, 여기서는 디스크의 다른 하위 디렉터리가 곧 원격 저장소인 예를 보고 있습니다.
 
 [i[Pushing]]
 
-Let's make a file and commit it, and see if we can push!
+파일을 만들어 커밋하고 푸시할 수 있는지 확인해 봅시다!
 
 ``` {.default}
 $ echo "Hello, world" > hello.txt
@@ -188,10 +163,9 @@ $ git branch -va
     remotes/origin/main 4a82a14 added
 ```
 
-And we've successfully pushed our file up to `origin`.
+파일을 `origin`으로 성공적으로 푸시했습니다.
 
-Finally, let's make another clone. First we'll `cd` back down to where
-`origin_repo` is and clone again this time into `playground2`:
+마지막으로 클론을 하나 더 만듭시다. 먼저 `origin_repo`가 있는 곳으로 `cd`해 돌아간 뒤, 이번에는 `playground2`로 다시 클론합니다.
 
 ``` {.default}
 $ git clone origin_repo playground2
@@ -199,9 +173,7 @@ $ git clone origin_repo playground2
   done.
 ```
 
-Let's `cd` in there and see what we have. It's a clone of the repo, so
-we'd better see the `hello.txt` we pushed in there from `playground`
-earlier.
+그곳으로 `cd`해서 무엇이 있는지 봅시다. 저장소의 클론이므로 앞서 `playground`에서 푸시한 `hello.txt`가 보여야 합니다.
 
 ``` {.default}
 $ cd playground2 
@@ -213,29 +185,23 @@ $ cat hello.txt
   Hello, world
 ```
 
-*Voila!* It's there!
+*짜잔!* 파일이 있습니다!
 
-Since `playground` and `playground2` are both clones of the same repo,
-you can push from one and pull from the other to get the changes.
+`playground`와 `playground2`는 같은 저장소의 클론이므로 한쪽에서 푸시하고 다른 쪽에서 풀해 변경 사항을 받을 수 있습니다.
 
 [i[Pulling]]
 
-You can even make conflicting changes and try to `git pull` or `git pull
---rebase` and see how things go wrong and how to fix them.
+서로 충돌하는 변경 사항을 만들고 `git pull`이나 `git pull --rebase`를 시도하여 어떻게 잘못되는지, 또 어떻게 고치는지 살펴볼 수도 있습니다.
 
-And if everything goes completely off the rails, you can just delete the
-directories and start again. It's a playground!
+모든 것이 완전히 엉망이 되면 디렉터리를 지우고 다시 시작하면 됩니다. 연습장이니까요!
 
-## Automating Playground Builds
+## 연습장 빌드 자동화하기 {#automating-playground-builds}
 
 [i[Playground-->Automating]<] [i[Shell scripts]]
 
-It can be tedious to continually destroy and recreate repos that you're
-trying to learn from. I suggest putting your commands in a _shell
-script_, which is just a text file that contains the commands to run.
+학습에 사용하는 저장소를 계속 없애고 다시 만드는 일은 지루할 수 있습니다. 실행할 명령을 담은 텍스트 파일인 _셸 스크립트_에 명령들을 넣기를 권합니다.
 
-Let's say you make a new text file called `buildrepo.sh` and you put
-the following text in it:
+`buildrepo.sh`라는 새 텍스트 파일을 만들고 다음 내용을 넣는다고 합시다.
 
 ``` {.default}
 rm -rf playground    # Remove old playground
@@ -250,9 +216,7 @@ git add foobar.txt
 git commit -m updated
 ```
 
-That's just a bunch of shell commands. But here's the fun bit: if you
-run `sh` (the shell) with `buildrepo.sh` as an argument, it will run
-all those commands in order!
+그저 셸 명령을 모아 놓은 것입니다. 하지만 재미있는 점은 `buildrepo.sh`를 인수로 주어 `sh`(셸)를 실행하면 그 명령을 모두 순서대로 실행한다는 것입니다!
 
 ``` {.default}
 $ sh buildrepo.sh
@@ -265,10 +229,10 @@ $ sh buildrepo.sh
    1 file changed, 1 insertion(+)
 ```
 
-> **To debug a shell script** you can run it like this: `sh -x
-> buildrepo.sh` and it will show you the commands it is running.
+> **셸 스크립트를 디버깅하려면** `sh -x
+> buildrepo.sh`처럼 실행하세요. 실행 중인 명령을 보여 줍니다.
 
-After that, we can `cd` in there and see what happened:
+그 뒤 그곳으로 `cd`해서 무슨 일이 일어났는지 볼 수 있습니다.
 
 ``` {.default}
 $ cd playground
@@ -290,9 +254,7 @@ $ cat foobar.txt
   foobar again
 ```
 
-By putting the initialization commands in a shell script, it's almost
-like having a "saved game" at that point. You can just rerun the shell
-script any time you want the same playground set up.
+초기화 명령을 셸 스크립트에 넣으면 그 시점의 "저장된 게임"이 생기는 것과 비슷합니다. 똑같이 설정된 연습장이 필요할 때마다 셸 스크립트를 다시 실행하기만 하면 됩니다.
 
 [i[Playground-->Automating]>]
 

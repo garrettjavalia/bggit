@@ -1,79 +1,65 @@
-# Quick Reference
+# 빠른 참조 {#quick-reference}
 
-Quickly look up commands based on what you want to do! Caveat: this list
-is grotesquely incomplete! See your man pages for more info!
+하려는 작업에 맞는 명령을 빠르게 찾아보세요! 다만 이 목록은 터무니없이
+불완전합니다! 자세한 내용은 매뉴얼 페이지를 보세요!
 
-In this reference section we use the following substitutions:
+이 참조 절에서는 다음과 같은 대체 표기를 사용합니다.
 
-* `URL`: Some URL either SSH, HTTP, or even a local file, usually the
-  URL you cloned from.
-* `FILE`: Path to file, e.g. `foo/bar.txt`, etc.
-* `DIR`: Path to directory, e.g. `foo/`, etc.
-* `PATH`: Path to directory or file
-* `BRANCH`: Some branch name, e.g. `main`, etc.
-* `REMOTE`: A remote name, e.g. `origin`, `upstream`, etc.
-* `HASH`: Some commit hash—you can get a commit hash from `git log` or
-  `git reflog`.
-* `CMMT`: a commit hash, branch, etc. Anything that refers to a commit.
-  Officially this is called a _tree-ish_, but that was more letters than
-  I wanted to repeatedly type.
-* `VARIABLE`: a Git config variable name, usually words separated by
-  periods.
-* `VALUE`: an arbitrary value for Git configs.
-* `TAG`: a tag name
+* `URL`: SSH, HTTP, 심지어 로컬 파일 등 어떤 URL. 보통 클론한 원본 URL입니다.
+* `FILE`: 파일 경로. 예: `foo/bar.txt` 등
+* `DIR`: 디렉터리 경로. 예: `foo/` 등
+* `PATH`: 디렉터리 또는 파일 경로
+* `BRANCH`: 브랜치 이름. 예: `main` 등
+* `REMOTE`: 원격 저장소 이름. 예: `origin`, `upstream` 등
+* `HASH`: 커밋 해시. `git log`나 `git reflog`에서 얻을 수 있습니다.
+* `CMMT`: 커밋 해시, 브랜치 등 커밋을 가리키는 모든 것. 공식적으로는
+  _tree-ish_라고 하지만, 계속 입력하기에는 글자가 너무 많았습니다.
+* `VARIABLE`: Git 설정 변수 이름. 보통 마침표로 단어를 구분합니다.
+* `VALUE`: Git 설정에 사용할 임의의 값
+* `TAG`: 태그 이름
 
-Also, don't type the `$`—it's the shell prompt. And everything after a
-`#` is a comment. A backslash `\` at the end of a line indicates that it
-continues on the next line.
+또한 `$`는 셸 프롬프트이므로 입력하지 마세요. `#` 뒤의 내용은 모두
+주석입니다. 줄 끝의 백슬래시 `\`는 다음 줄에 이어진다는 뜻입니다.
 
-## Glossary 
+## 용어집 {#glossary}
 
-* **Clone**: a duplicate (or to duplicate) a remote repo, commonly for
-  local use.
-* **Commit**: a snapshot of all the files in the repo at a point in
-  time.
-* **Fork**: a GitHub construct to make a clone of someone else's GitHub
-  repo under your GitHub account.
-* **`HEAD`**: the commit that is currently checked out/switched to.
-* **Index**: another name for the *stage*.
-* **`main`**: a common name for the first branch created.
-* **`master`**: another common name for the first branch created.
-* **`origin`**: the default name for the remote from which this repo was
-  cloned.
-* **Pull request**: a way to get changes you made in your fork of a repo
-  back into the repo you forked from.
-* **Remote**: an alias for a URL to another repo. Usually an HTTP or SSH
-  URL.
-* **Stage**: where you collect files to be bundled into a
-  commit.
-* **`upstream`**: the conventional name of the remote that you forked
-  from. Not set up automatically.
-* **Working Tree**: the collection of files you can see, which might
-  have changes from the commit at `HEAD`.
-* **WT**: shorthand for working tree.
+* **클론**: 보통 로컬에서 사용하려고 원격 저장소를 복제한 것, 또는 복제하는 일
+* **커밋**: 특정 시점에 저장소에 있는 모든 파일의 스냅숏
+* **포크**: 다른 사람의 GitHub 저장소를 자신의 GitHub 계정 아래에 클론하는 GitHub 기능
+* **`HEAD`**: 현재 체크아웃하거나 전환한 커밋
+* **인덱스**: *스테이징 영역*의 다른 이름
+* **`main`**: 처음 생성되는 브랜치에 흔히 쓰는 이름
+* **`master`**: 처음 생성되는 브랜치에 흔히 쓰는 또 다른 이름
+* **`origin`**: 이 저장소를 클론해 온 원격 저장소의 기본 이름
+* **풀 리퀘스트**: 저장소의 포크에서 만든 변경 사항을 원래 포크해 온 저장소로 돌려보내는 방법
+* **원격 저장소**: 다른 저장소의 URL에 붙인 별칭. 보통 HTTP나 SSH URL입니다.
+* **스테이징 영역**: 커밋으로 묶을 파일을 모으는 곳
+* **`upstream`**: 포크해 온 원격 저장소에 관례적으로 붙이는 이름. 자동으로 설정되지는 않습니다.
+* **작업 트리**: 눈으로 볼 수 있는 파일의 모음. `HEAD` 커밋과 달라진 내용이 있을 수 있습니다.
+* **WT**: 작업 트리의 줄임말
 
-## File States
+## 파일 상태 {#file-states-1}
 
-* **Untracked** to:
-  * Unmodified: `git add FILE`
-* **Unmodified** to:
-  * Modified: Edit with your editor and save
-  * Untracked/deleted: `git rm --cached FILE`
-* **Modified** to:
-  * Staged: `git add FILE`
-  * Unmodified: `git restore FILE` (discards changes)
-  * Untracked/deleted: `git rm --cached FILE`
-* **Staged**
-  * Unmodified: `git commit FILE` (finalize commit)
-  * Modified: `git restore --staged FILE` (unstage)
-  * Both modified: `git checkout --merged FILE` (during merge)
+* **추적되지 않음**에서:
+  * 수정되지 않음으로: `git add FILE`
+* **수정되지 않음**에서:
+  * 수정됨으로: 편집기로 편집하고 저장
+  * 추적되지 않음/삭제됨으로: `git rm --cached FILE`
+* **수정됨**에서:
+  * 스테이징됨으로: `git add FILE`
+  * 수정되지 않음으로: `git restore FILE` (변경 사항 폐기)
+  * 추적되지 않음/삭제됨으로: `git rm --cached FILE`
+* **스테이징됨**에서:
+  * 수정되지 않음으로: `git commit FILE` (커밋 완료)
+  * 수정됨으로: `git restore --staged FILE` (스테이징 해제)
+  * 양쪽에서 수정됨으로: `git checkout --merged FILE` (병합 중)
 
-## Configuration
+## 설정 {#configuration-1}
 
 [i[Configuration]i<]
 
-For all `git config` commands, specify `--global` for a universal
-setting or leave it off to set the value just for this repo.
+모든 `git config` 명령에서 전체에 적용하려면 `--global`을 지정하고, 이
+저장소에만 값을 설정하려면 생략합니다.
 
 ``` {.default}
 $ git config set VARIABLE VALUE
@@ -83,7 +69,7 @@ $ git config unset VARIABLE
 $ git config --edit
 ```
 
-Obsolete commands for older versions:
+이전 버전에서 쓰던 구식 명령은 다음과 같습니다.
 
 ``` {.default}
 git config user.email                     # Get
@@ -93,10 +79,10 @@ git config --list                         # List
 git config --edit                         # Edit
 ```
 
-### Set identity
+### 신원 설정하기 {#set-identity}
 
 [i[Configuration-->Name and email]i]
-Username and email:
+사용자 이름과 이메일:
 
 ``` {.default}
 $ git config set --global user.name "Your Name"
@@ -104,27 +90,27 @@ $ git config set --global user.email "your-email@example.com"
 ```
 
 [i[Configuration-->SSH identity]i]
-SSH identity:
+SSH 신원:
 
 ``` {.default}
 $ git config set core.sshCommand \
     "ssh -i ~/.ssh/id_alterego_ed25519 -F none"
 ```
 
-### Set default branch
+### 기본 브랜치 설정하기 {#set-default-branch}
 
 [i[Configuration-->Default branch]i]
 
-This is the first branch created when you make a new repo.
+새 저장소를 만들 때 처음 생성되는 브랜치입니다.
 
 ``` {.default}
 $ git config set --global init.defaultBranch BRANCH
 ```
 
-Common names are `main`, `master`, `trunk`, and `development`. This
-guide uses `main`.
+흔한 이름은 `main`, `master`, `trunk`, `development`입니다. 이 안내서에서는
+`main`을 사용합니다.
 
-### Set default pull behavior to merge or rebase
+### 기본 풀 동작을 병합 또는 리베이스로 설정하기 {#set-default-pull-behavior-to-merge-or-rebase}
 
 [i[Configuration-->Pull rebase behavior]i]
 ``` {.default}
@@ -132,11 +118,10 @@ $ git config set --global pull.rebase false   # Merge
 $ git config set --global pull.rebase true    # Rebase
 ```
 
-### Set default editor, difftool, and mergetool
+### 기본 편집기, difftool, mergetool 설정하기 {#set-default-editor-difftool-and-mergetool}
 
-Set the default editor to Vim, and the default mergetool and difftool to
-Vimdiff, turn off prompting for the tools, and turn off mergetool
-backups:
+기본 편집기를 Vim으로, 기본 mergetool과 difftool을 Vimdiff로 설정하고,
+도구 실행 전 질문과 mergetool 백업을 끕니다.
 
 [i[Configuration-->Editor]i]
 [i[Configuration-->Difftool]i]
@@ -152,18 +137,18 @@ $ git config set mergetool.vimdiff.cmd \
 $ git config --global set mergetool.keepBackup false
 ```
 
-### Colorful Git output
+### 다채로운 Git 출력 {#colorful-git-output}
 
 [i[Configuration-->Color output]i]
 ``` {.default}
 $ git config set color.ui true   # Or false
 ```
 
-### Autocorrect
+### 자동 교정 {#autocorrect}
 
 [i[Configuration-->Autocorrect]i]
-Autocorrect will automatically run the command it thinks you meant. For
-example, if you `git poush`, it will assume you meant `git push`.
+자동 교정은 사용자가 의도했다고 판단한 명령을 자동으로 실행합니다. 예를
+들어 `git poush`를 입력하면 `git push`를 뜻한다고 가정합니다.
 
 ``` {.default}
 $ git config set help.autocorrect 0   # Ask "Did you mean...?"
@@ -174,10 +159,10 @@ $ git config set help.autocorrect prompt     # Prompt then go
 $ git config set help.autocorrect never      # Turn autocorrect off
 ```
 
-### Newline translation
+### 줄바꿈 변환 {#newline-translation}
 
-Handle automatic newline translation. Recommend set to true for Windows
-(not WSL) and false everywhere else.
+줄바꿈 자동 변환을 처리합니다. Windows(WSL 제외)에서는 true, 그 밖의
+환경에서는 false로 설정하기를 권합니다.
 
 [i[Configuration-->Newline translation]i]
 ``` {.default}
@@ -185,11 +170,11 @@ $ git config set core.autocrlf true  # Windows (non-WSL)
 $ git config set core.autocrlf false # WSL, Linux, Mac, C64, etc.
 ```
 
-### Aliases
+### 별칭 {#aliases}
 
 [i[Alias]i<]
 
-Setting aliases, some examples:
+별칭을 설정하는 몇 가지 예입니다.
 
 ``` {.default}
 $ git config set --global alias.logn 'log --name-only'
@@ -201,7 +186,7 @@ $ git config set alias.lol "log --graph"\
 " %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 ```
 
-Getting aliases:
+별칭 가져오기:
 
 ``` {.default}
 $ git config get alias.logx
@@ -210,7 +195,7 @@ $ git config set alias.aliases \
     "config get --all --show-names --regexp '^alias\.'"
 ```
 
-Tracing an alias run:
+별칭 실행 추적하기:
 
 ``` {.default}
 $ GIT_TRACE=1 git logx
@@ -219,7 +204,7 @@ $ GIT_TRACE=1 git logx
 [i[Alias]i>]
 [i[Configuration]i>]
 
-## Creating and Cloning Repos
+## 저장소 만들기와 클론하기 {#creating-and-cloning-repos}
 
 [i[Clone]i]
 
@@ -230,7 +215,7 @@ $ git init DIR        # Init repo at directory
 $ git init .          # Init repo in the current directory
 ```
 
-## Adding, Renaming, Deleting, Committing
+## 추가, 이름 변경, 삭제, 커밋 {#adding-renaming-deleting-committing}
 
 [i[Add]i]
 [i[Move]i]
@@ -248,8 +233,8 @@ $ git commit               # Commit files on stage
 $ git commit -m "message"  # Commit with a message
 ```
 
-Amending commits—don't amend commits you have pushed unless you know
-what you're getting into!
+커밋 수정하기—무슨 일이 벌어질지 잘 알지 못한다면 이미 푸시한 커밋을
+수정하지 마세요!
 
 [i[Commit-->Amending]i]
 ``` {.default}
@@ -259,17 +244,17 @@ $ git commit --amend --no-edit     # Don't change commit message
 ```
 
 [i[Remove-->Unstaging]i]
-To undelete a staged file, run these two commands in sequence:
+스테이징된 파일의 삭제를 취소하려면 다음 두 명령을 순서대로 실행합니다.
 
 ``` {.default}
 $ git restore --staged FILE
 $ git restore FILE
 ```
 
-To undelete a deleted file, you could manually recover it from an old
-commit, or revert the commit that deleted it.
+삭제된 파일을 복구하려면 이전 커밋에서 직접 가져오거나, 파일을 삭제한
+커밋을 되돌릴 수 있습니다.
 
-## Getting Status
+## 상태 확인하기 {#getting-status}
 
 [i[Status]i]
 [i[Log]i]
@@ -286,7 +271,7 @@ $ git log CMMT1...CMMT2  # Show logs from CMMT1 and CMMT2
                          # since they diverged
 ```
 
-## Getting a Diff
+## Diff 확인하기 {#getting-a-diff}
 
 [i[Diff]i<]
 ``` {.default}
@@ -312,10 +297,10 @@ $ git difftool          # Diffs using the configured difftool
 ```
 [i[Diff]i>]
 
-## Branches
+## 브랜치 {#branches}
 
-A local branch looks like `branchname`. A remote tracking branch looks
-like `remote/branchname`.
+로컬 브랜치는 `branchname`처럼 보입니다. 원격 추적 브랜치는
+`remote/branchname`처럼 보입니다.
 
 [i[Switch]i<]
 
@@ -356,7 +341,7 @@ $ git branch -D BRANCH   # Force delete unmerged branch
 
 [i[Branch]i>]
 
-Obsolete style (use `switch` if you can):
+구식 방식(가능하면 `switch`를 사용하세요):
 
 [i[Checkout]i]
 ``` {.default}
@@ -365,7 +350,7 @@ $ git checkout HEAD^     # Detach HEAD to previous commit
 $ git checkout HEAD~2    # Detach HEAD to second previous commit
 ```
 
-## Pulling and Pushing, and Fetching
+## 풀, 푸시, 페치 {#pulling-and-pushing-and-fetching}
 
 [i[Pull]i]
 ``` {.default}
@@ -400,7 +385,7 @@ $ git fetch        # Get data from remote but don't merge or rebase
 $ git fetch REMOTE # Same, for a specific remote
 
 ```
-## Merging
+## 병합 {#merging}
 
 [i[Merge]i]
 ``` {.default}
@@ -411,13 +396,13 @@ $ git mergetool      # Run mergetool to resolve a conflict
 $ git checkout --merged FILE   # Unstage resolved files
 ```
 
-If a conflict occurs, you can always `--abort`. Otherwise:
+충돌이 발생하면 언제든 `--abort`할 수 있습니다. 계속하려면 다음과 같이 합니다.
 
-1. Fix the conflict.
-2. Add the fixed files.
-3. Commit to complete the merge.
+1. 충돌을 해결합니다.
+2. 고친 파일을 추가합니다.
+3. 커밋하여 병합을 완료합니다.
 
-## Remotes
+## 원격 저장소 {#remotes}
 
 [i[Remote]i]
 ``` {.default}
@@ -428,16 +413,15 @@ $ git remote rename REMOTE1 REMOTE2   # Rename REMOTE1 to REMOTE2
 $ git remote remove REMOTE            # Delete REMOTE
 ```
 
-## Ignoring Files
+## 파일 무시하기 {#ignoring-files}
 
 [i[`.gitignore` file]i<]
 
-Add a `.gitignore` file to your repo. It applies to this directory and
-all non-submodule subdirectories below it. Add descriptions of files to
-ignore to this file. Comments behind `#` are allowed. Blank lines are
-ignored.
+저장소에 `.gitignore` 파일을 추가합니다. 이 디렉터리와 그 아래에 있는
+서브모듈이 아닌 모든 하위 디렉터리에 적용됩니다. 무시할 파일을 나타내는
+패턴을 이 파일에 추가하세요. `#` 뒤에는 주석을 쓸 수 있고 빈 줄은 무시됩니다.
 
-Example `.gitignore`:
+`.gitignore` 예:
 
 ``` {.default}
 foo.aux     # Ignore specific file "foo.aux"
@@ -450,8 +434,8 @@ frotz/bar   # Ignore file "bar" in directory "frotz"
 *           # Ignore everything
 ```
 
-Exceptions to earlier rules, also useful in `.gitignore` files in
-subdirectories to override rules from parent directories:
+앞서 나온 규칙의 예외입니다. 하위 디렉터리의 `.gitignore` 파일에서 부모
+디렉터리의 규칙을 재정의할 때도 유용합니다.
 
 ``` {.default}
 *.txt       # Ignore all text files
@@ -459,7 +443,7 @@ subdirectories to override rules from parent directories:
 ```
 [i[`.gitignore` file]i>]
 
-## Rebasing
+## 리베이스 {#rebasing}
 
 [i[Rebase]i]
 ``` {.default}
@@ -478,9 +462,9 @@ $ git pull --rebase      # Force a rebase on pull
 $ git pull --no-rebase   # Force a merge on pull
 ```
 
-## Stashing
+## 스태시 {#stashing}
 
-Stashes are stored on a stack.
+스태시는 스택에 저장됩니다.
 
 [i[Stash]i]
 ``` {.default}
@@ -496,7 +480,7 @@ $ git stash drop 'stash@{1}'  # Drop stash at index 1
 $ git stash drop --index 1    # Same thing
 ```
 
-## Reverting
+## 되돌리기 {#reverting}
 
 [i[Revert]i]
 ``` {.default}
@@ -511,11 +495,10 @@ $ git revert --skip      # Skip a conflicting commit
 $ git revert --abort     # Bail out of reverting
 ```
 
-## Resetting
+## 리셋 {#resetting}
 
 [i[Reset]i]
-All resets move `HEAD` and the current checked out branch to the
-specified commit.
+모든 리셋은 `HEAD`와 현재 체크아웃한 브랜치를 지정한 커밋으로 옮깁니다.
 
 ``` {.default}
 $ git reset --mixed CMMT  # Set stage to CMMT, don't change WT
@@ -526,29 +509,29 @@ $ git reset --hard CMMT   # Set stage and WT to CMMT
 $ git reset -p CMMT       # Reset file in patch mode
 ```
 
-Obsolete usage:
+구식 사용법:
 
 ``` {.default}
 $ git reset FILE   # Same as "git restore --staged FILE"
 ```
 
-## The Reflog
+## Reflog {#the-reflog}
 
 [i[Reflog]i]
 ``` {.default}
 $ git reflog      # Look at the reflog
 ```
 
-…I admit this section could use a bit more information.
+…인정합니다. 이 절에는 정보가 조금 더 필요하겠네요.
 
-## Cherry-pick
+## 체리픽 {#cherry-pick}
 
 [i[Cherry-pick]i]
 ``` {.default}
 $ git cherry-pick CMMT   # Cherry-pick a particular commit
 ```
 
-## Blame
+## Blame {#blame}
 
 [i[Blame]i]
 ``` {.default}
@@ -556,7 +539,7 @@ $ git blame FILE                # Who is responsible for each line
 $ git blame --date=short FILE   # Same, shorter date format
 ```
 
-## Submodules
+## 서브모듈 {#submodules-1}
 
 [i[Submodules]i<]
 ``` {.default}
@@ -575,8 +558,8 @@ $ git submodule update --recursive   # Handle submods of submods
 ```
 
 [i[Submodules-->Deleting]i]
-Deleting a submodule—do these in order. In this example, DIR is the name
-of the submodule directory.
+서브모듈을 삭제하려면 다음 명령을 순서대로 실행합니다. 이 예에서 DIR은
+서브모듈 디렉터리의 이름입니다.
 
 ``` {.default}
 $ git submodule deinit DIR
@@ -588,7 +571,7 @@ $ git commit -m "remove DIR submodule"
 ```
 [i[Submodules]i>]
 
-## Tags
+## 태그 {#tags-1}
 
 [i[Tag]i<]
 
@@ -618,7 +601,7 @@ $ git push REMOTE -d tagname  # Delete a tag on a remote
 
 [i[Tag]i>]
 
-## Worktrees
+## 작업 트리 {#worktrees-1}
 
 [i[Worktree]i<]
 

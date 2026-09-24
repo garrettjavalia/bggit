@@ -1,4 +1,4 @@
-# Foreword
+# 머리말 {#foreword}
 <!-- Beej's guide to Git
 # vim: ts=4:sw=4:nosi:et:tw=72
 -->
@@ -54,110 +54,65 @@
 [is[`git tag`==>see Tag]]
 [is[`git worktree`==>see Worktree]]
 
-Hello again, everyone! In my role as an industry
-professional-turned-college instructor, I definitely see my fair share
-of students struggling with Git.
+여러분, 다시 만났군요! 업계 전문가에서 대학 강사로 전향한 저는 Git 때문에 애를 먹는 학생들을 정말 많이 봅니다.
 
-And who can blame 'em? It's a seemingly-overcomplicated system with lots
-of pitfalls and merge conflicts and detached heads and remotes and
-cherrypicks and rebases and an endless array of other commands that do
-who-knows-what.
+학생들의 잘못은 아닙니다. Git은 함정과 병합 충돌, 분리된 헤드, 원격 저장소, 체리픽, 리베이스, 그리고 무슨 일을 하는지 알 수 없는 끝없는 명령이 가득한, 지나치게 복잡한 시스템입니다.
 
-Which leads us directly to the goal: let's make sense of all this and go
-from complete Git novice up to intermediate! We'll start off easy
-(allegedly) with commands mixed in with some theory of operation. And
-we'll see that understanding what Git does under the hood is critical to
-using it correctly.
+그러니 목표를 이렇게 잡아봅시다. 이 모든 것을 이해하고 Git 완전 초보에서 중급자로 올라가 보는 것이지요! 명령과 약간의 동작 원리를 섞어 쉽다고 알려진 내용부터 시작합니다. 그리고 Git 내부에서 무슨 일이 일어나는지 이해하는 것이 Git을 올바르게 사용하는 데 매우 중요하다는 사실을 알게 될 것입니다.
 
-And I *promise* there's definitely a chance that after you get through
-some of this guide, you might actually start to appreciate Git and like
-using it.
+이 안내서를 어느 정도 읽고 나면 실제로 Git의 유용함을 이해하고 작업에 활용하는 것을 좋아하게 될 가능성이 분명히 있다고 제가 *약속*합니다.
 
-I've been using it for years (I'm using it for the source code for this
-guide right now) and I can certainly vouch for it becoming easier over
-time, and then, even, second nature.
+저는 Git을 오랫동안 사용해 왔고(지금도 이 안내서의 소스 코드에 사용하고 있습니다), 쓰면 쓸수록 쉬워지고 습관이 될 것이라 확실히 보장할 수 있습니다.
 
-But first, some boilerplate!
+하지만 먼저, 관례적인 안내를 하겠습니다!
 
-## Audience
+(역자 주: 이제부터 Git이라는 영어 단어와 깃이라는 한국어 음차 표현을 편의에 따라 혼용하겠습니다.)
 
-The initial draft of this guide was put online for the university
-students where I worked (or maybe still work, depending on when you're
-reading this) as an instructor. So it's pretty natural to assume that's
-the audience I had in mind.
+## 독자 {#audience}
 
-But I'm also hoping that there are enough other folks out there who
-might get something of use from the guide as well, and I've written it
-in a more general sense with all you non-college students in mind.
+이 안내서의 초안은 제가 강사로 일했던(여러분이 이 글을 읽는 시점에 따라 지금도 일하고 있을지 모르는) 대학의 학생들을 위해 온라인에 공개했습니다. 그러니 제가 대학생을 독자로 염두에 두었다고 보는 것이 자연스럽습니다.
 
-This guide assumes that you have basic POSIX shell (i.e. Bash, Zsh,
-etc.) usage skills, i.e.:
+그러나 읽는 사람이 대학생이 아니더라도 이 안내서가 유용하기를 바라며, 그런 독자들도 염두에 두고 좀 더 일반적인 관점에서 안내서를 작성했습니다.
 
-* You know basic commands like `cd`, `ls`, `mkdir`, `cp`, etc.
-* You can install more software.
+이 안내서는 여러분에게 다음과 같은 기본적인 POSIX 셸(즉 Bash, Zsh 등) 사용 능력이 있다고 가정합니다. 예를 들자면,
 
-It also assumes you're in a Unix-like environment, e.g. Linux, BSD,
-Unix, macOS, WSL, etc. with a POSIX shell. The farther you are away from
-that (e.g. PowerShell, Commodore 64), the more manual translation you'll
-have to do.
+* `cd`, `ls`, `mkdir`, `cp` 같은 기본 명령을 알고 있습니다.
+* 소프트웨어를 추가로 설치할 수 있습니다.
 
-Windows is naturally the sticking point, there. Luckily Git for Windows
-comes with a Bash shell variant called Git Bash. You can also install
-[fl[WSL|https://learn.microsoft.com/en-us/windows/wsl/]] to get a Linux
-environment running on your Windows box. I wholeheartedly recommend this
-for hacker types, since Unix-like systems are hacker-awesome, and
-additionally I recommend you all become hacker types.
+또한 POSIX 셸을 갖춘 Linux, BSD, Unix, macOS, WSL 등의 유닉스 또는 그와 유사한 환경에 있다고 가정합니다. 여기서 멀어질수록(예를 들어 PowerShell이나 Commodore 64) 여러분이 직접 바꾸어 적용해야 할 내용이 많아집니다.
 
-## Official Homepage
+Windows는 당연히 걸림돌이 됩니다. 다행히 Git for Windows에는 Git Bash라는 Bash 셸 변형이 들어 있습니다. 또한 [fl[WSL|https://learn.microsoft.com/en-us/windows/wsl/]]을 설치해 Windows 컴퓨터에서 Linux 환경을 구성할 수도 있습니다. 유닉스 계열 시스템은 해커에게 정말 편하므로 해커 기질이 있는 분께 이를 진심으로 권합니다. 더 나아가 여러분 모두 해커가 되기를 권합니다. (역자 주: 여기서 해커는 컴퓨터를 능숙하게 활용하는 개발자라는 의미입니다.)
 
-This official location of this document is (currently)
-[fl[https://beej.us/guide/bggit/|https://beej.us/guide/bggit/]].
+## 공식 홈페이지 {#official-homepage}
 
-## Email Policy
+이 문서의 공식 위치는 (현재) [fl[https://beej.us/guide/bggit/|https://beej.us/guide/bggit/]]입니다.
 
-I'm generally available to help out with email questions so feel free to
-write in, but I can't guarantee a response. I lead a pretty busy life
-and there are times when I just can't answer a question you have. When
-that's the case, I usually just delete the message. It's nothing
-personal; I just won't ever have the time to give the detailed answer
-you require.
+## 이메일 정책 {#email-policy}
 
-As a rule, the more complex the question, the less likely I am to
-respond. If you can narrow down your question before mailing it and be
-sure to include any pertinent information (like platform, compiler,
-error messages you're getting, and anything else you think might help me
-troubleshoot), you're much more likely to get a response.
+저는 보통 이메일에 답하고자 하니 편하게 보내셔도 되지만, 답장을 보장할 수는 없습니다. 상당히 바쁘게 살다 보니 여러분의 질문에 도저히 답할 수 없는 때가 있습니다. 그럴 때는 보통 메시지를 그냥 삭제합니다. 개인적인 감정은 없습니다. 여러분에게 필요한 자세한 답을 드릴 시간이 앞으로도 나지 않을 뿐입니다.
 
-If you don't get a response, hack on it some more, try to find the
-answer, and if it's still elusive, then write me again with the
-information you've found and hopefully it will be enough for me to help
-out.
+대체로 질문이 복잡할수록 제가 답할 가능성은 낮아집니다. 메일을 보내기 전에 질문의 범위를 좁히고, 관련 정보(플랫폼, 컴파일러, 나타나는 오류 메시지, 문제 해결에 도움이 되리라 생각하는 그 밖의 정보)를 빠짐없이 넣으면 답을 받을 가능성이 훨씬 커집니다.
 
-Now that I've badgered you about how to write and not write me, I'd just
-like to let you know that I _fully_ appreciate all the praise the guide
-has received over the years. It's a real morale boost, and it gladdens
-me to hear that it is being used for good! `:-)` Thank you!
+답장을 받지 못했다면 조금 더 파고들어 답을 찾아보세요. 그래도 찾기 어렵다면 알아낸 정보를 담아 다시 메일을 보내 주세요. 어쩌면 제가 도와드리기에 충분할지도 모릅니다.
 
-## Mirroring
+메일을 어떻게 써야 하는지 잔소리를 늘어놓았으니, 이제 이 안내서가 여러 해 동안 받은 모든 찬사에 제가 _진심으로_ 감사한다는 말씀도 드리고 싶습니다. 사기를 올려주고, 좋은 일에 쓰인다는 소식을 들으면 기쁩니다! `:-)` 감사합니다!
 
-You are more than welcome to mirror this site, whether publicly or
-privately. If you publicly mirror the site and want me to link to it
-from the main page, drop me a line at
-[`beej@beej.us`](mailto:beej@beej.us).
+## 미러링 {#mirroring}
 
-## Note for Translators
+이 사이트는 공개든 비공개든 얼마든지 미러링하셔도 됩니다. 공개 미러를 만들고 메인 페이지에서 링크해 주기를 원한다면 [`beej@beej.us`](mailto:beej@beej.us)로 연락해 주세요.
+
+## 번역자를 위한 안내 {#note-for-translators}
 
 [i[Translations]<]
-If you want to translate the guide into another language, write me at
-[`beej@beej.us`](mailto:beej@beej.us) and I'll link to your translation
-from the main page. Feel free to add your name and contact info to the
-translation.
+이 안내서를 다른 언어로 번역하고 싶다면 [`beej@beej.us`](mailto:beej@beej.us)로 메일을 보내 주세요. 메인 페이지에 번역본의 링크를 추가하겠습니다. 번역본에 번역자의 이름과 연락처를 자유롭게 덧붙여도 됩니다.
 
-Please note the license restrictions in the Copyright and Distribution
-section, below.
+아래 저작권 및 배포 절의 라이선스 지침에 유의하세요.
 [i[Translations]>]
 
-## Copyright and Distribution
+## 저작권 및 배포 {#copyright-and-distribution}
+
+(역자 주: 이 절은 법적 정보 보존을 위해 번역하지 않았습니다.)
+(Translator's note : This section has not been translated to keep its legal information.)
 
 Beej's Guide to Git is Copyright © 2024 Brian "Beej Jorgensen" Hall.
 
@@ -183,25 +138,32 @@ guide to their students.
 
 Contact [`beej@beej.us`](mailto:beej@beej.us) for more information.
 
-## Dedication
+## 헌사 {#dedication}
 
-The hardest things about writing these guides are:
+이런 안내서를 쓸 때 가장 어려운 일은 다음과 같습니다.
 
-* Learning the material in enough detail to be able to explain it
-* Figuring out the best way to explain it clearly, a seemingly-endless
-  iterative process
-* Putting myself out there as a so-called _authority_, when really
-  I'm just a regular human trying to make sense of it all, just like
-  everyone else
-* Keeping at it when so many other things draw my attention
+* 설명할 수 있을 만큼 충분히 자세하게 소재를 배우기
+* 명확하게 설명할 최선의 방법을 찾아내기. 끝이 없어 보이는 반복 과정입니다
+* 사실은 다른 모든 사람과 마찬가지로 이 모든 것을 이해하려 애쓰는 평범한 사람일 뿐이지만 이른바 *권위자*로서 자신을 세상에 내놓기
+* 수많은 다른 일이 관심을 끄는 와중에도 계속해 나가기
 
-A lot of people have helped me through this process, and I want to
-acknowledge those who have made this book possible:
+이 과정에서 많은 분들이 저를 도와주셨고, 이 책이 나올 수 있게 해 준 분들께 감사를 표하고 싶습니다.
 
-* Everyone on the Internet who decided to help share their knowledge in
-  one form or another. The free sharing of instructive information is
-  what makes the Internet the great place that it is.
-* Everyone who submitted corrections and pull-requests on everything
-  from misleading instructions to typos.
+* 어떤 형태로든 지식을 나누기로 한 인터넷의 모든 분. 유익한 정보를 자유롭게 나누는 일이 인터넷을 지금과 같이 훌륭한 곳으로 만듭니다.
+* 오해를 부르는 설명부터 오타 등 모든 것에 수정 사항과 풀 리퀘스트를 보내 주신 모든 분.
 
-Thank you! ♥
+감사합니다! ♥
+
+## 옮긴이의 말: 2026년 10월 번역, 원문 1.2.8 기반 한국어판 {#translators-message-202610}
+
+AI가 발전하면서 많은 도구가 가치를 잃기도 하고, 반대로 대중화되기도 하는 시대입니다. 소스 코드 이력 관리 도구인 깃은 원래 개발자들의 전유물이었습니다. 그러나 최근에는 비개발자들도 그들의 업무에서 개발을 많이 하고, 그에 따라 개발 도구도 많이 활용하고 있습니다. 자연스럽게 예전보다 많은 사람들이 깃을 사용하게 되었습니다.
+
+한편 개발자인 저도 최근에는 깃의 명령을 직접 입력하는 일이 거의 없어졌습니다. 그리고 깃의 내부 구조와 동작 원리를 이해하는 일은 깃을 활용하는 많은 사람들에게 대부분의 경우에 이전보다 더 불필요한 일이 되었습니다.
+
+그래서 깃의 구조를 이해하고 복잡한 협업 상황에서 깃을 현명하게 다룰 수 있는 능력은 이전보다 더 희소해진 듯하고, 그 가치도 희박해진 듯합니다. 하지만 아직은 깃을 효율적으로 사용할 필요가 있고, 복잡한 협업 상황의 문제를 해결해야 하며, 누군가는 깃을 이해해야 다음 버전의 깃이 세상에 나올 수 있을 것입니다. 그렇기에 가치 있는 지식이 적어지는 이 시대에도 깃에 대한 지식을 담은 이 안내서와 그 번역에 가치가 있으리라 생각합니다.
+
+이 번역은 AI를 통해 초안을 만드는 것으로 시작되었으며, 초안의 모든 부분을 원문과 비교 검토해서 자연스럽고 이해하기 쉬운 한국어 문장을 내놓기 위해 최선을 다했습니다. 제가 쓸 수 있는 모든 지식을 동원해 최선의 결과물을 만들었기에, AI의 시대에도 이 번역본을 세상에 내놓는 일에 작은 자부심을 느끼고, 결과물에 애정을 느낍니다.
+
+여러분이 어떤 이유로 깃을 다루든, 이 안내서가 도움이 되리라 믿습니다. 또한 제가 이 번역본을 낼 때 그러했듯이, 여러분도 자부심과 애정을 느낄 수 있는 결과물을 만드실 수 있기를 바랍니다.
+
+읽어주셔서 감사합니다. - 2026년 10월 30일, 정민석.

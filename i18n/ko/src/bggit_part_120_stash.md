@@ -1,39 +1,38 @@
-# Stashing: Temporarily Set Changes Aside {#stash}
+# 스태시: 변경 사항을 잠시 치워 두기 {#stash}
 
 [i[Stash]<]
 
-If you're in the middle of working on something and you realize you want
-to pull some changes in, but you're not ready to make a commit because
-your stuff is still completely broken, `git stash` is your friend. It
-takes the stuff you're working on and stashes it away on the side,
-returning your working tree to the state of the last commit.
+무언가를 작업하던 중 다른 변경 사항을 pull하고 싶어졌지만, 아직 작업물이
+완전히 망가진 상태라 커밋할 준비가 되지 않았다면 `git stash`가 도움이
+됩니다. 작업 중인 내용을 한쪽에 치워 두고 작업 트리를 마지막 커밋 상태로
+되돌려 줍니다.
 
-So your changes will look like they're gone—but don't worry, they're
-safely stashed away and you can bring them back later.
+변경 사항이 사라진 것처럼 보이지만 걱정하지 마세요. 안전하게 스태시해
+두었으므로 나중에 다시 가져올 수 있습니다.
 
-Then you can pull the new stuff down so you're up-to-date, and then
-unstash your stuff on top of it.
+그런 다음 새 내용을 pull해 최신 상태로 만들고, 그 위에 스태시한 내용을 다시
+꺼낼 수 있습니다.
 
-It's kind of like a mini rebase in spirit.
+개념적으로는 작은 리베이스와 비슷합니다.
 
-## Example
+## 예시 {#example}
 
-Let's say we're all caught up to the latest.
+현재 최신 상태라고 합시다.
 
 ``` {.default}
 $ git pull
 ```
 
-Great. And we start hacking. We open an existing file `foo.rs` and add
-some code to it as per usual.
+좋습니다. 이제 코딩을 시작합니다. 기존 `foo.rs` 파일을 열고 평소처럼 코드를
+조금 추가합니다.
 
-Then Chris calls from the next desk over and says, "Hey wait—I just made
-a critical update to `main` and you should use that!"
+그때 옆자리의 Chris가 말합니다. "잠깐만요. 방금 `main`에 중요한 업데이트를
+했으니 그걸 사용하세요!"
 
-And you think, "Well, heck, I was in the middle of something." You're
-not ready to commit, but you want Chris's changes.
+여러분은 생각합니다. "이런, 한창 작업 중이었는데." 아직 커밋할 준비는 안
+됐지만 Chris의 변경 사항은 가져오고 싶습니다.
 
-So you save your files and then run this:
+파일을 저장하고 다음 명령을 실행합니다.
 
 ``` {.default}
 $ git stash
@@ -41,11 +40,10 @@ $ git stash
                                 some very descriptive commit message
 ```
 
-And, if you were watching, you might have seen your file in your editor
-change back to what it used to be! Your changes have been undone and
-stashed away!
+유심히 보고 있었다면 편집기의 파일이 이전 모습으로 돌아가는 것을 봤을 수도
+있습니다! 변경 사항이 취소되어 스태시에 보관됐습니다!
 
-If you git status at this point, you'll see:
+이 시점에 `git status`를 실행하면 다음과 같이 보입니다.
 
 ``` {.default}
 $ git status
@@ -55,8 +53,8 @@ $ git status
   nothing to commit, working tree clean
 ```
 
-It's all clean, which means now you can pull and get the latest `main`.
-So you do that.
+모두 깨끗합니다. 이제 pull해서 최신 `main`을 가져올 수 있다는 뜻입니다.
+그렇게 해 봅시다.
 
 ``` {.default}
 $ git pull
@@ -73,10 +71,10 @@ $ git pull
    1 file changed, 1 insertion(+)
 ```
 
-And now you're up to date.
+이제 최신 상태가 됐습니다.
 
-Oh, wait. What was it we were working on? Oh yeah! We stashed it! Let's
-unstash those changes with `pop`:
+잠깐, 무엇을 작업하고 있었죠? 아, 맞다! 스태시해 뒀죠! `pop`으로 그 변경
+사항을 다시 꺼냅시다.
 
 ``` {.default}
 $ git stash pop
@@ -94,30 +92,27 @@ $ git stash pop
   Dropped refs/stash@{0} (046ac112f8c02c3dc02984ad71d353a3e5be9a7a)
 ```
 
-Auto-merging sounds good. Looks like things went well. And if we look at
-our file now we'll see our changes brought out of the stash and
-reapplied. Our file `foo.rs` is in "modified" state and ready for us to
-work on, or add and commit.
+자동 병합이라니 좋은 소리입니다. 잘 된 것 같군요. 이제 파일을 보면 변경
+사항이 스태시에서 나와 다시 적용된 것을 볼 수 있습니다. `foo.rs`는 "수정됨"
+상태이며, 계속 작업하거나 추가하고 커밋할 준비가 됐습니다.
 
-## The Stash Stack
+## 스태시 스택 {#the-stash-stack}
 
 [i[Stash-->The stack]<]
 
-If you're familiar with the [flw[stack abstract data
-type|Stack_(abstract_data_type)]], your ears might have perked up when
-you read `git stash pop`.
+[flw[스택 추상 자료형|Stack_(abstract_data_type)]]에 익숙하다면 `git stash
+pop`을 읽는 순간 귀가 솔깃했을 것입니다.
 
-Yes, Git tracks stashes in a stack. If you're not familiar with a stack,
-read up on it first.
+그렇습니다. Git은 스택으로 스태시를 추적합니다. 스택이 익숙하지 않다면 먼저
+관련 내용을 읽어 보세요.
 
-* `git stash` pushes the working tree on the stash stack.
-* `git stash pop` pops the top of the stash stack and applies it to the
-  working tree.
-* `git stash list` shows you the current stash stack.
-* `git stash drop` deletes a particular stash stack entry.
+* `git stash`는 작업 트리를 스태시 스택에 push합니다.
+* `git stash pop`은 스태시 스택 맨 위 항목을 pop해 작업 트리에 적용합니다.
+* `git stash list`는 현재 스태시 스택을 보여 줍니다.
+* `git stash drop`은 특정 스태시 스택 항목을 삭제합니다.
 
-Because of this, I could `stash`, then do something else, then `stash`
-again, and we'll have two stashes on the stack.
+따라서 `stash`한 뒤 다른 작업을 하고 다시 `stash`하면 스택에 스태시가 두
+개 생깁니다.
 
 ``` {.default}
 $ git stash list
@@ -125,41 +120,39 @@ $ git stash list
   stash@{1}: WIP on main: 659b132 added repo1 another line
 ```
 
-The top of the stack is `stash@{0}`.
+스택 맨 위는 `stash@{0}`입니다.
 
-If I ran just plain `git stash pop`, it would take the stash at the top,
-which is index `0`, removing it from the stack and applying it to the
-working tree.
+그냥 `git stash pop`을 실행하면 인덱스 `0`인 맨 위 스태시를 가져와
+스택에서 제거하고 작업 트리에 적용합니다.
 
-But you can also pop by stash name if you want to pop something from the
-middle of the stack.
+스택 중간의 항목을 pop하고 싶다면 스태시 이름으로 지정할 수도 있습니다.
 
 ``` {.default}
 $ git stash pop 'stash@{1}'
 $ git stash pop --index 1       # same thing
 ```
 
-Similarly `stash drop` will pop the top of the stack and **not** apply
-the changes to the working tree, discarding them instead.
+마찬가지로 `stash drop`은 스택 맨 위 항목을 꺼내되 변경 사항을 작업 트리에
+적용하지 **않고** 버립니다.
 
-And `stash drop` can also operate on a particular stash by name if you
-want to drop something from the middle of the stack.
+스택 중간의 항목을 버리고 싶다면 `stash drop`에도 특정 스태시 이름을 지정할
+수 있습니다.
 
 [i[Stash-->The stack]>]
 
-## Conflicts
+## 충돌 {#conflicts}
 
 [i[Stash-->Conflicts]<]
 
-Now that you've spent so much time reading about conflicts during merge
-and rebase, you might start to get a little worried here.
+병합과 리베이스 중 생기는 충돌을 한참 읽었으니, 여기서 조금 걱정되기 시작할
+수 있습니다.
 
-What if I stash then pull, but then popping the stash does something
-that conflicts with the changes I pulled? Can that happen?
+스태시하고 pull한 다음 스태시를 pop했는데, 그 내용이 pull한 변경 사항과
+충돌하면 어떻게 될까요? 그런 일이 생길 수 있을까요?
 
-Of course it can. Hooray.
+물론 생길 수 있습니다. 만세.
 
-When it happens, it looks like this:
+그런 일이 생기면 다음과 같이 보입니다.
 
 ``` {.default}
 $ git stash pop
@@ -177,7 +170,7 @@ $ git stash pop
   The stash entry is kept in case you need it again.
 ```
 
-Sure looks like a merge conflict, and it looks doubly so in the editor.
+딱 봐도 병합 충돌이고, 편집기에서는 더욱 그렇게 보입니다.
 
 ``` {.rs .numberLines}
 fn main() {
@@ -189,11 +182,11 @@ fn main() {
 }
 ```
 
-You can see our stashed changes below where we tried to fix it, but
-then we see that conflicts with Chris's fix from upstream.
+아래쪽에는 우리가 고치려고 했던 스태시된 변경 사항이 보이고, 이것이
+업스트림에서 온 Chris의 수정과 충돌한다는 것도 알 수 있습니다.
 
-So we do the merge thing and make it *Right*, editing it to look the way
-we want, and we save it. Our status is still not clean, though.
+그러니 병합할 때처럼 파일을 원하는 모습으로 편집해 *올바르게* 만들고
+저장합니다. 하지만 아직 상태는 깨끗하지 않습니다.
 
 ``` {.default}
 $ git status
@@ -208,41 +201,40 @@ $ git status
   no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-Let's add it with `git add` to mark it resolved.
+`git add`로 추가해 해결됐다고 표시합시다.
 
-A couple things can happen at this point.
+이 시점에는 두 가지 일이 일어날 수 있습니다.
 
-1. If you just accepted the pulled version (i.e. discarding your
-   conflicting changes), nothing new will happen. After all, there's
-   already a commit in your repo with their version, so Git it smart
-   enough to just call it a day. `git status` reports clean.
+1. pull한 버전만 받아들였다면(즉, 충돌한 내 변경 사항을 버렸다면) 새로
+   일어나는 일은 없습니다. 결국 그 버전이 담긴 커밋은 이미 저장소에 있으므로
+   Git은 이쯤에서 끝내도 된다는 것을 압니다. `git status`는 깨끗한 상태를
+   보고합니다.
 
-2. If you accepted a version different than the one you pulled (i.e. you
-   kept some or all of your changes), then `git status` will report that
-   file as modified and staged to be committed.
+2. pull한 것과 다른 버전을 받아들였다면(즉, 내 변경 사항 일부 또는 전부를
+   유지했다면) `git status`는 그 파일이 수정됐고 커밋을 위해 스테이징됐다고
+   보고합니다.
 
-   If you're not ready to commit at this point, use `git restore
-   --staged` to unstage the file. That will change it to just be
-   modified and you can work on it more before you commit it.
+   아직 커밋할 준비가 되지 않았다면 `git restore --staged`로 파일을
+   스테이징 해제하세요. 그러면 파일은 단순히 수정된 상태가 되고, 커밋하기
+   전에 더 작업할 수 있습니다.
 
-**In both conflict cases the stashed changes are still in the stash!**
-Yes, you ran `stash pop`, but when there's a conflict, the stash remains
-untouched and doesn't actually pop.
+**두 충돌 상황 모두 스태시한 변경 사항은 여전히 스태시에 남아 있습니다!**
+분명 `stash pop`을 실행했지만 충돌이 생기면 스태시는 그대로 남고 실제로
+pop되지 않습니다.
 
-If you're done with it (and you probably are), you can use `git stash
-drop` to discard the particular stash from the stack and get all cleaned
-up.
+그 스태시가 더 필요 없다면(아마 그럴 것입니다) `git stash drop`으로 해당
+스태시를 스택에서 버리고 깔끔하게 정리할 수 있습니다.
 
 [i[Stash-->Conflicts]>]
 
-## Stashing New Files
+## 새 파일 스태시하기 {#stashing-new-files}
 
 [i[Stash-->New files]]
 
-What if you've added a new file to your working tree but it's currently
-untracked? Can stash see it?
+작업 트리에 새 파일을 추가했지만 현재 추적되지 않는 상태라면 어떨까요?
+스태시가 이 파일을 볼 수 있을까요?
 
-No. You have to add it first. So do a `git add` (but not a commit!) then
-stash it. The new file should disappear from the working tree.
+아닙니다. 먼저 파일을 추가해야 합니다. `git add`를 실행한 뒤(커밋은 하지
+마세요!) 스태시하세요. 새 파일이 작업 트리에서 사라질 것입니다.
 
 [i[Stash]>]

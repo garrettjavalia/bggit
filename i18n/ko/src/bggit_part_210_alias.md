@@ -1,87 +1,83 @@
-# Git Aliases
+# Git 별칭 {#git-aliases}
 
 [i[Alias]<]
 
-Some of these Git commands might be painstaking to type. So far, we
-haven't had to do anything _too_ complicated, but we might eventually.
+Git 명령 가운데는 입력하기 고된 것도 있습니다. 지금까지는 _그렇게까지_
+복잡한 일을 할 필요가 없었지만, 언젠가는 그럴 수도 있습니다.
 
-For example, let's say you want to see the names of the files that were
-modified with `git log`. It's no problem; you can tell it to do that.
+예를 들어 `git log`로 수정된 파일의 이름을 보고 싶다고 합시다. 어렵지
+않습니다. 그렇게 하라고 명령하면 됩니다.
 
 ``` {.default}
 $ git log --name-only
 ```
 
-And that'll work.
+그러면 잘 작동합니다.
 
-But let's say for the sake of example that you find yourself doing that
-a *lot*. It would get irksome.
+하지만 예를 들어 이 작업을 *아주 자주* 하게 됐다고 합시다. 슬슬
+성가셔질 것입니다.
 
-Wouldn't it be easier if you could just make up a new command, like `git
-logn` that would do the same thing?
+같은 일을 하는 `git logn` 같은 새 명령을 직접 만들 수 있다면 더 쉽지
+않을까요?
 
-That's what aliases are for.
+바로 이럴 때 별칭을 씁니다.
 
-This chapter assumes you've read the [Configuration
-chapter](#configuration). In particular, if these commands don't work,
-you should look at [configuration of Older Git Versions](#config-old).
+이 장에서는 독자가 [구성 장](#configuration)을 읽었다고 가정합니다. 특히
+여기 나온 명령이 작동하지 않는다면 [이전 Git 버전의
+구성](#config-old)을 살펴보세요.
 
-## Creating an Alias
+## 별칭 만들기 {#creating-an-alias}
 
 [i[Alias-->Creating]<]
 
-You do this through the configuration interface. Basically what you want
-to set is the variable `alias.myname` where `myname` is the name of the
-new command.
+구성 인터페이스를 통해 별칭을 만듭니다. 기본적으로 설정하려는 것은
+`alias.myname` 변수이며, 여기서 `myname`은 새 명령의 이름입니다.
 
-Let's say you want to make `git logn` an alias for `git log
---name-only`. You can do it like this:
+`git logn`을 `git log --name-only`의 별칭으로 만들고 싶다고 합시다. 다음과
+같이 하면 됩니다.
 
 ``` {.default}
 $ git config set --global alias.logn 'log --name-only'
 ```
 
-And at this point, you can run:
+이제 다음 명령을 실행할 수 있습니다.
 
 ``` {.default}
 $ git logn
 ```
 
-and it will be an alias for `git log --name-only`, effectively running
-that command.
+그러면 이 명령이 `git log --name-only`의 별칭이 되어 사실상 그 명령을
+실행합니다.
 
-I speculate that Git has a number of built-in commands (like `log` and
-`push`) and if you try to have it run something that is not a built-in,
-it tries to find it as an `alias` variable. And if it does, it
-substitutes that instead. 99% sure that's what's happening under the
-hood.
+제 추측으로는 Git에 `log`나 `push` 같은 내장 명령이 여럿 있고, 내장
+명령이 아닌 것을 실행하려 하면 `alias` 변수에서 그 이름을 찾는 듯합니다.
+찾으면 그 값으로 바꾸는 것이죠. 내부에서 실제로 이렇게 돌아간다고 99%
+확신합니다.
 
-Since aliases are just regular configuration variables, getting,
-setting, and deleting them happens as described in the [config
-chapter](#configuration).
+별칭도 평범한 구성 변수일 뿐이므로, 값을 조회하고 설정하고 삭제하는 방법은
+[구성 장](#configuration)에 설명한 것과 같습니다.
 
 [i[Alias-->Creating]>]
 
-## Displaying Aliases
+## 별칭 표시하기 {#displaying-aliases}
 
 [i[Alias-->Displaying]<]
 
-Since aliases are just config variables, you can just get them in order
-to see what they are.
+별칭은 그저 구성 변수이므로, 어떤 값인지 보고 싶으면 조회하면 됩니다.
 
 ``` {.default}
 $ git config get alias.logx
 ```
 
-If you want to see all of them, you can run this command:
+별칭을 모두 보고 싶다면 다음 명령을 실행하세요.
 
 ``` {.default}
 $ git config get --all --show-names --regexp '^alias\.'
 ```
 
-which is super annoying. I suggest you alias it. Wheee!
+엄청나게 성가신 명령이죠. 이 명령에도 별칭을 붙이길 권합니다. 야호!
 
-> **Older versions of Git use this command instead:**
+> **이전 버전의 Git에서는 대신 이 명령을 사용합니다.**
 > ``` {.display}
 > $ git config --get-regexp ^alias\.
 > ```
@@ -89,44 +85,44 @@ which is super annoying. I suggest you alias it. Wheee!
 
 [i[Alias-->Displaying]>]
 
-## Some Neat Sample Aliases
+## 쓸 만한 별칭 예시 {#some-neat-sample-aliases}
 
 [i[Alias-->Examples]<]
 
-Some of the following are split into multiple lines so they fit in the
-book. You can put them on a single line, or type them as-is with the `\`
-escape that tells the shell to continue the command on the next line.
+다음 예시 가운데 일부는 책에 들어가도록 여러 줄로 나눴습니다. 한 줄에
+입력해도 되고, 셸에 명령이 다음 줄에서 계속된다고 알려 주는 `\` 이스케이프를
+포함해 보이는 그대로 입력해도 됩니다.
 
-**Add all changed files** with `git adda`. Do this carefully since you
-might add more than you wanted!
+`git adda`로 **변경된 파일을 모두 추가합니다**. 원한 것보다 더 많이 추가할
+수 있으니 조심해서 사용하세요!
 
 ``` {.default}
 $ git config set alias.adda "add --all"
 ```
 
-**More compact log showing the commit graph** with `git logc`.
+`git logc`로 **커밋 그래프를 보여 주는 더 간결한 로그**를 표시합니다.
 
 ``` {.default}
 $ git config set alias.logc "log --oneline --graph --decorate"
 ```
 
-**Diff the stage with the repo** with `git diffs`.
+`git diffs`로 **스테이징 영역과 저장소의 차이를 비교합니다**.
 
 ``` {.default}
 $ git config set alias.diffs "diff --staged"
 ```
 
-**Make `git aliases` show all aliases** with `git aliases`.
+`git aliases`로 **모든 별칭을 표시하게 합니다**.
 
 ``` {.default}
 $ git config set alias.aliases \
     "config get --all --show-names --regexp '^alias\.'"
 ```
 
-**Make a very colorful and customized log** with `git lol`.
+`git lol`로 **매우 화려하고 맞춤화된 로그를 만듭니다**.
 
-(Make sure to get the spacing exactly as-is on this copy-paste or the
-shell and/or Git will be unhappy.)
+(복사해 붙여 넣을 때 공백까지 정확히 그대로 옮기세요. 그렇지 않으면 셸이나
+Git, 혹은 둘 다 불평할 것입니다.)
 
 ``` {.default}
 $ git config set alias.lol "log --graph"\
@@ -134,33 +130,32 @@ $ git config set alias.lol "log --graph"\
 " %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 ```
 
-For that last one, we're making heavy use of `--pretty` formatting which
-gives tons of control over the output. [fl[See the "Pretty Formats"
-section of the `git log` manual page for more
-info|https://git-scm.com/docs/git-log#_pretty_formats]].
+마지막 예시에서는 출력을 아주 세밀하게 제어할 수 있는 `--pretty` 서식을
+적극 활용합니다. 자세한 내용은 [fl[`git log` 매뉴얼 페이지의 "Pretty
+Formats" 절을 참고하세요|https://git-scm.com/docs/git-log#_pretty_formats]].
 
 [i[Alias-->Examples]>]
 
-## Seeing Git's Alias Expansion
+## Git의 별칭 확장 살펴보기 {#seeing-gits-alias-expansion}
 
 [i[Alias-->Debugging]<]
 
-Let's say you've added an alias, but it's not working. When you run it,
-it just gives some error and it's not super clear what's going on.
+별칭을 추가했는데 작동하지 않는다고 합시다. 실행하면 오류만 나오고 무슨
+일이 벌어지는지 그다지 분명하지 않습니다.
 
 ``` {.default}
 $ git logx
 fatal: unrecognized argument: --foobar
 ```
 
-You can ask Git to give you more information by adding `GIT_TRACE=1` to
-the beginning of the command line.
+명령줄 맨 앞에 `GIT_TRACE=1`을 붙이면 Git에 더 많은 정보를 요청할 수
+있습니다.
 
-> **This sets the environment variable `GIT_TRACE` to `1`,** but it only
-> does it for this one command. It's not persistent. Git knows to look
-> for `GIT_TRACE` and that it should alter its behavior if it finds it.
+> **이렇게 하면 환경 변수 `GIT_TRACE`를 `1`로 설정하지만,** 이 명령 하나에만
+> 적용됩니다. 지속되는 설정은 아닙니다. Git은 `GIT_TRACE`를 찾아보고, 이
+> 변수가 있으면 동작을 바꿔야 한다는 것을 알고 있습니다.
 
-Here's some example output:
+다음은 출력 예시입니다.
 
 ``` {.default}
 $ GIT_TRACE=1 git logx
@@ -174,16 +169,13 @@ $ GIT_TRACE=1 git logx
   fatal: unrecognized argument: --foobar
 ```
 
-Unfortunately I had to truncate the lines on the right so they fit in
-the print version of the book, and that's what we really want to look
-at. We'll get there in a moment.
+아쉽게도 인쇄판 책에 맞추려고 오른쪽을 잘라 냈는데, 사실 우리가 정말 보고
+싶은 부분이 바로 그쪽입니다. 잠시 후 살펴보겠습니다.
 
-For now, let's look on the left. What we see there is a timestamp and
-some information about which part of the Git code is sending the trace
-out. And then it ends with our error.
+우선 왼쪽을 봅시다. 타임스탬프와 Git 코드의 어느 부분이 추적 정보를
+출력하는지에 관한 정보가 보입니다. 그리고 마지막에는 앞서 본 오류가 나옵니다.
 
-Let's scroll to the right and just look at the lines following the
-`trace:`.
+오른쪽으로 스크롤해서 `trace:` 뒤에 나오는 내용만 살펴봅시다.
 
 ``` {.default}
 trace: exec: git-logx
@@ -195,8 +187,8 @@ trace: start_command: /usr/lib/git-core/git log --foobar
 trace: built-in: git log --foobar
 ```
 
-It might take some sifting through, but let's look just at the lines
-with `run_command` and `alias expansion` in them:
+조금 골라내야 할 수도 있지만, `run_command`와 `alias expansion`이 들어간
+줄만 봅시다.
 
 ``` {.default}
 trace: run_command: git-logx
@@ -204,14 +196,12 @@ trace: alias expansion: logx => log --foobar
 trace: run_command: git log --foobar
 ```
 
-And there we can see exactly what's being expanded into what. And that
-might be useful for debugging it.
+여기서 무엇이 무엇으로 확장되는지 정확히 볼 수 있습니다. 별칭을 디버깅할 때
+유용할 수 있습니다.
 
-It's probably a bit of overkill for this simple example, but there are
-some aliases of extraordinary complexity for which this technique might
-help.
+이 간단한 예시에는 조금 과한 방법일지 모르지만, 놀라울 정도로 복잡한 별칭에는
+이 기법이 도움이 될 수 있습니다.
 
 [i[Alias-->Debugging]>]
 
 [i[Alias]>]
-

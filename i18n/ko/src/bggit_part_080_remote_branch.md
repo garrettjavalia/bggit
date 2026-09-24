@@ -1,36 +1,26 @@
-# Remote Tracking Branches {#remote-tracking-branch}
+# 원격 추적 브랜치 {#remote-tracking-branch}
 
 [i[Branch-->Remote tracking]<]
 
-We've seen how to create local branches that you do work on, then merge
-back into the `main` branch, then `git push` it up to a remote server.
+작업할 로컬 브랜치를 만들고, `main` 브랜치로 다시 병합한 다음, 원격 서버로 `git push`하는 방법을 살펴봤습니다.
 
-This part of the guide is going to try to clarify what's actually going
-on behind the scenes, as well as give us a way to push our local
-branches to a remote for safe keeping.
+이 장에서는 무대 뒤에서 실제로 무슨 일이 일어나는지 명확히 설명하고, 안전하게 보관하도록 로컬 브랜치를 원격 저장소에 푸시하는 방법도 알아봅니다.
 
-## Branches on Remotes
+## 원격 저장소의 브랜치 {#branches-on-remotes}
 
 [i[Branch-->On remote]<]
 
-First, a refresher!
+먼저 복습해 봅시다!
 
-Recall that the remote repo you cloned yours from is a complete copy of
-your repo. The remote repo has a `main` branch, and therefore your
-clone also has a `main` branch.
+여러분이 클론해 온 원격 저장소는 여러분 저장소의 완전한 복사본이라는 점을 기억하세요. 원격 저장소에 `main` 브랜치가 있으므로 여러분의 클론에도 `main` 브랜치가 있습니다.
 
-That's right! When you make a GitHub repo and then clone it, there are
-**two** `main` branches!
+맞습니다! GitHub 저장소를 만든 뒤 클론하면 `main` 브랜치가 **두 개** 있습니다!
 
-How do we differentiate them?
+둘을 어떻게 구분할까요?
 
-Well, on your local clone, we just refer to branches by their plain
-name. When we say `main` or `topic2`, we mean the local branch by that
-name on our repo.
+로컬 클론에서는 브랜치를 평범한 이름으로만 부릅니다. `main`이나 `topic2`라고 하면 우리 저장소에 있는 그 이름의 로컬 브랜치를 뜻합니다.
 
-If we want to talk about a branch on a remote, we have to give the
-remote name along with the branch using that slash notation we've
-already seen:
+원격 저장소에 있는 브랜치를 말하려면 앞에서 본 슬래시 표기법으로 원격 저장소 이름과 브랜치 이름을 함께 써야 합니다.
 
 ``` {.default}
 main            # main branch on your local repo
@@ -40,73 +30,50 @@ zork/mailbox    # mailbox branch on the remote named zork
 mailbox         # mailbox branch on your local repo
 ```
 
-Importantly, not only do the words `origin/main` refer to the `main`
-branch on `origin` in casual conversation, but _you actually have a
-branch on your local repo called `origin/main`_.
+중요한 점은 일상적인 대화에서 `origin/main`이 `origin`의 `main` 브랜치를 가리킬 뿐 아니라, _실제로 로컬 저장소에 `origin/main`이라는 브랜치가 있다는 것_입니다.
 
-This is called a _remote-tracking branch_. It's your local copy of the
-`main` branch on the remote. You can't move your local `origin/main`
-branch directly; Git does it for you as a matter of course when you
-interact with the remote (e.g. when you push or pull).
+이를 *원격 추적 브랜치*라고 합니다. 원격 저장소의 `main` 브랜치를 로컬에 복사해 둔 것입니다. 로컬의 `origin/main` 브랜치를 직접 움직일 수는 없습니다. 원격 저장소와 상호 작용할 때(예: 푸시하거나 풀할 때) Git이 으레 대신 움직입니다.
 
-We're going to call the `main` branch on our local machines the _local
-branch_, and we'll call the one on `origin` the _upstream branch_.
+로컬 컴퓨터의 `main` 브랜치를 _로컬 브랜치_, `origin`에 있는 브랜치를 *업스트림 브랜치*라고 부르겠습니다.
 
-> **And this is going to get confusing later** when we name a remote
-> `upstream` in a way that has nothing to do with the _upstream branch_
-> terminology we're using here.
+> **그리고 뒤에서는 혼란스러워집니다.** 여기서 사용하는 *업스트림 브랜치*라는 용어와 전혀 관계없는 방식으로 원격 저장소에 `upstream`이라는 이름을 붙이기 때문입니다.
 
-I want to go over that one more time to drive it home.
+확실히 이해하도록 한 번 더 살펴보겠습니다.
 
-Let's say you have these two branches on your computer because you've
-just cloned the remote repo at the `origin`:
+`origin`의 원격 저장소를 방금 클론하여 컴퓨터에 다음 두 브랜치가 있다고 합시다.
 
 ``` {.default}
 main            # main branch on your local repo
 origin/main     # main branch on the remote named origin
 ```
 
-When you have those two branches on your computer, *there are actually
-three branches in the world*. 
+컴퓨터에 이 두 브랜치가 있을 때 *세상에는 실제로 브랜치가 세 개 있습니다*.
 
-1. `main` on your computer.
-2. `origin/main` on your computer.
-3. `main` on the `origin` computer, usually a different computer than
-   yours, e.g. one at GitHub or something.
+1. 여러분의 컴퓨터에 있는 `main`
+2. 여러분의 컴퓨터에 있는 `origin/main`
+3. `origin` 컴퓨터에 있는 `main`. 보통 GitHub 같은 곳에 있는 여러분의 컴퓨터와 다른 컴퓨터입니다.
 
-Notice that the first two of these are on the repo on your computer!
+첫 두 브랜치는 여러분의 컴퓨터에 있는 저장소에 존재한다는 점에 주목하세요!
 
-The branch `origin/main` is just where your computer *thinks* that
-`main` on the `origin` is. Your computer got this information the last
-time you pulled or fetched from `origin`.
+`origin/main` 브랜치는 `origin`의 `main`이 어디에 있다고 여러분의 컴퓨터가 *생각하는지* 나타낼 뿐입니다. 마지막으로 `origin`에서 풀하거나 페치했을 때 이 정보를 받았습니다.
 
-If other people have pushed to `main` on `origin` since your last pull,
-your `origin/main` on your local computer won't be up to date.
+마지막으로 풀한 뒤 다른 사람이 `origin`의 `main`에 푸시했다면 로컬 컴퓨터의 `origin/main`은 최신 상태가 아닙니다.
 
-And normally you don't have to worry about this much; when you try to
-push, Git will tell you if someone else has pushed changes in the
-meantime and you have to pull first to update your `origin/main` branch.
-No biggie.
+보통은 이를 크게 걱정할 필요가 없습니다. 푸시하려 할 때 그사이에 다른 사람이 변경 사항을 푸시했다면 Git이 알려 주고, 먼저 풀하여 `origin/main` 브랜치를 업데이트하라고 합니다. 별일 아닙니다.
 
-But I wanted to spell that out so you had a more complete mental model
-of what's happening behind the curtain, here.
+다만 여기서 무대 뒤에 무슨 일이 일어나는지 더 완전한 사고 모형을 갖도록 자세히 설명하고 싶었습니다.
 
 [i[Branch-->On remote]>]
 
-## Listing Remote Tracking Branches
+## 원격 추적 브랜치 목록 보기 {#listing-remote-tracking-branches}
 
 [i[Branch-->Listing remote tracking]<]
 
-Remember how `git branch` listed the branches you had? Let's power it
-up so you can see all the remote tracking branches, as well. This will
-help in the following sections.
+`git branch`가 보유한 브랜치 목록을 보여 줬던 것을 기억하나요? 원격 추적 브랜치도 모두 볼 수 있도록 강화해 봅시다. 다음 절들을 이해하는 데 도움이 됩니다.
 
-Basically, we just give it the `-avv` switch for "all" (to list the
-remote tracking branches) and "verbose" (to give info about which
-commits they're pointing to) and "verbose" again (to give info about
-which remote branches map to which local branches.)
+기본적으로 `-avv` 옵션을 줍니다. "all"(원격 추적 브랜치까지 나열), "verbose"(브랜치가 가리키는 커밋 정보 표시), 그리고 다시 "verbose"(어느 원격 브랜치가 어느 로컬 브랜치에 대응하는지 표시)를 뜻합니다.
 
-Here's the result for the repo that holds the source for this book:
+이 책의 소스를 담은 저장소에서는 다음과 같은 결과가 나옵니다.
 
 ``` {.default}
 % git branch -avv
@@ -117,34 +84,21 @@ Here's the result for the repo that holds the source for this book:
     remotes/origin/sphinx cdac325 partial port
 ```
 
-We see my two local branches (`main` and `sphinx`). Looking on those two
-top lines, you see remote tracking branches in brackets (`origin/main`
-and `origin/sphinx`). When I push or pull from `main` or `sphinx`, those
-are the remote tracking branches that are merged to.
+로컬 브랜치 두 개(`main`과 `sphinx`)가 보입니다. 위쪽 두 줄에는 원격 추적 브랜치가 대괄호 안에 보입니다(`origin/main`과 `origin/sphinx`). `main`이나 `sphinx`에서 푸시하거나 풀할 때 대응하는 원격 추적 브랜치가 바로 이것입니다.
 
-Additionally, we see information about the remote below that.
+그 아래에는 원격 저장소에 관한 정보도 보입니다.
 
-The first line about `remotes/origin/HEAD` is a little strange. It just
-points to `origin/main` which simply lets us know that `main` is the
-initial branch for the repo that Git will use when you clone it. You
-typically don't need to think about this line.
+`remotes/origin/HEAD`에 관한 첫 줄은 조금 이상합니다. 단순히 `origin/main`을 가리키며, 저장소를 클론할 때 Git이 사용할 초기 브랜치가 `main`임을 알려 줍니다. 보통은 이 줄을 신경 쓸 필요가 없습니다.
 
-The remaining two lines tell us what commits the remote tracking
-branches `origin/main` and `origin/sphinx` are pointing at. Looking
-closely, we see they're pointing to the same commits as our local `main`
-and `sphinx` indicating that everything is in sync. (As far as we
-know—someone else might have pushed something to the repo since our last
-pull and we don't know about that yet.)
+나머지 두 줄은 원격 추적 브랜치 `origin/main`과 `origin/sphinx`가 어느 커밋을 가리키는지 알려 줍니다. 자세히 보면 로컬 `main`과 `sphinx`와 같은 커밋을 가리키므로 모든 것이 동기화된 상태입니다. (우리가 아는 한에서 말입니다. 마지막으로 풀한 뒤 누군가 저장소에 무언가를 푸시했지만 아직 모를 수도 있습니다.)
 
 [i[Branch-->Listing remote tracking]>]
 
-## Pushing to a Remote
+## 원격 저장소로 푸시하기 {#pushing-to-a-remote}
 
 [i[Branch-->Set upstream]<]
 
-Fun Fact: when you push or pull, you technically specify the remote and
-the branch you want to use. This is me saying, "Push the branch I'm on
-right now (presumably `main`) and merge it into `main` on `origin`.
+재미있는 사실: 푸시하거나 풀할 때는 엄밀히 말해 사용할 원격 저장소와 브랜치를 지정합니다. 다음 명령은 "지금 있는 브랜치(아마 `main`)를 푸시하여 `origin`의 `main`에 병합해 줘"라는 뜻입니다.
 
 [i[Push-->Branch to remote]]
 [i[Branch-->Pushing to remote]]
@@ -152,66 +106,54 @@ right now (presumably `main`) and merge it into `main` on `origin`.
 $ git push origin main
 ```
 
-"But wait! I haven't been doing that!"
+"잠깐만요! 저는 그렇게 한 적이 없는데요!"
 
-It turns out there's an option you can set to make it happen
-automatically. Let's say you're on the `main` branch and then run this:
+자동으로 처리하게 만드는 옵션이 있습니다. `main` 브랜치에서 다음 명령을 실행한다고 합시다.
 
 ``` {.default}
 $ git push --set-upstream origin main
 $ git push -u origin main              # same thing, shorthand
 ```
 
-This will do a couple things:
+이 명령은 두 가지 일을 합니다.
 
-1. It'll push changes on your local `main` to the remote server (that's
-   the `push origin main` part).
-2. It'll remember that local `main` branch is tracking the remote branch
-   `origin/main` (that's the `-u` part).
+1. 로컬 `main`의 변경 사항을 원격 서버로 푸시합니다(`push origin main` 부분).
+2. 로컬 `main` 브랜치가 원격 브랜치 `origin/main`을 추적한다는 사실을 기억합니다(`-u` 부분).
 
-And then, from then on, from the `main` branch, you can just:
+그 뒤부터는 `main` 브랜치에서 다음 명령만 실행하면 됩니다.
 
 ``` {.default}
 $ git push
 ```
 
-and it'll automatically push to `main` on `origin` (and update your
-`origin/main` branch) thanks to your earlier usage of `--set-upstream`.
+앞서 `--set-upstream`을 사용한 덕분에 `origin`의 `main`으로 자동 푸시하고 로컬의 `origin/main` 브랜치도 업데이트합니다.
 
-And `git pull` has the same option, as well, though you only need to do
-it once with either push or pull.
+`git pull`에도 같은 옵션이 있지만 푸시나 풀 어느 한쪽에서 한 번만 사용하면 됩니다.
 
-"But wait! I've never used `--set-upstream`, either!"
+"잠깐만요! 저는 `--set-upstream`도 사용한 적이 없는데요!"
 
-That's because by default when you clone a repo, Git automagically sets
-up a local branch to track the `main` branch on the remote.
+기본적으로 저장소를 클론할 때 Git이 로컬 브랜치에서 원격 저장소의 `main` 브랜치를 추적하도록 자동으로 마법처럼 설정하기 때문입니다.
 
-> **Depending on how you made your repo, you might also have a reference
-> to `origin/HEAD`.** It might be weird to think that there's a `HEAD`
-> ref on a remote server that you can see, but in this case it's just
-> referring to the branch that you'll be checking out by default when
-> you clone the repo.
+> **저장소를 만든 방법에 따라 `origin/HEAD` 참조도 있을 수 있습니다.** 원격 서버에 여러분이 볼 수 있는 `HEAD` 참조가 있다고 생각하면 이상할 수 있지만, 여기서는 저장소를 클론할 때 기본으로 체크아웃할 브랜치를 가리킬 뿐입니다.
 
-"OK, so what you're telling me is that I can just `git push` and `git
-pull` like always and just ignore everything you wrote in this section?"
+"그러니까 늘 하던 대로 `git push`와 `git pull`만 실행하고 이 절에서 쓴 내용은 전부 무시해도 된다는 말인가요?"
 
-Well... yes. Ish. No. We're going to make use of this to push other
-branches to the remote!
+음… 네. 어느 정도는요. 아니기도 합니다. 다른 브랜치를 원격 저장소로 푸시할 때 이 내용을 활용할 것입니다!
 
 [i[Branch-->Set upstream]>]
 
-## Making a Branch and Pushing to Remote
+## 브랜치를 만들어 원격 저장소로 푸시하기 {#making-a-branch-and-pushing-to-remote}
 
 [i[Push-->Branch to remote]<]
 
-I'm going to make a new local branch `topic99`:
+새 로컬 브랜치 `topic99`를 만들겠습니다.
 
 ``` {.default}
 $ git switch -c topic99
   Switched to a new branch 'topic99'
 ```
 
-And make some changes:
+그리고 몇 가지를 변경합니다.
 
 ``` {.default}
 $ vim README.md        # Create and edit a README
@@ -219,7 +161,7 @@ $ git add README.md
 $ git commit -m "Some important additions"
 ```
 
-In our log, we can see where all the branches are:
+로그에서 모든 브랜치의 위치를 볼 수 있습니다.
 
 ``` {.default}
 commit 79ddba75b144bad89e1cbd862e5f3b3409f6c498 (HEAD -> topic99)
@@ -235,12 +177,9 @@ Date:   Fri Feb 16 16:14:13 2024 -0800
     Initial checkin
 ```
 
-`HEAD` refers to `topic99`, and that's one commit ahead of `main`
-(local) and `main` (upstream on the `origin` remote), as far as we know.
-And we know this because it's one commit ahead of our remote-tracking
-branch `origin/main`.
+`HEAD`는 `topic99`를 가리키며, 이는 우리가 아는 한 `main`(로컬)과 `main`(`origin` 원격 저장소의 업스트림)보다 커밋 하나 앞에 있습니다. 원격 추적 브랜치 `origin/main`보다 커밋 하나 앞서 있으므로 이를 알 수 있습니다.
 
-Now let's push!
+이제 푸시해 봅시다!
 
 ``` {.default}
 $ git push
@@ -253,13 +192,11 @@ $ git push
   upstream, see 'push.autoSetupRemote' in 'git help config'.
 ```
 
-Ouch. The short of all this is that we said "push", and Git said, "To
-what? You haven't associated this branch with anything on the remote!"
+아야. 요약하면 우리가 "푸시해"라고 했더니 Git이 "어디로요? 이 브랜치를 원격 저장소의 어떤 것과도 연결하지 않았잖아요!"라고 답한 것입니다.
 
-And we haven't. There's no `origin/topic99` remote-tracking branch, and
-certainly no `topic99` branch on that remote. Yet.
+실제로 연결하지 않았습니다. `origin/topic99` 원격 추적 브랜치도 없고, 그 원격 저장소에는 당연히 `topic99` 브랜치도 없습니다. 아직은 말입니다.
 
-The fix is easy enough—Git already told us what to do.
+해결법은 충분히 쉽습니다. Git이 이미 무엇을 해야 하는지 알려 줬습니다.
 
 [i[Branch-->Set upstream]]
 
@@ -267,121 +204,106 @@ The fix is easy enough—Git already told us what to do.
 $ git push --set-upstream origin topic99
 ```
 
-And that will do it.
+이것으로 됩니다.
 
 [i[GitHub-->Branches]]
 
-At this point, assuming you've pushed to GitHub, you could go to your
-GitHub page for the project, and near the top left you should see
-something that looks like Figure_#.1.
+이 시점에 GitHub로 푸시했다면 프로젝트의 GitHub 페이지로 이동하세요. 왼쪽 위 근처에 그림_#.1과 비슷한 것이 보일 것입니다.
 
-![Two branches on GitHub](img_080_010.png "Two branches on GitHub")
+![GitHub의 브랜치 두 개](img_080_010.png "Two branches on GitHub")
 
-If you pull down that `main` button, you'll see `topic99` there as well.
-You can select either branch and view it in the GitHub interface.
+`main` 버튼을 펼치면 `topic99`도 보입니다. 어느 브랜치든 선택하여 GitHub 인터페이스에서 볼 수 있습니다.
 
 [i[Push-->Branch to remote]>]
 
-## Deleting Remote Tracking Branches
+## 원격 추적 브랜치 삭제하기 {#deleting-remote-tracking-branches}
 
 [i[Branch-->Deleting remote]<]
 [i[Branch-->Deleting remote tracking]<]
 
-There are few things that can happen here.
+여기서는 몇 가지 상황이 생길 수 있습니다.
 
-1. Someone deletes the branch on the remote, but your corresponding
-   remote tracking branch (the one on your clone) still exists and you
-   want to delete it.
+1. 누군가 원격 저장소에서 브랜치를 삭제했지만 대응하는 원격 추적 브랜치(여러분의 클론에 있는 것)는 여전히 존재하여 이를 삭제하고 싶습니다.
 
-2. You want to delete your remote tracking branch, and you want to leave
-   the corresponding branch untouched on the remote.
+2. 원격 추적 브랜치는 삭제하되 원격 저장소의 대응하는 브랜치는 그대로 두고 싶습니다.
 
-3. You delete your remote tracking branch and you want to delete the
-   corresponding branch on the remote, too.
+3. 원격 추적 브랜치를 삭제하고 원격 저장소의 대응하는 브랜치도 삭제하고 싶습니다.
 
-For all of these, it's good to have your working tree clean, of course.
+물론 어느 경우든 작업 트리를 깨끗하게 해 두는 것이 좋습니다.
 
-### Fetching Deleted Remote Branches
+### 삭제된 원격 브랜치 페치하기 {#fetching-deleted-remote-branches}
 
-The first one is pretty easy. Let's tell Git to delete all our remote
-tracking branches that no longer exist on the `origin` remote:
+첫 번째는 꽤 쉽습니다. `origin` 원격 저장소에 더는 존재하지 않는 원격 추적 브랜치를 모두 삭제하라고 Git에 지시합시다.
 
 [i[Fetch-->Pruning remote tracking branches]]
 ``` {.default}
 $ git fetch --prune
 ```
 
-or if you want to specify a remote:
+원격 저장소를 지정하려면 다음과 같이 합니다.
 
 ``` {.default}
 $ git fetch --prune someremote
 ```
 
-or if you want to prune all remotes:
+모든 원격 저장소를 프루닝하려면 다음과 같이 합니다.
 
 ``` {.default}
 $ git fetch --prune --all
 ```
 
-### Deleting Your Remote Tracking Branch
+### 내 원격 추적 브랜치 삭제하기 {#deleting-your-remote-tracking-branch}
 
-In this case, you have a remote tracking branch on your clone that you
-want to delete. But you don't want to delete that branch from the
-server.
+이 경우에는 클론에 있는 원격 추적 브랜치를 삭제하려 합니다. 하지만 서버에서는 그 브랜치를 삭제하고 싶지 않습니다.
 
-Use `-d` for delete and `-r` for remote:
+삭제를 뜻하는 `-d`와 원격을 뜻하는 `-r`을 사용합니다.
 
 ``` {.default}
 $ git branch -dr remote/branch
 ``` 
 
-For example:
+예를 들면 다음과 같습니다.
 
 ``` {.default}
 $ git branch -dr origin/topic99
 ``` 
 
-### Deleting a Branch on a Remote
+### 원격 저장소의 브랜치 삭제하기 {#deleting-a-branch-on-a-remote}
 
-Finally, let's say you've deleted your remote tracking branch on your
-clone, as per above, and you also want to delete it on the remote.
+마지막으로 위에서처럼 클론의 원격 추적 브랜치를 삭제했고, 원격 저장소에서도 해당 브랜치를 삭제하고 싶다고 합시다.
 
-We're going to (perhaps surprisingly) use `git push` for this.
+(어쩌면 놀랍게도) 여기에 `git push`를 사용합니다.
 
-To delete a branch on the remote, you:
+원격 저장소의 브랜치를 삭제하려면 다음과 같이 합니다.
 
 ``` {.default}
 $ git push someremote --delete branchname
 ``` 
 
-For example:
+예를 들면 다음과 같습니다.
 
 ``` {.default}
 $ git push origin --delete topic99
 ``` 
 
-And that's it! Make sure you delete your remote tracking branch if you
-haven't done so already.
+이것으로 끝입니다! 원격 추적 브랜치를 아직 삭제하지 않았다면 꼭 삭제하세요.
 
 [i[Branch-->Deleting remote]>]
 [i[Branch-->Deleting remote tracking]>]
 
-## Multiple Remotes
+## 여러 원격 저장소 {#multiple-remotes}
 
 [i[Remote-->Multiple]<]
 
-It's possible that you might have multiple remotes. (This is commonly
-put in place when you've forked someone's repo on GitHub.)
+원격 저장소가 여러 개일 수도 있습니다. (GitHub에서 다른 사람의 저장소를 포크했을 때 흔히 이렇게 설정합니다.)
 
-How do remote tracking branches work in that case?
+이 경우 원격 추적 브랜치는 어떻게 작동할까요?
 
-Let's say your main remote is called `origin` as usual. But you've also
-set another remote called `remote2`, unoriginally.
+평소처럼 주 원격 저장소의 이름이 `origin`이라고 합시다. 그리고 독창성 없이 `remote2`라는 다른 원격 저장소도 설정했습니다.
 
-Someone else pushes a new branch called `foobranch` (slightly more
-originally) up to `remote2` and you'd like to get it.
+다른 사람이 `remote2`에 `foobranch`라는 새 브랜치(조금 더 독창적이군요)를 푸시했고 이를 받고 싶습니다.
 
-So you do this:
+따라서 다음과 같이 합니다.
 
 [i[Fetch]]
 
@@ -396,7 +318,7 @@ $ git fetch remote2
    * [new branch]      foobranch -> remote2/foobranch
 ```
 
-So far so good. Let's switch to it:
+여기까지 좋습니다. 그 브랜치로 전환해 봅시다.
 
 ``` {.default}
 $ git switch foobranch
@@ -404,21 +326,17 @@ $ git switch foobranch
   Switched to a new branch 'foobranch'
 ```
 
-Wait! We're tracking at `remote2`? That's a little weird because it's
-the other person's repo. Maybe you have permission to write to it, and
-that's what you want to do. But it's more probably you'd like your own
-version of this branch on your repo as well.
+잠깐만요! `remote2`의 브랜치를 추적한다고요? 다른 사람의 저장소이므로 조금 이상합니다. 그곳에 쓸 권한이 있고 이것이 원하는 동작일 수도 있습니다. 하지만 이 브랜치의 자신만의 버전을 자기 저장소에도 두고 싶은 경우가 더 많을 것입니다.
 
-You can do that by pushing it to your remote with `-u` again.
+다시 `-u`를 붙여 여러분의 원격 저장소에 푸시하면 됩니다.
 
 ``` {.default}
 $ git push -u origin foobranch
 ```
 
-And that'll do it.
+이것으로 됩니다.
 
-If you look at your branches with `git branch -avv` you'll see now
-several `foobranch` variants for different clones.
+`git branch -avv`로 브랜치를 보면 이제 서로 다른 클론에 해당하는 `foobranch` 변형이 여러 개 보입니다.
 
 ``` {.default}
 foobranch
@@ -426,8 +344,7 @@ remotes/origin/foobranch
 remotes/remote2/foobranch
 ```
 
-If you want to keep your `origin/foobranch` in sync with that on
-`remote2`, you'll have to do a bunch of merging.
+`origin/foobranch`를 `remote2`의 브랜치와 계속 동기화하려면 병합 작업을 여러 번 해야 합니다.
 
 [i[Fetch]]
 
@@ -438,10 +355,9 @@ $ git merge remote2/foobranch  # Merge changes from remote2
 $ git push origin foobranch    # Push changes back to origin
 ```
 
-(You can leave the `origin foobranch` off the `push` if you've already
-pushed it with `-u` earlier, of course.)
+(물론 앞에서 이미 `-u`를 붙여 푸시했다면 `push` 명령에서 `origin foobranch`를 생략할 수 있습니다.)
 
-At that point, every `foobranch` should be on the same commit.
+이 시점에는 모든 `foobranch`가 같은 커밋에 있어야 합니다.
 
 [i[Remote-->Multiple]>]
 [i[Branch-->Remote tracking]>]
