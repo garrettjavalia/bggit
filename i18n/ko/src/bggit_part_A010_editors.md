@@ -1,31 +1,29 @@
-# Appendix: Getting Out of Editors {#editor-get-out}
+# 부록: 편집기에서 빠져나오기 {#editor-get-out}
 
 [i[Exiting editors]<]
 
-If you try to `git commit` and don't specify `-m` for a message, or if
-you `git pull` and there's a non-fast-forward merge, or if you `git
-merge` and there's a non-fast-forward merge and you don't specify `-m`,
-or what I'm sure are a host of other reasons, you might get popped into
-an editor.
+메시지용 `-m`을 지정하지 않고 `git commit`을 실행했거나, `git pull`을
+실행했는데 비고속 전진 병합이 발생했거나, `git merge`를 실행했는데 비고속
+전진 병합이 발생했고 `-m`을 지정하지 않았거나, 그 밖에도 틀림없이 수많은
+이유로 갑자기 편집기가 나타날 수 있습니다.
 
-And you might not be familiar with that editor.
+그 편집기가 익숙하지 않을 수도 있습니다.
 
-So here's how to get out of it.
+그래서 빠져나오는 방법을 알려 드리겠습니다.
 
-* **Nano**: If the editor says "Nano" or "Pico" in the upper left, then
-  edit the commit message (if you want), then then hit `CTRL-X`, and
-  then hit `Y` to save, then `ENTER` to accept the given filename.
+* **Nano**: 왼쪽 위에 "Nano"나 "Pico"라고 표시되어 있다면 커밋 메시지를
+  편집한 다음(원한다면), `CTRL-X`를 누르고 `Y`를 눌러 저장한 뒤 `ENTER`를
+  눌러 주어진 파일 이름을 받아들입니다.
 
-* **Vim**: If the screen has a bunch of `~` characters down the left and
-  a crazy-looking file name at the bottom maybe with the word `All`,
-  you're in Vim or some other vi ("vee eye") variant. Press `i`, then
-  type a message (if you want), then hit the `ESC` key in the upper
-  left, then type two capital `Z`s in a row. `ZZ`. That should save and
-  exit.
+* **Vim**: 화면 왼쪽에 `~` 문자가 잔뜩 있고 맨 아래에 `All`이라는 단어가
+  들어 있을지도 모르는 기묘한 파일 이름이 보인다면 Vim이나 다른 vi("브이
+  아이") 변형을 사용하고 있는 것입니다. `i`를 누르고 메시지를 입력한
+  다음(원한다면), 왼쪽 위의 `ESC` 키를 누르고 대문자 `Z` 두 개를 연달아
+  입력하세요. `ZZ`입니다. 그러면 저장하고 종료될 것입니다.
 
-  I love Vim. But it took a while. If you want to learn more, see the
-  [Appendix on Using Vim](#vim-tutorial), that has the briefest of
-  tutorials. I guess the previous paragraph was really the briefest, so
-  we'll call it the second-briefest.
+  저는 Vim을 정말 좋아합니다. 하지만 익숙해지기까지 시간이 좀 걸렸습니다.
+  더 배우고 싶다면 가장 짧은 축에 드는 튜토리얼이 있는 [Vim 사용 부록](#vim-tutorial)을
+  보세요. 가만, 방금 문단이 사실 가장 짧은 튜토리얼이었군요. 그러니 부록은
+  두 번째로 짧다고 합시다.
 
 [i[Exiting editors]>]

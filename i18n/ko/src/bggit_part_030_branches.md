@@ -1,14 +1,14 @@
-# Branches and Fast-Forward Merges
+# 브랜치와 빨리 감기 병합 {#branches-and-fast-forward-merges}
 
-## What is a Branch?
+## 브랜치란 무엇인가요? {#what-is-a-branch}
 
 [i[Branch]<]
 
-Normally you think of writing code as a linear sequence of changes. You
-start with an empty file, add some things, test them, add some more,
-test some more, and eventually the code is complete.
+보통 코드를 작성하는 일은 선형으로 이어지는 변경의 연속이라고 생각합니다.
+빈 파일에서 시작해 무언가를 추가하고 테스트하고, 더 추가하고 더 테스트하다
+보면 마침내 코드가 완성됩니다.
 
-![A simple commit graph.](img_030_010.pdf "[A simple commit graph.]")
+![간단한 커밋 그래프.](img_030_010.pdf "[A simple commit graph.]")
 
 <!--
 ``` {.default}
@@ -16,27 +16,24 @@ test some more, and eventually the code is complete.
 ```
 -->
 
-In Git we might think of this as a sequence of commits. Let's look at a
-graph (Figure_#.1) where I've numbered commits 1-5. There, `(1)` was the
-first commit we made on the repo, `(2)` is some changes we made on top
-of `(1)`, and `(3)` is some changes we made on top of `(2)`, etc.
+Git에서는 이를 커밋의 연속이라고 생각할 수 있습니다. 커밋에 1부터 5까지
+번호를 붙인 그래프(Figure_#.1)를 봅시다. `(1)`은 저장소에서 만든 첫
+커밋이고, `(2)`는 `(1)` 위에 만든 변경 사항이며, `(3)`은 `(2)` 위에 만든
+변경 사항인 식입니다.
 
-Git always keeps track of the parent commit for any particular commit,
-e.g. it knows the parent commit of `(3)` is `(2)` in the above graph. In
-this graph, the parent relationship is indicated by an arrow. "The
-parent of commit 3 is commit 2", etc. It's a little confusing because
-clearly commit 3 came _after_ commit 2 in terms of time, but the arrow
-points to the parent, which is the opposite of the nodes' temporal
-relationship.
+Git은 모든 커밋의 부모 커밋을 항상 추적합니다. 예를 들어 위 그래프에서
+`(3)`의 부모 커밋이 `(2)`라는 사실을 압니다. 이 그래프에서 부모 관계는
+화살표로 표시합니다. "커밋 3의 부모는 커밋 2다"라는 식입니다. 시간상 커밋
+3은 분명 커밋 2 _뒤에_ 만들어졌지만 화살표는 부모를 가리키므로 노드의 시간
+관계와 반대라 조금 헷갈립니다.
 
-A _branch_ is like a name tag stuck on one **specific** commit. You can
-move the name tag around with various Git operations.
+*브랜치*는 **특정** 커밋 하나에 붙은 이름표와 같습니다. 여러 Git 작업으로 이
+이름표를 옮길 수 있습니다.
 
-We're assuming the default branch is called [i[Branch-->`main`]] `main`.
-If you haven't done so already, configure your default branch as shown
-in the [Git Basics](#initial-setup) chapter.
+기본 브랜치 이름이 [i[Branch-->`main`]] `main`이라고 가정합니다. 아직 설정하지
+않았다면 [Git 기초](#initial-setup) 장의 설명대로 기본 브랜치를 구성하세요.
 
-![The main branch on a commit.](img_030_020.pdf "[The main branch on a commit.]")
+![커밋에 붙은 `main` 브랜치.](img_030_020.pdf "[The main branch on a commit.]")
 
 <!--
 ``` {.default}
@@ -47,19 +44,17 @@ in the [Git Basics](#initial-setup) chapter.
 ```
 -->
 
-So to make it a little more complete, we can show that branch in
-Figure_#.2. There's our `main` branch attached to the commit labeled
-`(5)`.
+조금 더 완전하게 만들기 위해 Figure_#.2에 브랜치를 표시할 수 있습니다.
+`(5)`라고 표시된 커밋에 `main` 브랜치가 붙어 있습니다.
 
-> **It's tempting to think of the whole sequence of commits as "the
-> branch", but this author recommends against it.** Better to keep in
-> mind that the branch is just a name tag for a single commit, and that
-> we can move that name tag around.
+> **커밋의 전체 연속을 "브랜치"라고 생각하고 싶겠지만, 저자는 그렇게 생각하지
+> 않기를 권합니다.** 브랜치는 커밋 하나에 붙은 이름표일 뿐이고, 이 이름표를
+> 이리저리 옮길 수 있다고 기억하는 편이 좋습니다.
 
-But Git offers something more powerful, allowing you (or collaborators)
-to pursue multiple branches simultaneously.
+하지만 Git은 더 강력한 기능을 제공해 여러분이나 공동 작업자가 여러 브랜치를
+동시에 진행할 수 있게 합니다.
 
-![Lots of branches.](img_030_030.pdf "[Lots of branches.]")
+![여러 브랜치.](img_030_030.pdf "[Lots of branches.]")
 
 <!--
 ``` {.default}
@@ -77,14 +72,13 @@ to pursue multiple branches simultaneously.
 ```
 -->
 
-So there might be multiple collaborators working on the project at the
-same time.
+따라서 여러 공동 작업자가 프로젝트에서 동시에 작업할 수 있습니다.
 
-And then, when you're ready, you can [i[Merge]] _merge_ those branches
-back together. In Figure_#.4, we've merged commit 6 and 7 into a new
-commit, commit 9. Commit 9 contains the changes of both commits 7 and 6.
+준비가 되면 이 브랜치들을 다시 [i[Merge]] *병합*할 수 있습니다. Figure_#.4에서는
+커밋 6과 7을 새 커밋인 커밋 9로 병합했습니다. 커밋 9에는 커밋 7과 6의 변경
+사항이 모두 들어 있습니다.
 
-![After merging `somebranch` and `anotherbranch`.](img_030_040.pdf "[After merging somebranch and anotherbranch.]")
+![`somebranch`와 `anotherbranch`를 병합한 뒤.](img_030_040.pdf "[After merging somebranch and anotherbranch.]")
 
 <!--
 ``` {.default}
@@ -99,20 +93,19 @@ commit, commit 9. Commit 9 contains the changes of both commits 7 and 6.
 ```
 -->
 
-In that case, `somebranch` and `anotherbranch` both point to the same
-commit. There's no problem with this.
+이 경우 `somebranch`와 `anotherbranch`는 둘 다 같은 커밋을 가리킵니다. 아무
+문제도 없습니다.
 
-> **I'm actually oversimplifying this a little.** When you merge a
-> branch into another, really only the branch you're merging *into*
-> moves, not both of them. So to get the two branches to point to the
-> same commit, you'd have to do two merges: `somebranch` into
-> `anotherbranch` and then `anotherbranch` into `somebranch`. (Or the
-> other way around.) And *then* they'd point to the same commit.
+> **사실 조금 지나치게 단순화했습니다.** 한 브랜치를 다른 브랜치에 병합하면
+> 두 브랜치 모두가 아니라 병합해 넣는 *대상* 브랜치만 움직입니다. 따라서 두
+> 브랜치가 같은 커밋을 가리키게 하려면 두 번 병합해야 합니다. `somebranch`를
+> `anotherbranch`에 병합한 다음 `anotherbranch`를 `somebranch`에 병합합니다.
+> (반대 순서도 됩니다.) *그제야* 두 브랜치가 같은 커밋을 가리킵니다.
 
-And then we can keep merging if we want, until all the branches are
-pointing at the same commit (Figure_#.5).
+원한다면 모든 브랜치가 같은 커밋을 가리킬 때까지 계속 병합할 수 있습니다
+(Figure_#.5).
 
-![After merging all branches.](img_030_050.pdf "[After merging all branches.]")
+![모든 브랜치를 병합한 뒤.](img_030_050.pdf "[After merging all branches.]")
 
 <!--
 ``` {.default}
@@ -127,11 +120,11 @@ pointing at the same commit (Figure_#.5).
 ```
 -->
 
-And maybe after all this we decide to delete `somebranch` and
-`anotherbranch`; we can do this safely because they're fully merged, and
-can do this without affecting `main` or any commits (Figure_#.6).
+이 모든 작업 뒤에 `somebranch`와 `anotherbranch`를 삭제하기로 할 수도
+있습니다. 완전히 병합됐으므로 안전하게 삭제할 수 있고, `main`이나 어떤
+커밋에도 영향을 주지 않습니다(Figure_#.6).
 
-![After deleting merged branches.](img_030_060.pdf "[After deleting merged branches.]")
+![병합된 브랜치를 삭제한 뒤.](img_030_060.pdf "[After deleting merged branches.]")
 
 <!--
 ``` {.default}
@@ -146,58 +139,53 @@ can do this without affecting `main` or any commits (Figure_#.6).
 ```
 -->
 
-This chapter is all about getting good with branching and partially
-good with merging.
+이 장에서는 브랜치를 능숙하게 다루고 병합도 어느 정도 잘하는 법을 배웁니다.
 
-If you like interactive tutorials, Peter Cottle has put together a great
-website called [fl[Learn Git
-Branching|https://learngitbranching.js.org/]]. I highly recommend it
-before, during, and/or after reading this chapter.
+대화형 튜토리얼을 좋아한다면 Peter Cottle이 만든 훌륭한 웹사이트 [fl[Learn
+Git Branching|https://learngitbranching.js.org/]]을 이용해 보세요. 이 장을 읽기
+전이나 읽는 중, 또는 읽은 뒤에 해 보길 강력히 권합니다.
 
-## A Quick Note about `git pull`
+## `git pull`에 관한 짧은 참고 사항 {#a-quick-note-about-git-pull}
 
 [i[Pull-->Force rebase or merge]]
 
-When you do a pull, it actually does two things: [i[Fetch]] (a) _fetch_
-all the changes from the remote repo and (b) _merge_ those changes.
+풀은 실제로 두 가지 일을 합니다. [i[Fetch]] (a) 원격 저장소의 모든 변경
+사항을 *페치*하고 (b) 그 변경 사항을 *병합*합니다.
 
-If two or more people are committing to the same branch, eventually `git
-pull` is going to have to merge. And it turns out there are a few ways
-it can do this.
+두 명 이상이 같은 브랜치에 커밋하면 언젠가 `git
+pull`이 병합해야 합니다.
+그리고 이 작업을 하는 방법은 몇 가지가 있습니다.
 
-For now, we're going to tell `git pull` to always classically merge
-divergent branches, and you can do that with this one-time command:
+지금은 `git pull`에 갈라진 브랜치를 항상 고전적인 방식으로 병합하라고
+지시하겠습니다. 다음 명령을 한 번만 실행하면 됩니다.
 
 ``` {.default}
 $ git config set --global pull.rebase false
 ```
 
-If you don't do that, Git will pop up an error message complaining about
-it the first time it has to merge on a pull. And you'll have to do it
-then. (Leave the word `set` out of that command if it fails on older
-Gits.)
+이렇게 하지 않으면 처음으로 풀 도중 병합해야 할 때 Git이 오류 메시지를 띄워
+불평하고, 그때 이 명령을 실행해야 합니다. (오래된 Git에서 명령이 실패하면
+`set`이라는 단어를 빼세요.)
 
-When we talk about [rebasing](#rebase) later, this will make more sense.
+나중에 [리베이스](#rebase)를 다루면 이 내용이 더 잘 이해될 것입니다.
 
-## `HEAD` and Branches
+## `HEAD`와 브랜치 {#head-and-branches}
 
 [i[`HEAD`-->With branches]]
 
-We said earlier that `HEAD` refers to a specific commit, namely the
-commit you're looking at right now in your unmodified working tree.
+앞서 `HEAD`는 특정 커밋, 즉 수정되지 않은 작업 트리에서 지금 보고 있는 커밋을
+가리킨다고 했습니다.
 
-And we also said that was a bit of a lie.
+그리고 그 말이 약간 거짓말이라고도 했습니다.
 
 [i[`HEAD`-->Detached]<]
 
-In normal usage, `HEAD` points to a branch, not to a commit. Only in
-detached head state does `HEAD` point directly to a commit (i.e. when
-it's detached from all branches).
+일반적인 사용에서 `HEAD`는 커밋이 아니라 브랜치를 가리킵니다. 분리된 HEAD
+상태, 즉 모든 브랜치에서 분리됐을 때만 `HEAD`가 커밋을 직접 가리킵니다.
 
-If we look at Figure_#.7, we see `HEAD` is pointing to a branch as per
-normal.
+Figure_#.7을 보면 평소처럼 `HEAD`가 브랜치를 가리킵니다.
 
-![`HEAD` pointing to a branch.](img_030_070.pdf "[HEAD pointing to a branch.]")
+![브랜치를 가리키는 `HEAD`.](img_030_070.pdf "[HEAD pointing to a branch.]")
 
 <!--
 ``` {.default}
@@ -208,11 +196,10 @@ normal.
 ```
 -->
 
-But if we check out an earlier commit that doesn't have a branch, we end
-up in detached head state, and it looks like
-Figure_#.8.
+하지만 브랜치가 없는 이전 커밋을 체크아웃하면 분리된 HEAD 상태가 되며,
+Figure_#.8과 같은 모습입니다.
 
-![`HEAD` pointing to a commit.](img_030_080.pdf "[HEAD pointing to a commit.]")
+![커밋을 가리키는 `HEAD`.](img_030_080.pdf "[HEAD pointing to a commit.]")
 
 <!--
 ``` {.default}
@@ -223,19 +210,17 @@ Figure_#.8.
 ```
 -->
 
-So far, we've been making commits on the `main` branch without really
-even thinking about branching. Recalling that the `main` branch is just
-a label for a specific commit, how does the `main` branch know to
-"follow" our `HEAD` from commit to commit?
+지금까지는 브랜치를 거의 생각하지 않고 `main` 브랜치에 커밋했습니다. `main`
+브랜치는 특정 커밋에 붙은 이름표일 뿐인데, 어떻게 커밋에서 커밋으로 `HEAD`를
+"따라가야" 한다는 것을 알까요?
 
-It does it like this: the branch that `HEAD` points to follows the
-current commit. That is, when you make a commit, the branch `HEAD`
-points to moves along to that next commit.
+다음과 같이 작동합니다. `HEAD`가 가리키는 브랜치가 현재 커밋을 따라갑니다.
+즉, 커밋을 만들면 `HEAD`가 가리키는 브랜치가 다음 커밋으로 함께 이동합니다.
 
-If we were here back at Figure_#.7, when `HEAD` was pointing to the
-`main` branch, we could make one more commit and get us to Figure_#.9.
+Figure_#.7처럼 `HEAD`가 `main` 브랜치를 가리키는 상태에서 커밋을 하나 더
+만들면 Figure_#.9가 됩니다.
 
-![`HEAD` moving with a branch.](img_030_090.pdf "[HEAD moving with a branch.]")
+![브랜치와 함께 이동하는 `HEAD`.](img_030_090.pdf "[HEAD moving with a branch.]")
 
 <!--
 ``` {.default}
@@ -246,10 +231,10 @@ If we were here back at Figure_#.7, when `HEAD` was pointing to the
 ```
 -->
 
-Contrast that to detached head state, back in Figure_#.8. If we were
-there, a new commit would get us to Figure_#.10, leaving `main` alone.
+Figure_#.8의 분리된 HEAD 상태와 비교해 봅시다. 그 상태에서 새 커밋을 만들면
+`main`은 그대로 둔 채 Figure_#.10이 됩니다.
 
-![A commit with detached `HEAD`.](img_030_100.pdf "[A commit with detached HEAD.]")
+![분리된 `HEAD`에서 만든 커밋.](img_030_100.pdf "[A commit with detached HEAD.]")
 
 <!--
 ``` {.default}
@@ -265,32 +250,29 @@ there, a new commit would get us to Figure_#.10, leaving `main` alone.
 ```
 -->
 
-At this point, there's nothing stopping you from creating a new branch
-at the same commit as `HEAD`, if you want to do that. Or maybe you are
-just messing around and decide to switch back to `main` later,
-abandoning the commits you've made in detached `HEAD` state.
+이 시점에는 원한다면 `HEAD`와 같은 커밋에 새 브랜치를 만드는 것을 막을 것이
+없습니다. 아니면 그냥 이것저것 시험하다가 나중에 `main`으로 돌아가 분리된
+`HEAD` 상태에서 만든 커밋을 버릴 수도 있습니다.
 
 [i[`HEAD`-->Detached]>]
 
-Now that we have the abstract theory stuff laid out, let's talk
-specifics.
+추상적인 이론을 정리했으니 이제 구체적인 내용을 이야기해 봅시다.
 
-## Listing All Your Branches
+## 모든 브랜치 나열하기 {#listing-all-your-branches}
 
 [i[Branch-->Listing]<]
 
-Before we start, let's see how to list branches.
+시작하기 전에 브랜치를 나열하는 방법부터 봅시다.
 
 ``` {.default}
 $ git branch
   * main
 ```
 
-This is telling you there's one branch, and you have it checked out (the
-`*` lets you know that).
+브랜치가 하나 있고 그 브랜치를 체크아웃했다는 뜻입니다(`*`가 그 사실을 알려
+줍니다).
 
-If I make a new branch called `foobranch` and switch to that, I'll see
-this:
+`foobranch`라는 새 브랜치를 만들고 그곳으로 전환하면 다음과 같이 보입니다.
 
 ``` {.default}
 % git branch
@@ -298,7 +280,7 @@ this:
     main
 ```
 
-If I then detach the `HEAD`, I end up here:
+그런 다음 `HEAD`를 분리하면 다음과 같습니다.
 
 ``` {.default}
 % git branch              
@@ -307,62 +289,56 @@ If I then detach the `HEAD`, I end up here:
     main
 ```
 
-But you can always see what branch you're on with `git branch` or `git
-status`.
+`git branch`나 `git
+status`를 사용하면 현재 어느 브랜치에 있는지 언제든 볼 수
+있습니다.
 
 [i[Branch-->Listing]>]
 
-## Creating a Branch
+## 브랜치 만들기 {#creating-a-branch}
 
 [i[Branch-->Creating]<]
 
-When you make the first commit to a new repo, the `main` branch is
-automatically created for you at that commit.
+새 저장소에 첫 커밋을 만들면 그 커밋에 `main` 브랜치가 자동으로 생성됩니다.
 
-But what about new branches we want to make?
+그렇다면 새 브랜치를 만들고 싶을 때는 어떻게 할까요?
 
-> **Why make a branch?** A common case is that you want to work on your
-> own commits without impacting the work of others. (In this case you're
-> really just putting off the work until you merge your branch with
-> theirs, but it's a good workflow.)
+> **왜 브랜치를 만들까요?** 흔한 경우는 다른 사람의 작업에 영향을 주지 않고
+> 자신의 커밋에서 작업하고 싶을 때입니다. (사실 이 경우에는 내 브랜치를 다른
+> 사람의 브랜치와 병합할 때까지 작업을 미루는 것일 뿐이지만, 좋은 작업
+> 흐름입니다.)
 >
-> Another case is that you want to mess around with some changes but
-> you're not sure if they'll work. If they end up not working, you can
-> just delete the branch. If they do work, you can merge your changes
-> back into the non-messing-around branch.
+> 또 다른 경우는 변경 사항을 이것저것 시험하고 싶지만 작동할지 확신하지 못할
+> 때입니다. 결국 작동하지 않으면 브랜치를 삭제하면 됩니다. 작동한다면 변경
+> 사항을 시험용이 아닌 브랜치에 다시 병합할 수 있습니다.
 
-The most common way to make new branches is this:
+새 브랜치를 만드는 가장 일반적인 방법은 다음과 같습니다.
 
-1. Switch to the commit or branch from which you want to make the new
-   branch.
+1. 새 브랜치를 만들 출발점인 커밋이나 브랜치로 전환합니다.
 
-2. Make the new branch there and switch `HEAD` to point to the new
-   branch.
+2. 그곳에 새 브랜치를 만들고 `HEAD`가 새 브랜치를 가리키게 전환합니다.
 
-Let's try it. Let's branch off `main`.
+해 봅시다. `main`에서 브랜치를 뻗어 나갑시다.
 
-You might already have `main` checked out (i.e. `HEAD` points to
-`main`), but let's do it again to be safe, and then we'll create a
-branch with `git switch`:
+이미 `main`을 체크아웃했을 수도 있지만(즉, `HEAD`가 `main`을 가리키지만),
+안전을 위해 다시 전환한 다음 `git switch`로 브랜치를 만들겠습니다.
 
 ``` {.default}
 $ git switch main
 $ git switch -c newbranch
 ```
 
-Normally you can just switch to another branch (i.e. have `HEAD` point
-to that branch) with `git switch branchname`. But if the branch doesn't
-exist, you need to use the `-c` switch to create the branch before
-switching to it.
+보통 `git switch branchname`으로 다른 브랜치로 전환할 수 있습니다(즉,
+`HEAD`가 그 브랜치를 가리키게 합니다). 하지만 브랜치가 없다면 `-c` 스위치를
+사용해 브랜치를 만든 뒤 전환해야 합니다.
 
-> **Make sure all your local changes are committed before switching
-> branches!** If you `git status` it should say "working tree clean"
-> before you switch. Later we'll learn about another option when we talk
-> about [stashing](#stash).
+> **브랜치를 전환하기 전에 모든 로컬 변경 사항을 커밋했는지 확인하세요!**
+> 전환하기 전에 `git status`를 실행하면 "working tree clean"이라고 나와야
+> 합니다. 나중에 [스태시](#stash)를 다룰 때 다른 방법도 배웁니다.
 
-So after checking out `main`, we have Figure_#.11.
+`main`을 체크아웃하면 Figure_#.11과 같습니다.
 
-![`HEAD` pointing to `main`.](img_030_070.pdf "[HEAD pointing to main.]")
+![`main`을 가리키는 `HEAD`.](img_030_070.pdf "[HEAD pointing to main.]")
 
 <!--
 ``` {.default}
@@ -373,10 +349,10 @@ So after checking out `main`, we have Figure_#.11.
 ```
 -->
 
-And then with `git switch -c newbranch`,  we create and switch to
-`newbranch`, and that gets us to Figure_#.12.
+그런 다음 `git switch -c newbranch`로 "newbranch"를 만들고 전환하면
+Figure_#.12가 됩니다.
 
-![`HEAD` pointing to `newbranch`.](img_030_110.pdf "[HEAD pointing to newbranch.]")
+![`newbranch`를 가리키는 `HEAD`.](img_030_110.pdf "[HEAD pointing to newbranch.]")
 
 <!--
 ``` {.default}
@@ -390,43 +366,36 @@ And then with `git switch -c newbranch`,  we create and switch to
 ```
 -->
 
-That's not super exciting, since we're still looking at the same commit,
-but let's see what happens when we make some new commits on this new
-branch.
+여전히 같은 커밋을 보고 있으니 그다지 흥미롭지는 않습니다. 하지만 이 새
+브랜치에서 새 커밋을 만들면 어떻게 되는지 봅시다.
 
-> **The branches we're making here exist only on your local clone**;
-> they're not automagically propagated back to wherever you cloned the
-> repo from.
+> **여기서 만드는 브랜치는 로컬 클론에만 존재합니다.** 저장소를 클론해 온
+> 곳으로 마법처럼 자동 전파되지 않습니다.
 >
-> The upshot is that if you accidentally (or deliberately) delete your
-> local repo, when you `git clone` again, all your local branches will
-> be gone (along with any commits that aren't part of `main` or any
-> other branches pushed to the server).
+> 따라서 실수로든 일부러든 로컬 저장소를 삭제하고 다시 `git clone`하면 모든
+> 로컬 브랜치가 사라집니다(`main`이나 서버에 푸시한 다른 브랜치에 속하지 않는
+> 커밋도 함께 사라집니다).
 >
-> There is a way to set up that connection where your local branches are
-> uploaded when you push, called [_remote-tracking
-> branches_](#remote-tracking-branch). `main` is connected to a remote
-> tracking branch (usually called `origin/main`) which is why `git push`
-> from `main` works while `git push` from `newbranch`, which is not by
-> default connected to a remote tracking branch, gives an error. But
-> we'll talk about all this later.
+> 푸시할 때 로컬 브랜치가 업로드되도록 연결을 설정하는 방법이 있는데, 이를
+> [_원격 추적 브랜치_](#remote-tracking-branch)라고 합니다. `main`은 원격 추적
+> 브랜치(보통 `origin/main`)와 연결돼 있으므로 `main`에서 `git push`가
+> 작동합니다. 반면 기본적으로 원격 추적 브랜치와 연결되지 않은 `newbranch`에서
+> `git push`를 실행하면 오류가 납니다. 이 내용은 나중에 다루겠습니다.
 
 [i[Branch-->Creating]>]
 
-## Make Some Commits on a Branch
+## 브랜치에서 커밋 만들기 {#make-some-commits-on-a-branch}
 
-This is not really that different than what we were doing with our
-commits before. Before we made a branch, we had `HEAD` pointing to
-branch `main`, and we were making commits on `main`.
+이 작업은 이전에 커밋하던 것과 크게 다르지 않습니다. 브랜치를 만들기 전에는
+`HEAD`가 `main` 브랜치를 가리키고 있었고 `main`에 커밋을 만들었습니다.
 
-Now we have `HEAD` pointing to `newbranch` and our commits will go
-there, instead.
+이제 `HEAD`가 `newbranch`를 가리키므로 커밋은 그곳에 만들어집니다.
 
-Right after creating `newbranch`, we had the situation in Figure_#.12.
-Now let's edit something in the working tree and make a new commit. With
-that, we'll have the scenario in Figure_#.13.
+`newbranch`를 만든 직후에는 Figure_#.12와 같은 상태였습니다. 이제 작업
+트리에서 무언가를 편집하고 새 커밋을 만듭시다. 그러면 Figure_#.13과 같은
+상태가 됩니다.
 
-![Adding a new commit to `newbranch`.](img_030_120.pdf "[Adding a new commit to newbranch.]")
+![`newbranch`에 새 커밋 추가하기.](img_030_120.pdf "[Adding a new commit to newbranch.]")
 
 <!--
 ``` {.default}
@@ -450,9 +419,9 @@ that, we'll have the scenario in Figure_#.13.
 ```
 -->
 
-Right? Let's make another commit and get to Figure_#.14.
+그렇죠? 커밋을 하나 더 만들어 Figure_#.14로 가 봅시다.
 
-![Adding another commit to `newbranch`.](img_030_130.pdf "[Adding another commit to newbranch.]")
+![`newbranch`에 커밋 하나 더 추가하기.](img_030_130.pdf "[Adding another commit to newbranch.]")
 
 <!--
 ``` {.default}
@@ -466,35 +435,29 @@ Right? Let's make another commit and get to Figure_#.14.
 ```
 -->
 
-We can see that `newbranch` and `main` are pointing at different
-commits.
+`newbranch`와 `main`이 서로 다른 커밋을 가리킨다는 것을 볼 수 있습니다.
 
-> **If we wanted to see the state of the repo from `main`'s perspective,
-> what would we have to do?** We'd have to `git switch main` to look at
-> that branch.
+> **`main`의 관점에서 저장소 상태를 보고 싶다면 무엇을 해야 할까요?**
+> `git switch main`으로 그 브랜치를 봐야 합니다.
 
-Now for another question. Let's say we've decided that we're happy with
-the changes on `newbranch`, and we want to merge them into the code in
-the `main` branch. How would we do that?
+다른 질문을 해 봅시다. `newbranch`의 변경 사항이 만족스러워 `main` 브랜치의
+코드에 병합하기로 했다고 합시다. 어떻게 해야 할까요?
 
-## Merging: Fast-Forward
+## 병합: 빨리 감기 {#merging-fast-forward}
 
 [i[Merge]<]
 [i[Merge-->Fast-forward]<]
 
-Bringing two branches back into sync is called _merging_.
+두 브랜치를 다시 동기화하는 것을 *병합*이라고 합니다.
 
-The branch you're on is the branch you're bringing other changes _into_.
-That is, if you're on Branch A, and you tell git to "merge Branch B",
-Branch B's changes will be applied onto Branch A. (Branch B remains
-unchanged in this scenario.)
+현재 있는 브랜치가 다른 변경 사항을 가져와 넣는 _대상_ 브랜치입니다. 즉,
+브랜치 A에 있을 때 Git에 "브랜치 B를 병합하라"고 하면 브랜치 B의 변경 사항이
+브랜치 A에 적용됩니다. (이 상황에서 브랜치 B는 바뀌지 않습니다.)
 
-But in this section we're going to be talking about a specific kind of
-merge: the _fast-forward_. This occurs when the branch you're merging
-from is a direct descendant of the branch you're merging into.
+하지만 이 절에서는 특정한 종류의 병합인 *빨리 감기*를 이야기합니다. 병합해
+오는 출발 브랜치가 병합 대상 브랜치의 직계 자손일 때 일어납니다.
 
-Let's say we have `newbranch` checked out, like from the previous
-example in Figure_#.14.
+앞의 Figure_#.14 예시처럼 `newbranch`를 체크아웃한 상태라고 합시다.
 
 <!--
 ``` {.default}
@@ -508,31 +471,31 @@ example in Figure_#.14.
 ```
 -->
 
-I decide I want to merge `main`'s changes into `newbranch`, so (again,
-with `newbranch` currently checked out):
+`main`의 변경 사항을 `newbranch`에 병합하기로 합니다. 다시 말해 현재
+`newbranch`를 체크아웃한 상태에서 다음을 실행합니다.
 
 ``` {.default}
 $ git merge main
   Already up to date.
 ```
 
-Nothing happened? What's that mean? Well, if we look at the commit
-graph, above, all of `main`'s changes are already in `newbranch`, since
-`newbranch` is a direct descendant.
+아무 일도 일어나지 않았나요? 무슨 뜻일까요? 위의 커밋 그래프를 보면
+`newbranch`가 직계 자손이므로 `main`의 모든 변경 사항이 이미 `newbranch`에
+들어 있습니다.
 
-Git is saying, "Hey, you already have all the commits up to `main` in
-your branch, so there's nothing for me to do."
+Git은 이렇게 말하는 셈입니다. "이봐요, 이 브랜치에는 이미 `main`까지의 커밋이
+전부 있으니 제가 할 일이 없습니다."
 
-But let's reverse it. Let's check out `main` and then merge `newbranch`
-into it.
+이번에는 반대로 해 봅시다. `main`을 체크아웃한 뒤 `newbranch`를 그곳에
+병합합니다.
 
 ``` {.default}
 $ git switch main
 ```
 
-Now we've moved `HEAD` to track `main`, as shown in Figure_#.15.
+이제 Figure_#.15처럼 `HEAD`를 옮겨 `main`을 추적하게 했습니다.
 
-![Checking out `main` again.](img_030_140.pdf "[Checking out `main` again.]")
+![`main`을 다시 체크아웃하기.](img_030_140.pdf "[Checking out `main` again.]")
 
 <!--
 ``` {.default}
@@ -546,11 +509,11 @@ Now we've moved `HEAD` to track `main`, as shown in Figure_#.15.
 ```
 -->
 
-And `newbranch` is **not** a direct ancestor of `main` (it's a
-descendant). So `newbranch`'s changes are **not** yet in `main`.
+그리고 `newbranch`는 `main`의 직계 조상이 **아닙니다**(자손입니다). 따라서
+`newbranch`의 변경 사항은 아직 `main`에 들어 있지 **않습니다**.
 
-So let's merge them in and see what happens (your output may vary
-depending on what files are included in the merge):
+변경 사항을 병합하고 어떻게 되는지 봅시다(병합에 포함된 파일에 따라 출력은
+다를 수 있습니다).
 
 ``` {.default}
 $ git merge newbranch
@@ -560,9 +523,9 @@ $ git merge newbranch
    1 file changed, 3 insertions(+), 1 deletion(-)
 ```
 
-And now we're at Figure_#.16.
+이제 Figure_#.16과 같은 상태입니다.
 
-![After merging `newbranch` into `main`.](img_030_150.pdf "[After merging newbranch into main.]")
+![`newbranch`를 `main`에 병합한 뒤.](img_030_150.pdf "[After merging newbranch into main.]")
 
 <!--
 ``` {.default}
@@ -576,48 +539,43 @@ And now we're at Figure_#.16.
 ```
 -->
 
-Wait a second—didn't we say to merge `newbranch` into `main`, like take
-those changes and fold them into the `main` branch? Why did `main`
-move, then?
+잠깐만요. `newbranch`의 변경 사항을 가져와 `main` 브랜치에 합치는 식으로
+`newbranch`를 `main`에 병합한다고 하지 않았나요? 그런데 왜 `main`이
+움직였을까요?
 
-We did say that! But let's stop and think about how this can happen in
-the special case where the branch you're merging _into_ is a direct
-ancestor of the branch you're merging _from_.
+맞습니다! 하지만 병합 _대상_ 브랜치가 병합해 오는 _출발_ 브랜치의 직계 조상인
+특수한 경우에 어떻게 할 수 있을지 잠시 멈춰 생각해 봅시다.
 
-It used to be that `main` didn't have commits `(5)` or `(6)` in the
-graph, above. But `newbranch` has already done the work of adding `(5)`
-and `(6)`!
+위 그래프에서 `main`에는 커밋 `(5)`와 `(6)`이 없었습니다. 하지만
+`newbranch`가 이미 `(5)`와 `(6)`을 추가하는 작업을 해 두었습니다!
 
-The easiest way to get those commits "into" `main` is to simply
-_fast-forward_ `main` up to `newbranch`'s commit!
+이 커밋들을 `main` "안으로" 가져오는 가장 쉬운 방법은 `main`을
+`newbranch`의 커밋까지 단순히 *빨리 감기*하는 것입니다!
 
-Again, this only works when the branch you're merging into is a direct
-ancestor of the branch you're merging from.
+다시 말하지만 병합 대상 브랜치가 병합해 오는 출발 브랜치의 직계 조상일 때만
+이 방법이 작동합니다.
 
-That said, you certainly can merge branches that are not directly
-related like that, e.g. branches that share a common ancestor but have
-both since diverged.
+그렇다고 이런 직접 관계가 없는 브랜치를 병합하지 못하는 것은 아닙니다. 예를
+들어 공통 조상이 있지만 이후 둘 다 갈라진 브랜치도 병합할 수 있습니다.
 
-Git will automatically fast-forward if it can. Otherwise it does a
-"real" merge. And while fast-forward merges can never lead to _merge
-conflicts_, regular merges certainly can.
+Git은 가능하면 자동으로 빨리 감기합니다. 그렇지 않으면 "진짜" 병합을 합니다.
+빨리 감기 병합에서는 *병합 충돌*이 절대 생기지 않지만 일반 병합에서는 분명
+생길 수 있습니다.
 
-But that's another story we'll get into in the [Merging and
-Conflicts](#merge) chapter.
+그 이야기는 [병합과 충돌](#merge) 장에서 다루겠습니다.
 
 [i[Merge-->Fast-forward]>]
 [i[Merge]>]
 
-## Deleting a Branch
+## 브랜치 삭제하기 {#deleting-a-branch}
 
 [i[Branch-->Deleting]]
 
-If you're done merging your branch, it's easy to delete it. **Importantly,
-this doesn't delete any commits; it just deletes the branch "label"
-so you can't use it any longer**. You can still use all the commits.
+브랜치 병합을 마쳤다면 쉽게 삭제할 수 있습니다. **중요하게도 커밋은 하나도
+삭제하지 않습니다. 더 이상 사용할 수 없도록 브랜치 "이름표"만 삭제합니다.**
+모든 커밋은 여전히 사용할 수 있습니다.
 
-Let's say we've finished the work on our `topic1` branch and we
-want to merge it into `main`. No problem:
+`topic1` 브랜치의 작업을 마쳐 `main`에 병합하고 싶다고 합시다. 문제없습니다.
 
 ``` {.default}
 $ git commit -m "finished with topic1"   # on topic1 branch
@@ -625,34 +583,31 @@ $ git switch main
 $ git merge topic1                       # merge topic1 into main
 ```
 
-At this point, assuming a completed merge, we can delete the `topic1`
-branch:
+병합이 완료됐다고 하면 이제 `topic1` 브랜치를 삭제할 수 있습니다.
 
 ``` {.default}
 $ git branch -d topic1
   Deleted branch topic1 (was 3be2ad2).
 ```
 
-Done!
+끝났습니다!
 
-> [i[Branch-->Topic]]**A *topic* branch is what we call a local branch
-> made for a single topic like a feature, bug fix, etc.** In this guide
-> I'll name branches literally `topic` to indicate that it's just an
-> arbitrary branch. But in real life you'd name the topic branch after
-> what it is you're doing, like `bugfix37`, `newfeature`, `experiment`,
-> etc.
+> [i[Branch-->Topic]]**_토픽_ 브랜치는 기능이나 버그 수정 같은 한 가지 주제를
+> 위해 만든 로컬 브랜치를 부르는 말입니다.** 이 안내서에서는 임의의 브랜치임을
+> 나타내려고 브랜치에 문자 그대로 `topic`이라는 이름을 붙이겠습니다. 하지만
+> 실제로는 `bugfix37`, `newfeature`, `experiment`처럼 하는 작업에 따라 토픽
+> 브랜치의 이름을 붙입니다.
 
-But what if you were working on a branch and wanted to abandon it before
-you merge it into something? For that, we have the more imperative
-Capital `D` option, which means, "I _really_ mean it. Delete this
-unmerged branch!"
+그런데 브랜치에서 작업하다가 다른 곳에 병합하기 전에 버리고 싶다면 어떻게
+할까요? 이때는 더 강한 명령인 대문자 `D` 옵션을 사용합니다. "_정말로_
+원합니다. 이 병합되지 않은 브랜치를 삭제하세요!"라는 뜻입니다.
 
 ``` {.default}
 $ git branch -D topic1
 ```
 
-Use lowercase `-d` unless you have reason to do otherwise. It'll at
-least tell you if you're about to lose your reference to your unmerged
-commits, and then you can override with `-D` if you really want to.
+다르게 해야 할 이유가 없다면 소문자 `-d`를 사용하세요. 적어도 병합되지 않은
+커밋에 대한 참조를 잃게 될 때 알려 주며, 정말 원한다면 그때 `-D`로 강제할 수
+있습니다.
 
 [i[Branch]>]

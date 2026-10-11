@@ -1,74 +1,69 @@
-# The Reference Log, "reflog"
+# 참조 로그, "reflog" {#the-reference-log-reflog}
 
 [i[Reflog]<]
 
-All this time you've been committing things, branching, doing whatever.
-And Git's been watching you, listening like Big Brother, recording
-everything you do.
+그동안 여러분은 커밋하고 브랜치를 만들며 온갖 일을 해 왔습니다. Git은 빅
+브라더처럼 여러분을 지켜보고 엿들으며 하는 일을 모두 기록했습니다.
 
-And you can use this to your benefit.
+그리고 이 기록을 유용하게 활용할 수 있습니다.
 
-Let's say you've done something like a hard reset because you wanted to
-abandon the branch you were on.
+현재 브랜치를 버리고 싶어서 하드 리셋 같은 작업을 했다고 합시다.
 
-But then, wait! You actually needed something from one of those commits
-you just reset past! Is there any way to get back to it? There's no
-branch there, and you can't remember the commit ID. And since it's not
-an ancestor to anything, `git log` won't help you.
+그런데 잠깐! 방금 리셋으로 지나쳐 버린 커밋 중 하나에서 무언가가 실제로
+필요했습니다! 다시 돌아갈 방법이 있을까요? 그곳에는 브랜치도 없고 커밋 ID도
+기억나지 않습니다. 어느 것의 조상 커밋도 아니므로 `git log`도 도움이 되지
+않습니다.
 
-How can you get it back?
+어떻게 되찾을 수 있을까요?
 
-`git reflog` to the rescue!
+구원투수 `git reflog`가 나설 차례입니다!
 
-The reflog contains a record of all manner of things you've done along
-with commit IDs, and it keeps them for 90 days[^9721]. After that time,
-orphan commits (that is commits with no branch above them) will be
-garbage collected.
+reflog에는 여러분이 한 온갖 작업과 커밋 ID가 기록되며, 이 기록은 90일 동안
+보관됩니다[^9721]. 그 시간이 지나면 고아 커밋(즉, 그 위에 브랜치가 없는
+커밋)은 가비지 컬렉션의 대상이 됩니다.
 
-[^9721]: By default it's 90 days. You can configure this with the
-    `gc.reflogExpire` config option.
+[^9721]: 기본값은 90일입니다. `gc.reflogExpire` 구성 옵션으로 변경할 수
+    있습니다.
 
-## What Can We Use It For?
+## 어디에 쓸 수 있을까요? {#what-can-we-use-it-for}
 
 [i[Reflog-->Uses]]
 
-You can use it for all kinds of things.
+온갖 일에 사용할 수 있습니다.
 
-* Looking at orphan commits
-* Recreating deleted branches
-* Recovering from a bad reset
-* Exploring the order of operations on the repo, even if they're on
-  other branches
-* And more!
+* 고아 커밋 살펴보기
+* 삭제한 브랜치 다시 만들기
+* 잘못된 리셋에서 복구하기
+* 다른 브랜치의 작업까지 포함해 저장소에서 작업한 순서 살펴보기
+* 그 밖에도 많습니다!
 
-Basically it gives you a way to look back on the linear history of the
-repo, and tells you the commit hashes along the way.
+기본적으로 저장소의 선형 작업 기록을 돌아볼 방법을 제공하고, 그 과정에 있던
+커밋 해시를 알려 줍니다.
 
-This means if you want to, say, hard reset the repo to some earlier
-state, you could look up that earlier commit in the reflog[^ab30].
+따라서 저장소를 이전 상태로 하드 리셋하고 싶다면 reflog에서 그 이전 커밋을
+찾을 수 있습니다[^ab30].
 
-[^ab30]: Keeping in mind to never rewrite history on anything you've
-    pushed, of course.
+[^ab30]: 물론 push한 것의 기록은 절대로 다시 쓰지 말아야 한다는 점을
+    기억하세요.
 
-## Looking Back at an Orphan Commit
+## 고아 커밋 돌아보기 {#looking-back-at-an-orphan-commit}
 
 [i[Reflog-->Finding an orphan commit]<]
 
-Let's run an example where we do the following:
+다음 작업을 수행하는 예시를 실행해 봅시다.
 
-1. Commit a file, `foo.txt`,  on the `main` branch.
-2. Make a new branch, `topic1`.
-3. In this new branch, add another file, `bar.txt`, and commit it.
-4. Modify `bar.txt` and commit the modification.
-5. Decide, at this point, you're giving up on `topic1`. Switch
-   back to the `main` branch and force delete `topic1`.
-6. Decide, at this point, that actually you need to look back at that
-   commit in `topic1` for some reason. But you deleted the branch.
-   Whoops.
-7. Look in the reflog for the commit on `topic1` that you want.
-8. Switch to that commit (detaching the `HEAD`).
+1. `main` 브랜치에서 `foo.txt` 파일을 커밋합니다.
+2. 새 브랜치 `topic1`을 만듭니다.
+3. 새 브랜치에서 다른 파일 `bar.txt`를 추가하고 커밋합니다.
+4. `bar.txt`를 수정하고 그 변경을 커밋합니다.
+5. 이제 `topic1`을 포기하기로 합니다. `main` 브랜치로 돌아가 `topic1`을
+   강제로 삭제합니다.
+6. 그런데 어떤 이유로 `topic1`의 그 커밋을 다시 봐야겠다고 마음을 바꿉니다.
+   하지만 브랜치를 삭제했습니다. 이런.
+7. reflog에서 원하는 `topic1`의 커밋을 찾습니다.
+8. 그 커밋으로 전환합니다(`HEAD`를 분리합니다).
 
-And here that is in Git, at least the first five steps:
+Git에서 실행하면 다음과 같습니다. 적어도 처음 다섯 단계까지는요.
 
 ``` {.default}
 $ echo 'Line 1' > foo.txt                  # Create foo.txt
@@ -96,8 +91,8 @@ $ git branch -D topic1                     # Delete topic1
   Deleted branch topic1 (was bf8b8cf).
 ```
 
-At this point let's say we want to look back at the commits we made on
-`bar.txt`. Good luck with `git log`!
+이 시점에서 `bar.txt`에 만든 커밋을 다시 보고 싶다고 합시다. `git log`로
+한번 잘 찾아보세요!
 
 ``` {.default}
 $ git log
@@ -108,13 +103,11 @@ Date:   Fri Oct 4 16:24:56 2024 -0700
     added foo.txt
 ```
 
-That's it? Where's all the `bar.txt` stuff? Well, it was on the
-`topic1` commits, which were descendants from this commit `90bd7`.
-Because `git log` only shows ancestors, we're not seeing any of the
-`bar.txt` changes.
+이게 전부인가요? `bar.txt` 관련 내용은 다 어디 갔죠? 그 내용은 이 커밋
+`90bd7`의 자손인 `topic1` 커밋에 있었습니다. `git log`는 조상만 보여
+주므로 `bar.txt` 변경 사항은 하나도 보이지 않습니다.
 
-So, finally, we arrive at the entire topic of this chapter: the reflog.
-Let's take a peek.
+드디어 이 장의 주제인 reflog에 도착했습니다. 한번 들여다봅시다.
 
 ``` {.default}
 $ git reflog
@@ -127,9 +120,8 @@ $ git reflog
   90bd7cc (HEAD -> main) HEAD@{4}: commit (initial): added foo.txt
 ```
 
-Hey, that's more like it! I see the changes I made to `bar.txt` in
-there! And I see the commit hash on the left! This means I can switch to
-that commit!
+그래, 바로 이거죠! `bar.txt`에 만든 변경 사항이 보입니다! 왼쪽에는 커밋
+해시도 있습니다! 그러면 그 커밋으로 전환할 수 있습니다!
 
 ``` {.default}
 $ git switch --detach bf8b8cf
@@ -154,7 +146,7 @@ $ git log
       added foo.txt
 ```
 
-There's the log... and we have the file contents?
+로그가 있군요... 파일 내용도 있을까요?
 
 ``` {.default}
 $ cat bar.txt
@@ -162,9 +154,9 @@ $ cat bar.txt
   Line 2
 ```
   
-Yup!
+물론이죠!
 
-Let's switch back to `main` and see what happens.
+`main`으로 돌아가 어떤 일이 생기는지 봅시다.
 
 ``` {.default}
 $ git switch -
@@ -182,14 +174,13 @@ $ git switch -
   Switched to branch 'main'
 ```
 
-This is Git telling us, "Hey, I'm going to garbage collect these two
-commits after the 90 days are up. If you want to keep them, attach a
-branch to them."
+Git이 이렇게 말하는 것입니다. "이봐요, 90일이 지나면 이 커밋 두 개를 가비지
+컬렉션으로 정리할 겁니다. 보관하고 싶다면 브랜치를 연결하세요."
 
-And it's helpfully telling us how to do that.
+친절하게 그 방법까지 알려 줍니다.
 
-So even though we force deleted `topic1` earlier, we could now simply
-recreate it if we didn't mean to do that. Let's do that.
+앞서 `topic1`을 강제로 삭제했지만, 그럴 생각이 아니었다면 이제 간단히 다시
+만들 수 있습니다. 그렇게 해 봅시다.
 
 ``` {.default}
 $ git branch topic1 bf8b8cf
@@ -200,16 +191,16 @@ $ cat bar.txt
   Line 2
 ```
 
-As you can see, the reflog can get you out of all kinds of trouble when
-you thought you'd lost commits for good.
+보시다시피 커밋을 영영 잃었다고 생각한 온갖 곤경에서 reflog가 구해 줄 수
+있습니다.
 
 [i[Reflog-->Finding an orphan commit]>]
 
-## Reflog Selectors
+## Reflog 선택자 {#reflog-selectors}
 
 [i[Reflog-->Selectors]<]
 
-Let's take a look at that example reflog output again:
+앞의 reflog 출력 예시를 다시 살펴봅시다.
 
 ``` {.default}
 $ git reflog
@@ -222,18 +213,18 @@ $ git reflog
   598c84e (HEAD -> main) HEAD@{4}: commit (initial): added foo.txt
 ```
 
-See that `HEAD@{3}`-type stuff in there? You can use those to check out
-specific commits (instead of using the commit hash, for example).
+`HEAD@{3}` 같은 것이 보이나요? 이를 사용해 특정 커밋을 체크아웃할 수
+있습니다(예를 들면 커밋 해시 대신 사용할 수 있습니다).
 
-Now, `HEAD@{3}` **doesn't** mean "3 commits before `HEAD`". But it is an
-identifier you can use to switch to a particular commit.
+`HEAD@{3}`은 "`HEAD`보다 3개 앞선 커밋"이라는 뜻이 **아닙니다**. 하지만 특정
+커밋으로 전환할 때 사용할 수 있는 식별자입니다.
 
 ``` {.default}
 $ git switch --detach HEAD@{1}
   HEAD is now at dc3d6a3 appended to bar.txt
 ```
 
-Just like that.
+이렇게 간단합니다.
 
 [i[Reflog-->Selectors]>]
 

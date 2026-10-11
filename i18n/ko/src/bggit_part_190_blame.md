@@ -1,16 +1,15 @@
-# Who's to Blame for this Code?
+# 이 코드는 누구 탓일까요? {#whos-to-blame-for-this-code}
 
 [i[Blame]<]
 
-Let's say you find something in the shared codebase that's just wrong.
-Or, charitably, we'll say you found something _interesting_.
+공유 코드베이스에서 명백히 잘못된 무언가를 발견했다고 해 봅시다.
+조금 너그럽게 말하자면, _흥미로운_ 무언가를 발견한 셈입니다.
 
-And you want to know who was to blame for that _incredible_ code.
+그리고 그 _놀라운_ 코드를 누구 탓으로 돌려야 할지 알고 싶습니다.
 
-This is where a simple Git command can enlighten you.
+이럴 때 간단한 Git 명령 하나가 답을 밝혀 줍니다.
 
-Here's some example truncated output (so that it fits in the book
-margins):
+다음은 예시 출력입니다. 책의 여백 안에 들어가도록 일부를 잘랐습니다.
 
 ``` {.default}
 $ git blame --date=short foo.py
@@ -25,35 +24,31 @@ $ git blame --date=short foo.py
   8c96991f (Alice 2024-10-08 12)     return data
 ```
 
-I have the `--date=short` switch in there to compress it even more so it
-fits in the book. Otherwise it would show a full time stamp.
+책에 들어가도록 출력을 더 줄이려고 `--date=short` 스위치도 넣었습니다.
+이 스위치가 없으면 전체 타임스탬프가 표시됩니다.
 
-What we see in this fabricated example is that Alice has checked in the
-majority of this function, but the next day Chris came in and modified
-or added those additional lines in the middle.
+이 가상 예시를 보면 Alice가 이 함수의 대부분을 체크인했지만, 다음 날
+Chris가 와서 중간의 몇 줄을 수정하거나 추가했습니다.
 
-And now we know.
+이제 범인을 알았습니다.
 
-## Fancier Blaming
+## 더 화려하게 탓하기 {#fancier-blaming}
 
 [i[Blame-->Fancier output]<]
 
-You can use the `--color-lines` switch to get color output, alternating
-colors between commits. Very exciting. If you want that to always
-happen, you can set the `color.blame.repeatedLines` config option.
+`--color-lines` 스위치를 쓰면 커밋마다 색이 번갈아 나오는 컬러 출력을
+볼 수 있습니다. 아주 신나는 일이죠. 언제나 이렇게 표시하고 싶다면
+`color.blame.repeatedLines` 구성 옵션을 설정하면 됩니다.
 
-We already saw `--date=short` to chop the date down a bit.
+날짜를 조금 줄여 주는 `--date=short`는 이미 살펴봤습니다.
 
-You can show the email address of the contributor with `-e` or
-`--show-email`.
+`-e` 또는 `--show-email`로 기여자의 이메일 주소를 표시할 수 있습니다.
 
-You can reliably detect lines that were moved or copied within a file
-with `-M`. And you can do the same thing across multiple files with
-`-C`.
+`-M`을 사용하면 파일 안에서 이동하거나 복사한 줄을 안정적으로 감지할 수
+있습니다. `-C`를 사용하면 여러 파일에 걸쳐 같은 작업을 할 수 있습니다.
 
-Finally, your IDE (like VS Code) might support blame, either natively or
-via an extension. Some people just have this feature turned on all the
-time.
+마지막으로 VS Code 같은 IDE는 자체 기능이나 확장 기능을 통해 blame을
+지원할 수도 있습니다. 어떤 사람들은 이 기능을 늘 켜 놓기도 합니다.
 
 [i[Blame-->Fancier output]>]
 

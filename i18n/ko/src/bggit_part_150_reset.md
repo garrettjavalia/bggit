@@ -1,148 +1,129 @@
-# Reset: Moving Branches Around {#reset}
+# 리셋: 브랜치 옮기기 {#reset}
 
 [i[Reset]<]
 
-Before we begin, using `git reset` ***rewrites history***. This means
-that you shouldn't use it on any branches that other people might have
-copies of, i.e. branches that you have pushed.
+시작하기 전에, `git reset`은 ***이력을 다시 씁니다***. 따라서 다른 사람이
+복사본을 가지고 있을 수 있는 브랜치, 즉 푸시한 브랜치에는 사용하지 않아야
+합니다.
 
-Of course, this is a highly-recommended guideline, not a rule, and you
-can reset anything provided you know what you're doing and have good
-communication with your team.
+물론 이는 강력한 권장 지침이지 법칙은 아닙니다. 자신이 무엇을 하는지 알고
+팀과 원활히 소통한다면 무엇이든 리셋할 수 있습니다.
 
-But if you reset a branch you haven't pushed, you won't get into trouble.
+하지만 푸시하지 않은 브랜치를 리셋하면 문제가 생기지 않습니다.
 
-So what is it?
+그러면 리셋이 무엇일까요?
 
-Doing a reset allows you to change where the `HEAD` and your current
-branch point to. You can move your current branch to a different commit!
+리셋하면 `HEAD`와 현재 브랜치가 가리키는 위치를 바꿀 수 있습니다. 현재
+브랜치를 다른 커밋으로 옮길 수 있는 것입니다!
 
-When you move a branch to another commit, the branch "becomes" the repo
-at the point of that commit, including all the history that led up to
-that commit. The upshot is that all the commits that led to the old
-branch point are now effectively gone, as shown in Figure 19.1.
+브랜치를 다른 커밋으로 옮기면 그 브랜치는 그 커밋에 이르는 모든 이력을
+포함하여 해당 커밋 시점의 저장소가 "됩니다". 그 결과 그림 19.1처럼 이전
+브랜치 위치에 이르던 커밋은 모두 사실상 사라집니다.
 
-![If we reset `main` to commit _2_, commits _3_ and _4_ will eventually be lost.](img_150_010.pdf "If we reset main to commit 2, commits 3 and 4 will eventually be lost.")
+![`main`을 커밋 *2*로 리셋하면 커밋 *3*과 *4*는 결국 사라집니다.](img_150_010.pdf "If we reset main to commit 2, commits 3 and 4 will eventually be lost.")
 
-So be sure you mean it when you reset! You'll be losing commits[^d563]!
+리셋할 때는 정말로 원하는 일인지 꼭 확인하세요! 커밋을 잃게 됩니다[^d563]!
 
-[^d563]: Git cleans up "unreachable" commits after some time has
-    elapsed, so they won't be *instantly* destroyed. But they're on
-    borrowed time unless you create a new branch to hold them.
+[^d563]: Git은 시간이 어느 정도 흐른 뒤 "도달할 수 없는" 커밋을 정리하므로
+    *즉시* 파괴되지는 않습니다. 하지만 이를 붙잡아 둘 새 브랜치를 만들지
+    않는 한 시한부 신세입니다.
 
-When doing a reset, you can ask Git to move the current branch to
-another commit, or to another branch, or to anything else that
-identifies a commit.
+리셋할 때 현재 브랜치를 다른 커밋이나 다른 브랜치, 또는 커밋을 식별하는
+무엇으로든 옮기라고 Git에 요청할 수 있습니다.
 
-Now, there is a question of what happens to the _difference_ between
-your working tree at the old commit and whatever it would be at the new
-commit.
+그러면 이전 커밋의 작업 트리와 새 커밋에서의 작업 트리 사이의 *차이*는
+어떻게 되는지가 문제입니다.
 
-You might have read that last sentence too quickly, so let's revisit it
-because it's important. Right now, you have some files in your working
-tree. Let's assume you're fully committed and your `HEAD` is on the
-`main` branch. Now if you move the `main` branch elsewhere, *there will
-necessarily be a difference between what you had at the commit you* were
-*looking at, and the one you* will be *looking at.
+방금 문장을 너무 빨리 읽었을지 모르니 중요한 내용인 만큼 다시 살펴봅시다.
+현재 작업 트리에 파일이 몇 개 있습니다. 모두 커밋했고 `HEAD`가 `main`
+브랜치에 있다고 가정합니다. 이제 `main` 브랜치를 다른 곳으로 옮기면 *전에
+보고 있던 커밋의 내용과 앞으로 보게 될 커밋의 내용 사이에는 반드시 차이가
+생깁니다*.
 
-We need to decide what to do with that difference. Where will it be
-reflected? As a difference between the stage and the destination commit?
-A difference between the working tree and the stage? Or both?
+그 차이를 어떻게 처리할지 결정해야 합니다. 어디에 반영할까요? 스테이징
+영역과 대상 커밋의 차이로 둘까요? 작업 트리와 스테이징 영역의 차이로
+둘까요? 아니면 둘 다일까요?
 
-Turns out we have three options: ***soft reset***, ***mixed reset***,
-and ***hard reset***.
+선택지는 ***소프트 리셋***, ***믹스드 리셋***, ***하드 리셋*** 세 가지입니다.
 
-And which you choose controls what happens to the branch, the stage, and
-the working tree.
+어느 것을 선택하느냐에 따라 브랜치, 스테이징 영역, 작업 트리에 일어나는
+일이 달라집니다.
 
-> **I want you to consider that *all* files exist in three places at all
-> times in Git:** the working tree, the stage, and a commit.
+> **Git에서 *모든* 파일은 언제나 세 곳에 존재한다고 생각해 주세요.** 작업
+> 트리, 스테이징 영역, 커밋입니다.
 >
-> And you're supposed to say, "Wait—the stage has *all* the files on it?
-> But I haven't added anything to it!"
+> 그러면 이렇게 말해야겠지요. "잠깐만요. 스테이징 영역에 *모든* 파일이
+> 있다고요? 저는 아무것도 추가하지 않았는데요!"
 >
-> Yes. I'm saying that when your working tree is clean that means that
-> the files in the `HEAD` commit, the files on the stage, and the files
-> in your working tree *are all the same*. And, yes, all the files exist
-> in all three places![^12db]
+> 맞습니다. 작업 트리가 깨끗하다는 것은 `HEAD` 커밋의 파일, 스테이징 영역의
+> 파일, 작업 트리의 파일이 *모두 같다*는 뜻입니다. 그리고 네, 모든 파일이
+> 세 곳 모두에 존재합니다![^12db]
 >
-> [^12db]: Who knows what it really does under the hood, but we're going
->     to use this as a mental model for how things work.
+> [^12db]: 내부에서 실제로 무엇을 하는지는 알 수 없지만, 작동 원리를 이해하는
+>     사고 모형으로 이렇게 생각하겠습니다.
 >
-> And `git status` won't show anything because there are no differences
-> between these three places. And `git status` shows the differences.
+> 이 세 곳 사이에 차이가 없으므로 `git status`에는 아무것도 표시되지
+> 않습니다. `git status`는 차이를 보여 주는 명령입니다.
 >
-> Let's say you modified a file in your working tree. In that case, `git
-> status` would show you a difference between your working tree and the
-> stage as a "modified file". But there would still be no difference
-> between the stage and the `HEAD` commit, so nothing would show as
-> "ready to commit".
+> 작업 트리의 파일을 수정했다고 합시다. 그러면 `git
+> status`는 작업 트리와
+> 스테이징 영역의 차이를 "수정된 파일"로 보여 줍니다. 하지만 스테이징 영역과
+> `HEAD` 커밋 사이에는 여전히 차이가 없으므로 "커밋 준비됨"으로 표시되는 것은
+> 없습니다.
 >
-> Then let's say you added the file to the stage. At this point, a copy
-> of the file from the working tree is placed on the stage. So now the
-> working tree and the stage are the same. And nothing shows as
-> "modified". But now, crucially, the stage differs from the `HEAD`
-> commit! So now `git status` shows that difference as "ready to
-> commit".
+> 그 파일을 스테이징 영역에 추가했다고 합시다. 작업 트리에 있던 파일의 복사본이
+> 스테이징 영역에 놓입니다. 이제 작업 트리와 스테이징 영역이 같으므로 "수정됨"으로
+> 표시되는 것은 없습니다. 하지만 중요한 점은 이제 스테이징 영역과 `HEAD`
+> 커밋이 다르다는 것입니다! 따라서 `git status`는 그 차이를 "커밋 준비됨"으로
+> 보여 줍니다.
 >
-> Finally, let's say that before you committed, you modified the file
-> again in the working tree. Now the file in the working tree is
-> different than the stage. **And** the file on the stage is different
-> than the `HEAD` commit! Now the file shows up as both "ready to
-> commit" and "modified".
+> 마지막으로 커밋하기 전에 작업 트리의 파일을 다시 수정했다고 합시다. 이제
+> 작업 트리의 파일은 스테이징 영역과 다릅니다. **그리고** 스테이징 영역의
+> 파일도 `HEAD` 커밋과 다릅니다! 이제 파일은 "커밋 준비됨"과 "수정됨" 양쪽에
+> 모두 나타납니다.
 >
-> The reason I want us to think about things this way is because it will
-> make this whole thing with `git reset` easier to digest. Sometimes a
-> reset will change the files in the working tree, sometimes on the
-> stage, and sometimes both.
+> 이렇게 생각해 보자는 이유는 `git reset`에 관한 이 모든 내용을 더 쉽게
+> 이해할 수 있기 때문입니다. 리셋은 때로 작업 트리의 파일을 바꾸고, 때로
+> 스테이징 영역의 파일을 바꾸며, 때로는 둘 다 바꿉니다.
 
-Note: in the following examples, I'm going to use the term "old commit"
-to refer to where the branch was *before* the reset, and "new commit" to
-refer to where it will be *after* the reset.
+참고: 다음 예에서는 리셋 *전* 브랜치가 있던 곳을 "이전 커밋", 리셋 *후*
+브랜치가 있게 될 곳을 "새 커밋"이라고 부르겠습니다.
 
-With all three variants, the current branch moves to the new (specified)
-commit.
+세 방식 모두 현재 브랜치를 지정한 새 커밋으로 옮깁니다.
 
-The summary of differences is:
+차이를 요약하면 다음과 같습니다.
 
-* **Soft**:
-  * Stage: old commit
-  * Working tree: old commit
-  * Result: All the old files will show on the stage as "ready to
-    commit".
+* **소프트**:
+  * 스테이징 영역: 이전 커밋
+  * 작업 트리: 이전 커밋
+  * 결과: 이전 파일이 모두 스테이징 영역에 "커밋 준비됨"으로 나타납니다.
 
-* **Mixed**:
-  * Stage: new commit
-  * Working tree: old commit
-  * Result: All the old files will show in the working tree as
-    "modified".
+* **믹스드**:
+  * 스테이징 영역: 새 커밋
+  * 작업 트리: 이전 커밋
+  * 결과: 이전 파일이 모두 작업 트리에 "수정됨"으로 나타납니다.
   
-* **Hard**:
-  * Stage: new commit
-  * Working tree: new commit
-  * Result: All the old files will be gone, and the working tree and
-    stage will be clean.
+* **하드**:
+  * 스테이징 영역: 새 커밋
+  * 작업 트리: 새 커밋
+  * 결과: 이전 파일이 모두 사라지고 작업 트리와 스테이징 영역이 깨끗해집니다.
 
-## Soft Reset
+## 소프트 리셋 {#soft-reset}
 
 [i[Reset-->Soft]<]
 
-When you run a `git reset --soft`, this resets the current branch to
-point to the given commit, and makes the stage and working tree both
-have the changes that were present in the old commit.
+`git reset --soft`를 실행하면 현재 브랜치가 지정한 커밋을 가리키도록 리셋되고,
+스테이징 영역과 작업 트리에는 모두 이전 커밋에 있던 변경 사항이 남습니다.
 
-The upshot is that `git status` will show your old commit's changes as
-staged, and none of the files as modified.
+그 결과 `git status`는 이전 커밋의 변경 사항을 스테이징된 것으로 보여 주며,
+수정된 것으로 표시되는 파일은 없습니다.
 
-In other words, you'll see the old state of your files on the stage
-ready to commit.
+다시 말해 이전 상태의 파일이 스테이징 영역에서 커밋할 준비가 된 채 보입니다.
 
-A common use for this might be to collapse some of your previous
-commits similar to what we did with [rebase and squashing
-commits](#squashing-commits).
+흔한 용도는 [리베이스와 커밋 스쿼시](#squashing-commits)에서 했던 것처럼
+이전 커밋 몇 개를 합치는 것입니다.
 
-Let's say we have commits like this (pretend the numbers are the commit
-hashes):
+다음과 같은 커밋이 있다고 합시다(숫자가 커밋 해시라고 생각하세요).
 
 ``` {.default}
 commit 555 (HEAD -> main)
@@ -157,36 +138,35 @@ commit 111
    Added
 ```
 
-That's a gnarly-looking commit history. It would be nice to rewrite it
-(*but if and only if you haven't pushed it yet!*).
+보기 흉한 커밋 이력입니다. 다시 쓰면 좋겠습니다(*단, 아직 푸시하지 않았을
+때만 가능합니다!*).
 
-We can do that with a soft reset back to commit `111`.
+커밋 `111`로 소프트 리셋하면 됩니다.
 
-If we do this soft reset:
+다음 소프트 리셋을 실행하면,
 
 ``` {.default}
 $ git reset --soft 111   # Again, pretend 111 is the commit hash
 ```
 
-We'll then be in this point with all the other commits gone...
+다른 커밋은 모두 사라지고 다음 상태가 됩니다…
 
 ``` {.default}
 commit 111 (HEAD -> main)
    Added
 ```
 
-**Except importantly** our files *as they existed in commit 555* will
-now be staged and ready to commit. That means with the soft reset the
-changes weren't lost, but effectively commits 222-555 are all squished
-together on the stage.
+**하지만 중요한 예외가 있습니다.** *커밋 555에 존재하던 상태의* 파일은 이제
+스테이징되어 커밋할 준비가 됩니다. 즉 소프트 리셋으로 변경 사항은 사라지지
+않았고, 사실상 커밋 222~555가 스테이징 영역에서 모두 하나로 합쳐졌습니다.
 
-So we commit them:
+따라서 이를 커밋합니다.
 
 ``` {.default}
 $ git commit -m "Implemented feature"
 ```
 
-And now we're here with a nice commit history:
+이제 깔끔한 커밋 이력을 얻었습니다.
  
 ``` {.default}
 commit 222 (HEAD -> main)
@@ -195,108 +175,102 @@ commit 111
    Added
 ```
 
-And now, finally we can push, happy that our changes are presentable to
-the general public.
+이제 마침내 변경 사항을 대중에게 내놓아도 괜찮은 모습으로 만들었다는 기쁜
+마음으로 푸시할 수 있습니다.
 
-> **Again, we've rewritten history here.** Don't do this if you've
-> already pushed those commits past the one you're resetting to.
+> **다시 말하지만 여기서 이력을 다시 썼습니다.** 리셋 대상 이후의 커밋을
+> 이미 푸시했다면 이렇게 하지 마세요.
 
 [i[Reset-->Soft]>]
 
-## Mixed Reset
+## 믹스드 리셋 {#mixed-reset}
 
 [i[Reset-->Mixed]<]
 
-Before we begin, the main use case of this reset was to unstage files.
-Now the more modern command is `git restore --staged`, and you should
-use that if all you want to do is unstage.
+시작하기 전에, 이 리셋의 주요 용도는 파일의 스테이징을 해제하는 것이었습니다.
+지금은 `git restore --staged`가 더 현대적인 명령이므로 스테이징 해제만
+하려는 경우에는 그 명령을 사용하세요.
 
-But let's still look at how this works!
+그래도 어떻게 작동하는지 살펴봅시다!
 
-When you run a `git reset --mixed`[^2472], this resets the current
-branch to point to the given commit, and it modifies the stage to that
-commit, and it **doesn't** change your working tree.
+`git reset --mixed`[^2472]를 실행하면 현재 브랜치가 지정한 커밋을 가리키도록
+리셋되고 스테이징 영역도 그 커밋에 맞게 바뀌지만, 작업 트리는 **바뀌지
+않습니다**.
 
-[^2472]: You can leave off the `--mixed` since it's the default.
+[^2472]: 기본 방식이므로 `--mixed`는 생략할 수 있습니다.
 
-The upshot is that it will show files as "modified" with the changes of
-the old commit, and there will be nothing on the stage.
+그 결과 이전 커밋의 변경 사항이 있는 파일은 "수정됨"으로 표시되고,
+스테이징 영역에는 아무것도 남지 않습니다.
 
-Now, thinking about this, since the branch has moved to a commit with
-your files in one state, but your working tree has the files in another
-state, the files must be _modified_ with respect to the commit the
-branch now points to.
+생각해 보면 브랜치는 파일이 한 상태인 커밋으로 옮겨 갔지만 작업 트리에는
+다른 상태의 파일이 있으므로, 현재 브랜치가 가리키는 커밋을 기준으로 파일은
+_수정된_ 상태일 수밖에 없습니다.
 
-And this is what happens. Your changes at the old commit will show up as
-modified files at the current commit.
+실제로 그렇게 됩니다. 이전 커밋에서의 변경 사항이 현재 커밋에서 수정된
+파일로 나타납니다.
 
-It's like the soft reset, except instead of the old commit ending up on
-the stage, it ends up in the working tree. You can stage it and commit
-it from here.
+소프트 리셋과 비슷하지만 이전 커밋의 내용이 스테이징 영역 대신 작업 트리에
+남습니다. 여기서 스테이징하고 커밋할 수 있습니다.
 
-But that's not all! Since the stage is also updated to the new commit,
-it means the stage is effectively "emptied".
+하지만 이것이 전부가 아닙니다! 스테이징 영역도 새 커밋에 맞게 업데이트되므로
+사실상 "비워집니다".
 
-Like I mentioned, this is the classic use for a mixed reset: `git reset
-HEAD`. This moves files from staged state back to modified state.
+앞에서 말했듯 믹스드 리셋의 전통적인 용도는 `git reset HEAD`입니다. 파일을
+스테이징된 상태에서 수정된 상태로 되돌립니다.
 
-This will reset the current branch to where it already was (assuming
-`HEAD` points to the current branch), and reset the stage to be the same
-as that commit. This unstages the files that were there. And it changes
-the working tree files to have the changes that were already present in
-those files at that point, which would be any changes you introduced.
+이 명령은 현재 브랜치를 이미 있던 위치로 리셋하고(`HEAD`가 현재 브랜치를
+가리킨다고 가정합니다), 스테이징 영역을 그 커밋과 같게 만듭니다. 그곳에 있던
+파일의 스테이징이 해제됩니다. 작업 트리 파일에는 그 시점에 이미 존재하던
+변경 사항, 즉 여러분이 만든 변경 사항이 남습니다.
 
-And that unstages the files!
+이렇게 파일의 스테이징이 해제됩니다!
 
-Another use might be if you want to squash a bunch of unpushed commits
-but simply don't want to stage the changes at the old commit yet,
-leaving them as modified.
+또 다른 용도는 푸시하지 않은 커밋 여러 개를 스쿼시하고 싶지만 이전 커밋의
+변경 사항을 아직 스테이징하지 않고 수정된 상태로 남겨 두려는 경우입니다.
 
 [i[Reset-->Mixed]>]
 
-## Hard Reset
+## 하드 리셋 {#hard-reset}
 
 [i[Reset-->Hard]<]
 
-This resets everything to a particular commit. The branch moves there.
-The stage is set to that commit. The files in the working tree are set
-to that commit. All changes since that commit are lost.
+모든 것을 특정 커밋으로 리셋합니다. 브랜치가 그곳으로 이동하고, 스테이징
+영역과 작업 트리의 파일도 그 커밋에 맞춰집니다. 그 커밋 이후의 모든 변경
+사항을 잃습니다.
 
-Use this if you want to bail out. You've made some commits and decided
-that was the wrong way, and you want to just roll them back entirely.
+작업을 포기하고 빠져나가려 할 때 사용합니다. 커밋 몇 개를 만들었지만 잘못된
+방향이었다고 판단하여 완전히 되돌리고 싶은 경우입니다.
 
-**Again, only do this if you haven't pushed!**
+**다시 말하지만 푸시하지 않았을 때만 이렇게 하세요!**
 
-If you do a hard reset, it will simply move the branch and reset your
-entire world (as it pertains to that branch) to that point as if nothing
-had happened since. `git status` will report that everything is clean.
+하드 리셋은 브랜치를 옮기고 그 브랜치와 관련된 여러분의 세계 전체를 해당
+시점 이후 아무 일도 없었던 것처럼 되돌립니다. `git status`는 모든 것이
+깨끗하다고 보고합니다.
 
 [i[Reset-->Hard]>]
 
-## Reset to a Divergent Branch
+## 갈라진 브랜치로 리셋하기 {#reset-to-a-divergent-branch}
 
 [i[Reset-->To divergent branch]<]
 
-In the above examples, we've been resetting to a direct ancestor of our
-current commit. This is the common case for using `git reset`.
+앞의 예에서는 현재 커밋의 직계 조상으로 리셋했습니다. `git reset`의 일반적인
+사용 사례입니다.
 
-But there's no reason why you couldn't reset to an entirely different
-divergent branch. It just moves the branch there with exactly the same
-rules for soft, mixed, and hard that we've already covered.
+하지만 완전히 다르게 갈라진 브랜치로 리셋하지 못할 이유는 없습니다. 이미
+다룬 소프트, 믹스드, 하드 규칙을 그대로 적용하여 브랜치를 그곳으로 옮길 뿐입니다.
 
 [i[Reset-->To divergent branch]>]
 
-## Resetting Files
+## 파일 리셋하기 {#resetting-files}
 
 [i[Reset-->Files]<]
 
-So far, we've been just doing resets on a commit-by-commit basis. But we
-could also do mixed resets with specific files. We can't do hard or soft
-resets with specific files, though—sorry!
+지금까지는 커밋 단위로만 리셋했습니다. 하지만 특정 파일에 믹스드 리셋을 할
+수도 있습니다. 특정 파일에는 하드나 소프트 리셋을 할 수 없습니다. 유감입니다!
 
-For example, we can do a mixed reset to unstage a single file.
+예를 들어 믹스드 리셋으로 파일 하나의 스테이징을 해제할 수 있습니다.
 
-Let's say we're here:
+다음 상태라고 합시다.
 
 ``` {.default}
 $ git status
@@ -307,13 +281,12 @@ $ git status
 	  modified:   foo.txt
 ```
 
-And we want to reset `foo.txt` off the stage, but leave `bar.txt` on
-there.
+`foo.txt`는 스테이징 영역에서 빼고 `bar.txt`는 그대로 두고 싶습니다.
 
-> **Again, we'd use `git restore --staged` in these modern times.** But
-> we're going to press on here for the sake of example.
+> **다시 말하지만 요즘이라면 `git restore --staged`를 사용합니다.** 하지만
+> 예를 위해 그대로 진행하겠습니다.
 
-So let's specify just that file:
+그 파일만 지정해 봅시다.
 
 ``` {.default}
 $ git reset foo.txt
@@ -333,77 +306,71 @@ $ git status
 	  modified:   foo.txt
 ```
 
-And there you have it.
+이것으로 됐습니다.
 
 [i[Reset-->Files]>]
 
-## Pushing Branch Changes to a Remote
+## 브랜치 변경 사항을 원격 저장소로 푸시하기 {#pushing-branch-changes-to-a-remote}
 
 [i[Reset-->Pushing to remote]<]
 
-Let's say you've made a mess of things somehow and you have to reset a
-branch that you've already pushed commits on. That is, you have to
-rewrite a public history.
+어쩌다 일을 엉망으로 만들어 이미 커밋을 푸시한 브랜치를 리셋해야 한다고
+합시다. 즉 공개 이력을 다시 써야 합니다.
 
-***First: get good communication with the team.*** They're going to make
-fun of you for sure, but at least they won't hate you[^d100].
+***먼저 팀과 원활히 소통하세요.*** 분명 여러분을 놀리기는 하겠지만, 적어도
+미워하지는 않을 것입니다[^d100].
 
-[^d100]: No guarantees. You shouldn't rewrite commit history that is
-    already public!! It makes a big mess!
+[^d100]: 보장할 수는 없습니다. 이미 공개된 커밋 이력은 다시 쓰지 말아야
+    합니다!! 크게 엉망이 됩니다!
 
-> ***Never do a forced push without completely understanding *why*
-> you're doing it.*** Git is trying to stop you from doing a push for a
-> reason: your own good! Everyone else who has cloned the repo will very
-> likely be impacted and they need to be informed. Everybody. We use it
-> here to demonstrate when it is necessary.
+> ***강제 푸시를 *왜* 하는지 완전히 이해하지 못한 채 실행하지 마세요.***
+> Git이 푸시를 막으려는 데에는 이유가 있습니다. 바로 여러분을 보호하기
+> 위해서입니다! 저장소를 클론한 다른 모든 사람이 영향을 받을 가능성이 매우
+> 크므로 이 사실을 알려야 합니다. 모두에게 말입니다. 여기서는 언제 필요한지
+> 보여 주려고 사용합니다.
 
-Our process will be something like this:
+우리가 따를 과정은 다음과 같습니다.
 
-1. Do the reset.
-2. Do a forced push to your remote. For your protection, Git won't push
-   in this circumstance. You have to override with a forced push.
+1. 리셋합니다.
+2. 원격 저장소로 강제 푸시합니다. Git은 여러분을 보호하려고 이 상황에서
+   푸시하지 않으므로 강제 푸시로 제한을 재정의해야 합니다.
 
-Your coworkers will do something like this:
+동료들은 다음과 같이 할 것입니다.
 
-1. [i[Fetch]]Do a `git fetch` to get the new branch position from the
-   remote.
-2. Stash or commit any local changes they need to preserve.
-3. Maybe make a new branch at the old branch point in case they need to
-   return to see old soon-to-be-obliterated commits.
-4. Do a reset of the branch in question to the remote branch commit. For
-   example, if we're resetting the `main` branch, you would
-   `git reset --hard origin/main`.
-5. Pop their changes from the stash, if any.
-6. Maybe apply earlier commits that got obliterated[^318a].
+1. [i[Fetch]]`git fetch`로 원격 저장소에서 새 브랜치 위치를 받습니다.
+2. 보존해야 할 로컬 변경 사항을 스태시하거나 커밋합니다.
+3. 곧 사라질 이전 커밋을 다시 살펴봐야 할 때를 대비해 이전 브랜치 위치에
+   새 브랜치를 만들 수도 있습니다.
+4. 해당 브랜치를 원격 브랜치 커밋으로 리셋합니다. 예를 들어 `main` 브랜치를
+   리셋한다면 `git reset --hard origin/main`을 실행합니다.
+5. 스태시한 변경 사항이 있다면 팝합니다.
+6. 사라진 이전 커밋을 다시 적용할 수도 있습니다[^318a].
 
-[^318a]: Perhaps using `git reflog` and `git cherry-pick` or `git
-    cherry-pick -n` and potentially `git add -p`, all of which are
-    covered in later chapters. Along with judicious use of rebase, old
-    commits or parts of old commits can be applied while keeping the
-    commit history clean.
+[^318a]: 뒤의 장에서 다루는 `git reflog`, `git cherry-pick` 또는 `git
+    cherry-pick -n`, 필요하다면 `git add -p`를 사용할 수 있습니다. 리베이스도
+    신중하게 함께 사용하면 커밋 이력을 깔끔하게 유지하면서 이전 커밋이나 그
+    일부를 적용할 수 있습니다.
 
-Note that your coworkers don't necessarily need to do a hard reset; they
-could do a mixed reset, for instance.
+동료들이 반드시 하드 리셋을 해야 하는 것은 아닙니다. 예를 들어 믹스드 리셋을
+할 수도 있습니다.
 
 [i[Reset-->Pushing to remote]>]
 
-### Forcing the Push
+### 강제로 푸시하기 {#forcing-the-push}
 
 [i[Push-->Forced]<]
 
-We have basically two options to use with `git push` here:
+여기서 `git push`와 함께 사용할 수 있는 옵션은 기본적으로 두 가지입니다.
 
-1. `--force`: Just push the new branch position, [flw[damn the
-   torpedoes|Battle_of_Mobile_Bay#"Damn_the_torpedoes"]].
-2. `--force-with-lease`: Only force push if the remote branch's position
-   is what we expect. In other words, **don't** force push if someone
-   else has pushed a new commit in the meantime. This is a good safety measure
-   because no one should have pushed a new commit in the meantime since
-   you've been in communication with your team about this. ***Right?***
+1. `--force`: [flw[어뢰 따위는 신경 쓰지 말고|Battle_of_Mobile_Bay#"Damn_the_torpedoes"]]
+   새 브랜치 위치를 그대로 푸시합니다.
+2. `--force-with-lease`: 원격 브랜치 위치가 예상한 곳일 때만 강제 푸시합니다.
+   다시 말해 그사이에 다른 사람이 새 커밋을 푸시했다면 강제 푸시하지
+   **않습니다**. 이 일에 관해 팀과 계속 소통했으니 그사이에 새 커밋을 푸시한
+   사람은 없어야 합니다. 따라서 좋은 안전장치입니다. ***그렇지요?***
 
-If you try to `--force-with-lease` and someone else has pushed another
-commit to this branch in the meantime, you'll be presented with an
-error:
+`--force-with-lease`를 시도했는데 그사이에 다른 사람이 이 브랜치에 커밋을
+푸시했다면 오류가 나타납니다.
 
 ``` {.default}
 $ git push --force-with-lease
@@ -412,32 +379,29 @@ $ git push --force-with-lease
   error: failed to push some refs to 'git@github.com:user/repo.git'
 ```
 
-If that happens, you'll have to talk to your team to get them to stop,
-and then pull the changes, make sure everyone is on board with the new
-reset, and then start again.
+그런 일이 생기면 팀과 이야기하여 푸시를 멈추게 하고, 변경 사항을 풀한 뒤,
+모두가 새 리셋에 동의했는지 확인하고 다시 시작해야 합니다.
 
-We'll use `--force-with-lease` in our examples.
+예에서는 `--force-with-lease`를 사용하겠습니다.
 
-### Example: Rewrite Public History
+### 예: 공개 이력 다시 쓰기 {#example-rewrite-public-history}
 
-First, let's play the part of the person who is rewriting the public
-history.
+먼저 공개 이력을 다시 쓰는 사람 역할을 해 봅시다.
 
-***The very first thing I'm going to do is coordinate with the team.***
-If you're already past this point, do it **right now**.
+***가장 먼저 팀과 조율하겠습니다.*** 이 단계를 이미 지나쳤다면 **지금 즉시**
+조율하세요.
 
-Then we'll start the rewrite. We'll be on the `main` branch for this
-demo. Let's reset to an earlier commit, and we'll assume that these
-commits we're resetting past are already public and other team members
-already have them.
+그런 다음 다시 쓰기를 시작합니다. 이 시연에서는 `main` 브랜치에 있겠습니다.
+이전 커밋으로 리셋하되, 건너뛰는 커밋은 이미 공개되었고 다른 팀원들이 가지고
+있다고 가정합니다.
 
 ``` {.default}
 $ git reset --hard 4849e6
   HEAD is now at 4849e65 added line 3
 ```
 
-So far no harm, but now we're going to push this history change to our
-origin. And we'll use `--force-with-lease` for safety.
+아직 피해는 없지만 이제 이 이력 변경을 origin에 푸시하겠습니다. 안전을 위해
+`--force-with-lease`를 사용합니다.
 
 ``` {.default}
 $ git push --force-with-lease
@@ -445,41 +409,38 @@ $ git push --force-with-lease
    + a2b7ac3...ce44516 main -> main (forced update)
 ```
 
-Now we've publicly rewritten history. Tell the team, which you've been
-in contact with this entire time, that you've done so. And they can
-begin to fix up their clones with much grumbling.
+이제 공개 이력을 다시 썼습니다. 그동안 계속 연락해 온 팀에 작업을 마쳤다고
+알리세요. 그러면 팀원들은 잔뜩 투덜거리며 자신의 클론을 고치기 시작할 수
+있습니다.
 
-### Example: Receiving Rewritten History
+### 예: 다시 쓴 이력 받기 {#example-receiving-rewritten-history}
 
-You've just received word from your coworker that public history on the
-`main` branch has been rewritten and pushed to the remote, which we'll
-assume is `origin` for this example.
+동료에게서 `main` 브랜치의 공개 이력을 다시 써서 원격 저장소에 푸시했다는
+연락을 막 받았습니다. 이 예에서 원격 저장소는 `origin`이라고 가정합니다.
 
-First thing we should do is make sure we're all backed up in whatever
-manner we need.
+가장 먼저 필요한 방식으로 모든 것을 백업했는지 확인해야 합니다.
 
-Perhaps a commit of the latest stuff:
+최신 내용을 커밋할 수도 있습니다.
 
 ``` {.default}
 $ git add [all files]
 $ git commit -m "last commit before public reset"
 ```
 
-Or a stash if we're not ready to commit:
+아직 커밋할 준비가 되지 않았다면 스태시할 수도 있습니다.
 
 ``` {.default}
 $ git stash
 ```
 
-And perhaps make a new branch right here so we can revisit the old state
-of affairs for reference if we have to:
+필요할 때 참고용으로 이전 상태를 다시 볼 수 있도록 현재 위치에 새 브랜치를
+만들 수도 있습니다.
 
 ``` {.default}
 $ git branch oldmain
 ```
 
-And now it's time for action. [i[Fetch]] We need to fetch the new branch
-information.
+이제 행동할 때입니다. [i[Fetch]] 새 브랜치 정보를 페치해야 합니다.
 
 ``` {.default}
 $ git fetch origin
@@ -487,47 +448,42 @@ $ git fetch origin
    + e7b133a...521a873 main       -> origin/main  (forced update)
 ```
 
-We just fetched, so our clone doesn't look different to us yet. But
-let's put an end to that and get on the same page as `origin`. This
-involves resetting our local `main` to be the same as it is on the
-remote tracking branch `origin/main`. (Remember the latter has been
-force pushed to a different commit, and we want our `main` to point to
-that commit, as well.)
+방금 페치했으므로 클론은 아직 달라 보이지 않습니다. 이제 `origin`과 같은
+상태로 맞춥시다. 로컬 `main`을 원격 추적 브랜치 `origin/main`과 같아지도록
+리셋해야 합니다. (origin/main은 다른 커밋으로 강제 푸시되었고, 로컬
+`main`도 그 커밋을 가리키게 하려는 것임을 기억하세요.)
 
-Assuming we're on branch `main` right now:
+현재 `main` 브랜치에 있다고 가정합니다.
 
 ``` {.default}
 $ git reset --hard origin/main
 ```
 
-And now we're on the same page as `origin`.
+이제 `origin`과 같은 상태입니다.
 
-If we had stashed things, let's try to get them back, resolving any
-conflicts as per usual:
+스태시한 것이 있다면 평소처럼 충돌을 해결하면서 되찾아 봅시다.
 
 ``` {.default}
 $ git stash pop
 ```
 
-And if you want to refer to any old commits and you set up the `oldmain`
-branch as above, you can `git switch oldmain` to examine them, and maybe
-use something like `git cherry-pick` to bring in any functionality you
-need.
+이전 커밋을 참고하려고 위처럼 `oldmain` 브랜치를 만들어 두었다면 `git switch
+oldmain`으로 전환해 살펴보고, `git cherry-pick` 같은 명령으로 필요한 기능을
+가져올 수 있습니다.
 
 [i[Push-->Forced]>]
 
-## Resetting Without Moving `HEAD`
+## `HEAD`를 옮기지 않고 리셋하기 {#resetting-without-moving-head}
 
 [i[Branch-->Moving]<]
 
-Using the reset feature moves the `HEAD` around by necessity. What if
-you just want to move a branch to another commit but leave `HEAD` alone?
+리셋 기능을 사용하면 반드시 `HEAD`도 움직입니다. 브랜치만 다른 커밋으로
+옮기고 `HEAD`는 그대로 두고 싶다면 어떻게 할까요?
 
-It can be done! But you can't do it with a branch you have checked out
-right now. So either detach the head or attach it to a different branch.
+가능합니다! 하지만 현재 체크아웃한 브랜치에는 할 수 없습니다. 따라서 HEAD를
+분리하거나 다른 브랜치에 붙여야 합니다.
 
-Instead of using `git reset` to do this, we'll use `git branch`. Here's
-an example:
+여기서는 `git reset` 대신 `git branch`를 사용합니다. 다음은 예입니다.
 
 ``` {.default}
 $ git switch topic1
@@ -549,27 +505,25 @@ $ git log
       fix a third typo
 ```
 
-See what happened to `main`? It moved to the current commit! You can see
-it in the output for the second `git log`.
+`main`에 무슨 일이 일어났는지 보이나요? 현재 커밋으로 이동했습니다! 두 번째
+`git log` 출력에서 확인할 수 있습니다.
 
-You could also specify a destination for `main` as a second argument if
-you wanted it to move somewhere other than your current location.
+`main`을 현재 위치가 아닌 다른 곳으로 옮기려면 두 번째 인수로 목적지를
+지정할 수도 있습니다.
 
 [i[Branch-->Moving]>]
 
-## Resetting to Remove Credentials
+## 자격 증명을 제거하도록 리셋하기 {#resetting-to-remove-credentials}
 
-Did you accidentally commit some secret password into your repo? Can you
-use `git reset` to back out of that commit?
+실수로 비밀번호 같은 비밀 정보를 저장소에 커밋했나요? `git reset`으로 그
+커밋에서 빠져나올 수 있을까요?
 
-* Have you pushed? Then **NO**. Your password is out in the wild. Change
-  it now and never make that mistake again.
-* Have you *not yet* pushed? **Yes**. You can do it. But keep in mind
-  the commit containing the password will remain in your local repo
-  until it is garbage collected.
+* 푸시했나요? 그렇다면 **안 됩니다**. 비밀번호가 세상에 공개되었습니다. 지금
+  바로 바꾸고 다시는 같은 실수를 하지 마세요.
+* *아직* 푸시하지 않았나요? **가능합니다.** 하지만 비밀번호가 든 커밋은
+  가비지 컬렉션으로 정리될 때까지 로컬 저장소에 남는다는 점을 기억하세요.
 
-If the answer was yes, you might find `git reset -p` useful to
-selectively reset parts of commits, something we'll cover in a later
-chapter.
+가능한 경우라면 커밋의 일부를 선택적으로 리셋하는 `git reset -p`가 유용할
+수 있습니다. 뒤의 장에서 다루겠습니다.
 
 [i[Reset]>]

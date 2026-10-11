@@ -1,150 +1,130 @@
-# Rebasing: Moving Commits {#rebase}
+# 리베이스: 커밋 옮기기 {#rebase}
 
 [i[Rebase]<]
 
-I'm going to start with the Number One Rule of Rebasing: ***never rebase
-anything that you have pushed***. That is, only rebase local changes
-that no one else has seen. You can push them after the rebase.
+리베이스의 제1원칙부터 시작하겠습니다. ***푸시한 것은 절대 리베이스하지
+마세요.*** 즉, 아무도 보지 않은 로컬 변경 사항만 리베이스하세요. 리베이스한
+뒤에는 푸시해도 됩니다.
 
-This is more of a guideline than a rule in that you can rebase things
-you've pushed *if you understand the consequences*. It's typically not a
-great situation, though, so you'll want to generally avoid it.
+*그 결과를 이해한다면* 푸시한 것도 리베이스할 수 있으므로 법칙보다는 지침에
+가깝습니다. 하지만 대개 좋은 상황은 아니므로 일반적으로 피해야 합니다.
 
-The reason is that rebasing *rewrites history*. And that makes your
-history get out of sync with the history of other devs who have cloned
-the repo with the old history, and it makes syncing up quite
-challenging.
+리베이스는 *이력을 다시 쓰기* 때문입니다. 그러면 이전 이력이 있는 저장소를
+클론한 다른 개발자의 이력과 어긋나고, 다시 동기화하기가 상당히 어려워집니다.
 
-There are other commands in Git that also rewrite history. And the
-general rule is *never rewrite history on anything that's already been
-pushed*. Unless you really know what you're doing.
+Git에는 이력을 다시 쓰는 다른 명령도 있습니다. 일반 원칙은 *이미 푸시한
+것의 이력은 절대 다시 쓰지 않는다*입니다. 정말로 무엇을 하는지 아는 경우는
+예외입니다.
 
-## Contrasted to Merging
+## 병합과 비교하기 {#contrasted-to-merging}
 
 [i[Rebase-->Compared to merging]<]
 [i[Merge-->Compared to rebasing]<]
 
-But before we go run off in high spirits talking about rebasing, let's
-do a quick merge refresher. Here's a variation of an earlier example
-where we have two divergent branches, Figure_#.1. Let's say you're
-working on the `topic` branch.
+신나게 리베이스 이야기를 시작하기 전에 병합을 짧게 복습해 봅시다. 그림_#.1은
+앞서 본 예를 조금 바꾼 것으로, 갈라진 브랜치 두 개가 있습니다. 여러분이
+`topic` 브랜치에서 작업한다고 합시다.
 
-![Two divergent branches.](img_110_010.pdf "Two divergent branches.")
+![갈라진 브랜치 두 개.](img_110_010.pdf "Two divergent branches.")
 
-Then you hear that someone has made a change to `main` and you want to
-roll those changes into your `topic` branch, but not necessarily get
-your changes in `main` yet.
+누군가 `main`을 변경했다는 말을 들었고, 여러분의 변경 사항을 아직 `main`에
+넣지는 않으면서 그 변경 사항을 `topic` 브랜치에 반영하고 싶습니다.
 
-At this point, if we wanted to get the changes in `main` into `topic`,
-our merge option was to make another commit, the *merge commit*. The
-merge commit contains the changes from two parent commits (in this case
-the commit labeled `(2)` and the one labeled `(4)` are the parents) and
-makes them into a new commit, marked `(5)` in Figure_#.2.
+이때 `main`의 변경 사항을 `topic`에 넣는 병합 방식은 *병합 커밋*이라는 새
+커밋을 만드는 것이었습니다. 병합 커밋은 부모 커밋 두 개(여기서는 `(2)`와
+`(4)`)의 변경 사항을 담아 그림_#.2의 `(5)`로 표시된 새 커밋을 만듭니다.
 
-![Two divergent branches, merged.](img_110_020.pdf "Two divergent branches, merged.")
+![갈라진 브랜치 두 개를 병합한 모습.](img_110_020.pdf "Two divergent branches, merged.")
 
-If we look at our log at that point, we can see the changes from all the
-other commits in the graph from the `topic` branch.
+이 시점의 로그를 보면 `topic` 브랜치에서 그래프의 다른 모든 커밋에 담긴
+변경 사항을 볼 수 있습니다.
 
-And we're good at this point. That worked, and it did what we wanted.
-Merging is a completely acceptable solution to this problem.
+이것으로 충분합니다. 제대로 작동했고 원하는 일을 했습니다. 병합은 이 문제에
+완전히 타당한 해결책입니다.
 
-But there are a couple drawbacks to doing the merge. See, we really just
-wanted to get the latest stuff from `main` into our branch so we could
-use it, but we didn't really want to commit anything. But here we've
-made a new commit for everyone to see.
+하지만 병합에는 몇 가지 단점이 있습니다. 사실 `main`의 최신 내용을 우리
+브랜치에서 사용하고 싶었을 뿐, 무언가를 커밋하고 싶지는 않았습니다. 그런데
+모두에게 보이는 새 커밋을 만들었습니다.
 
-Not only that, but now the commit graph forms a loop, so the history is
-a little more convoluted than perhaps we'd like it.
+게다가 커밋 그래프가 고리를 이루어 이력이 원하는 것보다 조금 더 복잡해졌습니다.
 
-What really would have been nice is if I could just have taken commits
-`(3)` and `(4)` from `topic` and just somehow applied those changes to
-`(2)` on `main`. That is, could we pretend that instead of branching off
-`(1)` like `topic` did, that we instead branched off `(2)`?
+정말 좋았을 방법은 `topic`의 커밋 `(3)`과 `(4)`를 가져와 그 변경 사항을
+`main`의 `(2)`에 적용하는 것입니다. 즉 `topic`이 `(1)`에서 갈라진 대신
+`(2)`에서 갈라진 척할 수 있을까요?
 
-After all, if we branched off `(2)`, then we'd have those changes from
-`main` that we wanted.
+`(2)`에서 갈라졌다면 원했던 `main`의 변경 사항을 갖게 됩니다.
 
-What we need is a way to somehow rewind our commits back to the branch
-point at `(1)`, and then reapply them on commit `(2)`. That is, the base
-of our `topic` branch, which was commit `(1)`, needs to be changed to
-another base at commit `(2)`. We want to ***rebase*** it to commit
-`(2)`!
+필요한 것은 커밋을 분기점 `(1)`까지 되감은 뒤 커밋 `(2)` 위에 다시 적용하는
+방법입니다. 즉 커밋 `(1)`이던 `topic` 브랜치의 기반을 커밋 `(2)`라는 다른
+기반으로 바꿔야 합니다. 커밋 `(2)`로 ***리베이스***하려는 것입니다!
 
 [i[Rebase-->Compared to merging]>]
 [i[Merge-->Compared to rebasing]>]
 
-## How it Works
+## 작동 원리 {#how-it-works}
 
-So let's do exactly that. Let's take the changes we made in commit `(3)`
-and apply them to `main` at commit `(2)`. This will make a brand new
-commit that includes changes from both commit `(2)` and commit `(3)`.
-(Importantly, this commit didn't exist before; there was no commit that
-contained changes from `(2)` and `(3)`.) We'll call this new commit
-`(3')` ("three prime"), since it has the changes that we made in `(3)`.
+바로 그렇게 해 봅시다. 커밋 `(3)`에서 만든 변경 사항을 가져와 `main`의
+커밋 `(2)`에 적용합니다. 그러면 커밋 `(2)`와 `(3)`의 변경 사항을 모두 담은
+완전히 새로운 커밋이 생깁니다. (중요하게도 이 커밋은 전에는 존재하지
+않았습니다. `(2)`와 `(3)`의 변경 사항을 함께 담은 커밋은 없었습니다.)
+`(3)`에서 만든 변경 사항을 담았으므로 새 커밋을 `(3')`("3 프라임")이라고
+부르겠습니다.
 
-After that, we'll do the same thing with commit `(4)`. We'll apply the
-changes from old commit `(4)` to `(3')`, making a new commit `(4')`.
+그런 다음 커밋 `(4)`에도 같은 작업을 합니다. 이전 커밋 `(4)`의 변경 사항을
+`(3')`에 적용하여 새 커밋 `(4')`을 만듭니다.
 
-And if we do that, we end up with Figure_#.3.
+그러면 그림_#.3과 같은 결과를 얻습니다.
 
-![`topic` branch rebased on `main`.](img_110_030.pdf "topic branch rebased on main")
+![`main` 위로 리베이스한 `topic` 브랜치.](img_110_030.pdf "topic branch rebased on main")
 
-And there you see `(3')` and `(4')` now rebased onto `main`! And now the
-`topic` branch includes commit `(2)` from the `main` branch!
+이제 `(3')`과 `(4')`이 `main` 위로 리베이스된 모습이 보입니다! 그리고
+`topic` 브랜치에는 이제 `main` 브랜치의 커밋 `(2)`가 들어 있습니다!
 
-Again, these two commits have the same changes that you originally had
-in commits `(3)` and `(4)`, but now they've been applied to `main` at
-commit `(2)`. So the code is necessarily different since it now contains
-the changes from `main`. This means your old commits `(3)` and `(4)` are
-effectively gone, and the rebase has replaced them with two new commits
-that contain the same changes, just on a different base point.
+다시 말하면 두 커밋에는 원래 커밋 `(3)`과 `(4)`에 있던 것과 같은 변경 사항이
+있지만, 이제 `main`의 커밋 `(2)`에 적용되었습니다. 이제 `main`의 변경 사항도
+포함하므로 코드는 필연적으로 달라집니다. 즉 이전 커밋 `(3)`과 `(4)`는 사실상
+사라졌고, 리베이스가 같은 변경 사항을 다른 기반점에 담은 새 커밋 두 개로
+대체했습니다.
 
-> **We just changed history.** When we mentioned rewriting history at
-> the top of this chapter, this is what we were talking about. Imagine
-> some other dev had your old commits `(3)` and `(4)` and was working
-> off those making their own new commits. And then you rebased
-> effectively destroying commits `(3)` and `(4)`. Now your commit
-> history is different than the other dev's and all kinds of *Fun*™ will
-> be had trying to sort it out.
+> **방금 이력을 바꿨습니다.** 이 장 첫머리에서 이력을 다시 쓴다고 한 것이
+> 바로 이것입니다. 다른 개발자가 이전 커밋 `(3)`과 `(4)`를 가지고 그 위에서
+> 자신의 새 커밋을 만들고 있다고 상상해 보세요. 그런데 여러분이 리베이스하여
+> 커밋 `(3)`과 `(4)`를 사실상 없애 버렸습니다. 이제 두 사람의 커밋 이력이
+> 서로 다르므로 이를 정리하며 온갖 *재미*™를 맛보게 됩니다.
 >
-> If you only rebase commits that you haven't pushed, you'll never get
-> into trouble. But if some other dev has a copy of your commits
-> (because you've already pushed them and they pulled them), don't
-> rebase those commits!
+> 푸시하지 않은 커밋만 리베이스하면 문제가 생기지 않습니다. 하지만 다른
+> 개발자가 여러분의 커밋을 가지고 있다면(이미 푸시했고 그들이 풀했기
+> 때문이라면) 그 커밋을 리베이스하지 마세요!
 
-## When Should I Do This?
+## 언제 해야 할까요? {#when-should-i-do-this}
 
 [i[Rebase-->When to use]]
-There's no fixed rule about this. Sometimes a shop will have one, saying
-that everyone should rebase all the time so that the commit history has
-a cleaner look (no merge commits, no loops).
+정해진 규칙은 없습니다. 어떤 조직에는 모든 사람이 항상 리베이스하여 커밋
+이력을 더 깔끔하게(병합 커밋과 고리 없이) 유지한다는 규칙이 있습니다.
 
-Other shops will say to merge all the time so that the complete history
-is preserved.
+다른 조직에서는 완전한 이력을 보존하도록 늘 병합하라고 합니다.
 
-## Pulling and Rebasing
+## 풀과 리베이스 {#pulling-and-rebasing}
 
 [i[Rebase-->And pulling]<]
 
-If you might recall from way back when, doing a pull is actually a
-couple operations: [i[Fetch]] *fetch* and *merge*.
+예전에 배운 내용을 기억한다면, 풀은 사실 [i[Fetch]] *페치*와 *병합*이라는
+두 작업으로 이루어집니다.
 
-The fetch downloads all the new data from the remote, but doesn't
-actually merge anything into your branches or working tree. So you won't
-see any local changes after a fetch.
+페치는 원격 저장소의 새 데이터를 모두 내려받지만 브랜치나 작업 트리에
+아무것도 실제로 병합하지 않습니다. 따라서 페치 뒤에는 로컬 변경 사항이
+보이지 않습니다.
 
-But the pull follows it up with a standard merge so that you see the
-remote tracking branch's changes in your local branch.
+하지만 풀은 뒤이어 일반 병합을 수행하므로 원격 추적 브랜치의 변경 사항이
+로컬 브랜치에 나타납니다.
 
-So, assuming you have everything set up and you're on your `main`
-branch, when you do this:
+모든 설정을 마치고 `main` 브랜치에 있다고 가정할 때 다음 명령을 실행하면,
 
 ``` {.default}
 $ git pull
 ```
 
-Git actually does something like this:
+Git은 실제로 다음과 비슷한 작업을 합니다.
 
 [i[Fetch]]
 
@@ -153,21 +133,19 @@ git fetch                # Get all the information from origin
 git merge origin/main    # Merge origin/main into main
 ```
 
-(Recall that `origin/main` is your remote-tracking branch—it's the
-version of `main` that's on `origin`, not the `main` on your local
-machine.)
+(`origin/main`은 원격 추적 브랜치라는 점을 기억하세요. 로컬 컴퓨터의
+`main`이 아니라 `origin`에 있는 `main` 버전입니다.)
 
-But merging isn't the only thing you can do there. Given that this is
-the chapter on rebasing, you might correctly suspect that we can make it
-do a rebase instead.
+하지만 여기서 병합만 할 수 있는 것은 아닙니다. 리베이스를 다루는 장인 만큼,
+대신 리베이스를 하게 만들 수 있다고 짐작했을 텐데 맞습니다.
 
-And here's how:
+방법은 다음과 같습니다.
 
 ``` {.default}
 $ git pull --rebase
 ```
 
-That causes these two things to happen:
+그러면 다음 두 작업이 일어납니다.
 
 [i[Fetch]]
 
@@ -176,21 +154,20 @@ git fetch                # Get all the information from origin
 git rebase origin/main   # Rebase main into origin/main
 ```
 
-If you want that to be the default behavior for the current repo, you
-can run this one-time command:
+현재 저장소에서 이를 기본 동작으로 삼으려면 다음 명령을 한 번 실행합니다.
 
 ``` {.default}
 $ git config pull.rebase true
 ```
 
-If you want it to be the default behavior for all repos, you can:
+모든 저장소의 기본 동작으로 삼으려면 다음과 같이 합니다.
 
 ``` {.default}
 $ git config --global pull.rebase true
 ```
 
-If you've configured your repo to always rebase on a pull, you can
-override that to force a merge (if you want) with:
+풀할 때 항상 리베이스하도록 저장소를 설정했더라도 다음 명령으로 설정을
+재정의하여 병합을 강제할 수 있습니다(원한다면 말입니다).
 
 ``` {.default}
 $ git pull --no-rebase  # Do a merge instead of a rebase
@@ -198,50 +175,45 @@ $ git pull --no-rebase  # Do a merge instead of a rebase
 
 [i[Rebase-->And pulling]>]
 
-## Conflicts {#rebasing-conflicts}
+## 충돌 {#rebasing-conflicts}
 
 [i[Rebase-->Conflicts]<]
 
-When you do a merge, there's a chance that you might conflict with some
-of the changes in the other branch, and you have to resolve those, as
-we've seen.
+병합할 때는 다른 브랜치의 변경 사항과 충돌할 가능성이 있으며, 앞에서 본
+것처럼 이를 해결해야 합니다.
 
-Can the same thing happen with a rebase?
+리베이스에서도 같은 일이 생길 수 있을까요?
 
-Of course! If the commit you're trying to rebase onto conflicts with
-your commit, you'll have the same trouble you'd have with a merge.
+물론입니다! 리베이스하려는 대상 커밋이 여러분의 커밋과 충돌하면 병합할 때와
+같은 문제를 겪습니다.
 
-Luckily, Git will let you resolve the conflict in a way similar to the
-merge.
+다행히 Git에서는 병합과 비슷한 방법으로 충돌을 해결할 수 있습니다.
 
-Let's start with a simple example. I'm going to have a text file that
-contains the following:
+간단한 예로 시작합시다. 다음 내용을 담은 텍스트 파일이 있습니다.
 
 ``` {.default}
 The magic number is 1.
 ```
 
-We'll have that in a commit on the `main` branch.
+이를 `main` 브랜치의 커밋에 넣습니다.
 
-Then we'll make a new `topic` branch there.
+그 위치에서 새 `topic` 브랜치를 만듭니다.
 
-Then on the `main` branch we'll change the number to `2` and commit.
+그런 다음 `main` 브랜치에서 숫자를 `2`로 바꾸고 커밋합니다.
 
-And on the `topic` branch we'll change the number to `3` and commit.
+`topic` 브랜치에서는 숫자를 `3`으로 바꾸고 커밋합니다.
 
-So we'll have the scenario in Figure_#.4.
+그러면 그림_#.4와 같은 상황이 됩니다.
 
-![Branches ready for conflict.](img_110_040.pdf "Branches ready for conflict")
+![충돌할 준비가 된 브랜치.](img_110_040.pdf "Branches ready for conflict")
 
-Finally, we'll try to rebase `topic` onto `main`.
+마지막으로 `topic`을 `main` 위로 리베이스해 봅니다.
 
-At that point, Git will become confused. It knows the last commit on
-`main` has `2` and that `topic` is unaware of this (because it branched
-off before that change). And it knows the last commit on `topic` has
-`3`. So which one is right?
+이때 Git은 혼란에 빠집니다. `main`의 마지막 커밋에는 `2`가 있고, `topic`은
+그 변경 전에 갈라졌으므로 이를 모른다는 사실을 압니다. 또 `topic`의 마지막
+커밋에는 `3`이 있다는 것도 압니다. 어느 쪽이 맞을까요?
 
-Let's try to rebase while we're on the `topic` branch and see what
-happens.
+`topic` 브랜치에서 리베이스를 시도하여 무슨 일이 일어나는지 봅시다.
 
 ``` {.default}
 $ git rebase main
@@ -259,29 +231,27 @@ $ git rebase main
   Could not apply 9f19221... Update to 3
 ```
 
-Whoa, Nelly. OK, so it can't do that. It says we need to "Resolve all
-conflicts manually", and then add them, and then we'll run rebase again
-with the `--continue` flag to continue the rebase.
+워워. 좋습니다. 자동으로는 할 수 없군요. "모든 충돌을 수동으로 해결"한 뒤
+추가하고, `--continue` 플래그를 붙여 리베이스를 다시 실행해 계속하라고 합니다.
 
-> **If you keep reading the hints**, you'll see there is some more stuff in
-> there. We'll get to `--skip` later, but do note that if the conflict
-> is more than you want to take on right now, you can just run:
+> **힌트를 계속 읽으면** 내용이 더 있습니다. `--skip`은 뒤에서 다루겠지만,
+> 지금 당장 감당하기 어려운 충돌이라면 다음 명령을 실행할 수 있다는 점을
+> 기억하세요.
 >
 > ``` {.default}
 > $ git rebase --abort
 > ```
 >
 > <!-- ` -->
-> to pretend you never started it in the first place.
+> 그러면 애초에 시작하지 않았던 것처럼 돌아갑니다.
 
-This might sound a little familiar. It's basically the same process as
-we went through with the merge conflict.
+조금 익숙하게 들릴 수 있습니다. 기본적으로 병합 충돌 때 거친 것과 같은 과정입니다.
 
-1. Edit the conflicting file and make it *Right*.
-2. Add it.
-3. Continue the rebase.
+1. 충돌 파일을 편집하여 *올바르게* 만듭니다.
+2. 추가합니다.
+3. 리베이스를 계속합니다.
 
-Let's do that. If I pop open that file `magic.txt` in my editor, I see:
+해 봅시다. 편집기에서 `magic.txt` 파일을 열면 다음 내용이 보입니다.
 
 ``` {.default .numberLines}
 <<<<<<< HEAD
@@ -291,19 +261,18 @@ The magic number is 3
 >>>>>>> 9f19221 (Update to 3)
 ```
 
-That's just like in a merge conflict—Git is showing us the two choices
-we have for this line. So we'll consult with the team and come to an
-agreement on what should be in the file, and we delete everything that
-shouldn't be there and we make it *Right*.
+병합 충돌 때와 똑같이 Git이 이 줄에 대한 두 선택지를 보여 줍니다. 팀과
+상의하여 파일에 무엇을 넣을지 합의하고, 있어서는 안 될 내용을 모두 지워
+*올바르게* 만듭니다.
 
 ``` {.default}
 The magic number is 3
 ```
 
-And I save that.
+그리고 저장합니다.
 
-Now, what were we supposed to do at this point, again? If you've
-forgotten, it's fine. Just run `git status` to see where we're at.
+이제 이 시점에 무엇을 하기로 했더라요? 잊었어도 괜찮습니다. `git status`를
+실행하여 현재 상태를 확인하세요.
 
 ``` {.default}
 $ git status
@@ -324,7 +293,7 @@ $ git status
   no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-Oh yeah! `--continue`, right?
+아, 맞다! `--continue`였지요?
 
 ``` {.default}
 $ git rebase --continue
@@ -333,8 +302,8 @@ $ git rebase --continue
   mark them as resolved using git add
 ```
 
-What? Oh, we should have read more of the status message. It says to use
-`git add` to mark resolution of the file `magic.txt`. Let's do that.
+뭐라고요? 아, 상태 메시지를 더 읽었어야 했습니다. `git add`를 사용하여
+`magic.txt` 파일이 해결되었다고 표시하라고 합니다. 그렇게 해 봅시다.
 
 ``` {.default}
 $ git add magic.txt
@@ -351,24 +320,21 @@ $ git status
 	  modified:   magic.txt
 ```
 
-That status looks nicer. (But note that Git's in a special "rebase"
-state similar to how it gets into a special "merge" state when merging.
-We have to either abort or continue before we can use Git normally
-again.)
+상태가 더 보기 좋아졌습니다. (다만 병합할 때 특별한 "merge" 상태에 들어가는
+것과 마찬가지로 Git이 특별한 "rebase" 상태에 있다는 점에 주목하세요. 다시
+정상적으로 Git을 사용하려면 중단하거나 계속해야 합니다.)
 
-Now `--continue`.
+이제 `--continue`입니다.
 
 ``` {.default}
 $ git rebase --continue
 ```
 
-This pops me into my editor to edit the commit message. This is your
-opportunity to change the commit message if it no longer reflects the
-commit. (That is, if you changed the commit when resolving the conflict
-to be something entirely different, you might need to edit the message.)
-Edit it if necessary and save it.
+그러면 커밋 메시지를 편집하도록 편집기가 열립니다. 커밋 메시지가 더는 커밋을
+제대로 설명하지 않는다면 바꿀 기회입니다. (즉 충돌을 해결하면서 커밋을 완전히
+다른 내용으로 바꿨다면 메시지도 고쳐야 할 수 있습니다.) 필요하면 편집하고 저장하세요.
 
-And Git says:
+그러면 Git이 다음과 같이 말합니다.
 
 ``` {.default}
 [detached HEAD 443fa53] Update to 3
@@ -376,57 +342,56 @@ And Git says:
 Successfully rebased and updated refs/heads/topic.
 ```
 
-And `git status` shows we're all clear.
+`git status`를 보면 모든 것이 해결되었습니다.
 
-After all that, we see our new commit graph in Figure_#.5.
+그 모든 작업이 끝나면 그림_#.5의 새 커밋 그래프를 볼 수 있습니다.
 
-![After rebase conflict resolution.](img_110_050.pdf "After rebase conflict resolution.")
+![리베이스 충돌을 해결한 뒤.](img_110_050.pdf "After rebase conflict resolution.")
 
-One last note: if you find yourself resolving the same conflicts with a
-rebase over and over with every pull, you might check out [i[`git
+마지막으로 한 가지 더 말하겠습니다. 풀할 때마다 리베이스에서 같은 충돌을
+계속 해결하고 있다면 그 과정을 자동화하는 데 도움이 되는 [i[`git
 rerere`]] [fl[`git
-rerere`|https://git-scm.com/book/en/v2/Git-Tools-Rerere]] to help
-automate that process.
+rerere`|https://git-scm.com/book/en/v2/Git-Tools-Rerere]]를 살펴보세요.
 
 [i[Rebase-->Conflicts]>]
 
-## Squashing Commits {#squashing-commits}
+## 커밋 스쿼시하기 {#squashing-commits}
 
 [i[Rebase-->Squashing commits]<]
 
-This concept fits in with the notion of a clean commit history.
+이 개념은 깔끔한 커밋 이력이라는 생각과 잘 맞습니다.
 
-Let's say you were tasked with implementing a feature, namely adding an
-alert box saying that the storage limit was exceeded.
+저장 용량 한도를 초과했다는 경고 상자를 추가하는 기능을 구현하라는 일을
+맡았다고 합시다.
 
-No problem. You add it and commit with message "Added feature #121".
-(And you don't push yet.)
+문제없습니다. 기능을 추가하고 "Added feature #121"이라는 메시지로
+커밋합니다. (아직 푸시하지는 않습니다.)
 
 ``` {.default}
 alert("Strrage limit exceeeded");
 ```
 
-Then after the commit, you notice a typo. Heck.
+커밋한 뒤 오타를 발견합니다. 이런.
 
-So you fix it and commit with message "Fixed typo".
+오타를 고치고 "Fixed typo"라는 메시지로 커밋합니다.
 
 ``` {.default}
 alert("Storage limit exceeeded");
 ```
 
-Done.
+끝났습니다.
 
-Wait! There's another typo! Are you kidding me?
+잠깐만요! 오타가 또 있습니다! 장난하나요?
 
-So you fix it:
+그래서 고칩니다.
 
 ``` {.default}
 alert("Storage limit exceeded");
 ```
 
-And add another commit saying "Fixed another typo".
+그리고 "Fixed another typo"라는 커밋을 하나 더 추가합니다.
 
-Now your local commit history reads:
+이제 로컬 커밋 이력은 다음과 같습니다.
 
 ``` {.default}
 Fixed another typo
@@ -434,18 +399,15 @@ Fixed a typo
 Added feature #121
 ```
 
-That's not super clean, right? Really this was supposed to be one commit
-that implemented feature #121.
+그리 깔끔하지 않지요? 원래는 기능 #121을 구현한 커밋 하나여야 했습니다.
 
-But luckily you haven't pushed yet, which means you're still free to
-rewrite that history!
+다행히 아직 푸시하지 않았으므로 이력을 자유롭게 다시 쓸 수 있습니다!
 
-You can use a feature of rebase called ***squashing*** to get this done.
+리베이스의 ***스쿼시(squashing)*** 기능으로 이 일을 할 수 있습니다.
 
-What you want to do is squash those two typo fixes into the previous
-commit, the one where you first tried to implement the feature.
+두 오타 수정 커밋을 기능을 처음 구현하려 했던 이전 커밋에 스쿼시하려는 것입니다.
 
-First, let's look at the log.
+먼저 로그를 봅시다.
 
 ``` {.default}
 $ git log
@@ -474,19 +436,18 @@ Date:   Wed Jul 17 11:53:10 2024 -0700
     Added
 ```
 
-Since this is a rebase, we're going to rebase onto something, namely the
-commit _prior_ to the added feature commit, the commit ID starting with
-`a9585`.
+리베이스이므로 어떤 커밋 위로 리베이스해야 합니다. 기능 추가 커밋의 _바로
+이전_ 커밋, 즉 ID가 `a9585`로 시작하는 커밋입니다.
 
-And we want to do it _interactively_, which is a special rebase mode
-that lets us do the squashing, and we get there with the `-i` flag.
+스쿼시를 할 수 있는 특별한 리베이스 모드인 _대화형_ 모드로 실행하려 합니다.
+`-i` 플래그를 사용합니다.
 
 ``` {.default}
 $ git rebase -i a9585
 ```
 
-This brings us into an editor that has this information, and a huge
-comment block below it full of instructions.
+그러면 다음 정보와 그 아래에 지시 사항이 가득한 거대한 주석 블록이 든
+편집기가 열립니다.
 
 ``` {.default .numberLines}
 pick ab84a42 Added feature #121
@@ -494,22 +455,18 @@ pick c62c0db Fixed typo
 pick c1820e6 Fixed another typo
 ```
 
-Notice that they're listed in forward order instead of the reverse log
-order we're used to.
+익숙한 로그의 역순이 아니라 시간 순서대로 나열된 점에 주목하세요.
 
-Look at all those options shown in the comment block (and not shown here
-in the guide)! Pick, reword, edit, squash, fixup... so many things to
-choose from. As you might imagine we're in a pretty powerful history
-rewriting mode.
+주석 블록에 표시된(이 안내서에는 싣지 않은) 수많은 옵션을 보세요! pick,
+reword, edit, squash, fixup… 고를 것이 아주 많습니다. 짐작하겠지만 상당히
+강력한 이력 다시 쓰기 모드에 들어와 있습니다.
 
-For now, though, let's just look at "squash" and "fixup", which are
-almost the same thing.
+지금은 거의 같은 기능인 "squash"와 "fixup"만 살펴봅시다.
 
-Starting with "squash", what I want to do is take those typo fix commits
-and work them into the "Added feature" commit. We can use the squash
-mode to do this.
+"squash"부터 보겠습니다. 오타 수정 커밋들을 "Added feature" 커밋에 합치려
+합니다. squash 모드로 할 수 있습니다.
 
-I'll edit the file to look like this:
+파일을 다음과 같이 편집하겠습니다.
 
 ``` {.default .numberLines}
 pick ab84a42 Added feature #121
@@ -517,16 +474,15 @@ squash c62c0db Fixed typo
 squash c1820e6 Fixed another typo
 ```
 
-That will squash "Fixed another typo" into "Fixed typo" and then squash
-that result into "Added feature #121".
+그러면 "Fixed another typo"를 "Fixed typo"에 스쿼시한 다음, 그 결과를
+"Added feature #121"에 스쿼시합니다.
 
-And `pick` just means "use this commit as-is".
+`pick`은 그저 "이 커밋을 그대로 사용한다"는 뜻입니다.
 
-> **There are shorthand versions for all these commands.** I could have
-> used `s` instead of `squash`.
+> **이 명령에는 모두 축약형이 있습니다.** `squash` 대신 `s`를 사용할 수도
+> 있었습니다.
 
-After I save the file, I get launched right back into another editor
-that has this in it:
+파일을 저장하면 다음 내용이 든 또 다른 편집기가 곧바로 열립니다.
 
 ``` {.default .numberLines}
 # This is a combination of 3 commits.
@@ -543,16 +499,15 @@ Fixed typo
 Fixed another typo
 ```
 
-We're making a new rebased commit here with the three commits squashed
-into one, and so we get to write a new commit message. Helpfully, Git
-has included all three commit messages. Let's hack it down to just have
-the commit message we want.
+여기서는 커밋 세 개를 하나로 스쿼시한 새 리베이스 커밋을 만들므로 새 커밋
+메시지를 쓸 수 있습니다. 친절하게도 Git이 세 커밋 메시지를 모두 넣어
+두었습니다. 원하는 커밋 메시지만 남기도록 줄여 봅시다.
 
 ``` {.default .numberLines}
 Added feature #121
 ```
 
-And saving gets us back out with a message.
+저장하고 나오면 메시지가 나타납니다.
 
 ``` {.default}
 [detached HEAD 4bc6bca] Added feature #121
@@ -562,12 +517,12 @@ And saving gets us back out with a message.
 Successfully rebased and updated refs/heads/main.
 ```
 
-Success is good. I like success.
+성공은 좋은 것입니다. 저는 성공이 좋습니다.
 
-> **What's that about detached HEAD?** Git detaches the `HEAD` briefly
-> when doing a rebase. Don't worry—it gets reattached for you.
+> **분리된 HEAD라는 말은 무엇일까요?** Git은 리베이스 중에 `HEAD`를 잠시
+> 분리합니다. 걱정하지 마세요. 알아서 다시 붙여 줍니다.
 
-Now my commit history is all cleaned up.
+이제 커밋 이력이 말끔해졌습니다.
 
 ``` {.default}
 commit 4bc6bca6870d124b3eebc9afd32486a5a23189fc (HEAD -> main)
@@ -583,23 +538,20 @@ Date:   Wed Jul 17 11:53:10 2024 -0700
     Added
 ```
 
-And you can see, if you look at the earlier log, that the "Added
-feature" commit ID has changed. We did a rebase, after all, so those old
-commits are gone, replaced by the new ones.
+앞의 로그와 비교하면 "Added feature" 커밋 ID가 바뀐 것을 볼 수 있습니다.
+어쨌든 리베이스를 했으므로 이전 커밋은 사라지고 새 커밋으로 대체되었습니다.
 
-Finally, after all this, *now* you can push. And always remember that
-since this is a history rewrite, you shouldn't do it after you've
-pushed.
+이 모든 작업을 마친 *이제야* 푸시할 수 있습니다. 이력을 다시 쓰는 일이므로
+푸시한 뒤에는 해서는 안 된다는 점을 늘 기억하세요.
 
 [i[Rebase-->Squashing commits]>]
 
-### Squash versus Fixup
+### Squash와 Fixup 비교 {#squash-versus-fixup}
 
 [i[Rebase-->Fixup]]
 
-Now a quick note about `fixup` instead of `squash`. It's the same thing,
-except only the squashed-into commit message is kept by default. So if I
-ran this:
+이제 `squash` 대신 `fixup`을 쓰는 방법을 짧게 살펴봅시다. 기본적으로 합쳐질
+대상 커밋의 메시지만 남긴다는 점을 빼면 같습니다. 따라서 다음과 같이 실행하면,
 
 ``` {.default .numberLines}
 pick fbc1075 Added feature #121
@@ -607,48 +559,45 @@ fixup fd4ca42 Fixed typo
 fixup 6a10e97 Fixed another typo
 ```
 
-Git instantly returns with:
+Git은 즉시 다음 메시지를 내놓습니다.
 
 ``` {.default}
 Successfully rebased and updated refs/heads/main.
 ```
 
-And Git log only shows the "Added feature #121" commit. With `fixup`,
-Git automatically discards the squashed commit messages.
+Git 로그에는 "Added feature #121" 커밋만 보입니다. `fixup`을 사용하면 Git이
+스쿼시되는 커밋의 메시지를 자동으로 버립니다.
 
-## Multiple Conflicts in the Rebase
+## 리베이스에서 여러 충돌이 발생할 때 {#multiple-conflicts-in-the-rebase}
 
 [i[Rebase-->Conflicts]<]
 
-When you merge with commit and there are multiple conflicts, you resolve
-them all in one big merge commit and then you're done. You use `git
-commit` to wrap it all up.
+커밋을 병합할 때 충돌이 여러 개 생기면 큰 병합 커밋 하나에서 모두 해결하고
+끝냅니다. `git commit`으로 모든 작업을 마무리합니다.
 
-Rebase is a little different. Since rebase "replays" your commits onto
-the new base one at a time, each replay is a merge conflict opportunity.
-This means that *as you rebase, you might have to resolve multiple
-conflicts one after another*.
+리베이스는 조금 다릅니다. 커밋을 새 기반 위에 하나씩 "재생"하므로 재생할
+때마다 병합 충돌이 생길 수 있습니다. 즉 *리베이스하면서 여러 충돌을 잇달아
+해결해야 할 수도 있습니다*.
 
-For example, let's say on your topic branch you made a commit that
-modified file `foo.txt`. And then you made *another commit* that
-modified file `bar.txt`.
+예를 들어 토픽 브랜치에서 `foo.txt`를 수정한 커밋을 만들었다고 합시다. 그런
+다음 `bar.txt`를 수정한 *또 다른 커밋*을 만들었습니다.
 
-But unbeknownst to you, someone on the `main` branch has also modified
-those two files, so they're bound to conflict when you rebase.
+그런데 여러분도 모르는 사이 `main` 브랜치의 누군가도 두 파일을 수정했습니다.
+따라서 리베이스할 때 반드시 충돌합니다.
 
-And so you begin `git rebase main`, and we're in trouble right off the
-bat. It's telling us that `foo.txt` conflicts.
+그래서 `git rebase main`을 시작하자마자 문제가 생깁니다. `foo.txt`가
+충돌한다고 합니다.
 
-So you fix it up and then run `git rebase --continue` and edit the
-commit message, and get on with it.
+이를 고치고 `git rebase --continue`를 실행한 다음 커밋 메시지를 편집하여
+계속 진행합니다.
 
-But all that does is move on to your *next* commit to `bar.txt` and try
-to rebase that. And it conflicts, too!
+하지만 그러면 `bar.txt`를 수정한 *다음* 커밋으로 넘어가 리베이스를 시도할
+뿐입니다. 이 커밋도 충돌합니다!
 
-So you fix it up and then run `git rebase --continue` and edit the
-commit message, and get on with it. Again.
+따라서 이를 고치고 `git rebase --continue`를 실행한 다음 커밋 메시지를
+편집하여 계속 진행합니다. 또다시 말입니다.
 
-And finally you get the success message:
+마침내 성공 메시지가 나타납니다.
 
 ``` {.default}
 [detached HEAD 31c3947] topic change bar
@@ -656,15 +605,14 @@ And finally you get the success message:
 Successfully rebased and updated refs/heads/topic.
 ```
 
-This is why you can conclude a merge with a simple commit, but you have
-to conclude a rebase by repeatedly running `git rebase --continue` until
-all commits have been rebased cleanly.
+이 때문에 병합은 간단한 커밋으로 끝낼 수 있지만, 리베이스는 모든 커밋이
+깔끔하게 리베이스될 때까지 `git rebase --continue`를 반복 실행해야 합니다.
 
-Is this good or bad? It might be better in that you get a chance to
-merge each commit in isolation so it might be easier to reason about and
-avoid errors. But at the same time it's more legwork to get through it.
+좋은 일일까요, 나쁜 일일까요? 각 커밋을 따로 병합할 기회가 생기므로 상황을
+이해하고 오류를 피하기 더 쉬울 수 있다는 점에서는 낫습니다. 하지만 동시에
+끝까지 처리하는 데 손이 더 많이 갑니다.
 
-As always, use the right tool for the job!
+언제나 그렇듯 작업에 맞는 도구를 사용하세요!
 
 [i[Rebase-->Conflicts]>]
 

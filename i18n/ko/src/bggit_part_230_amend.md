@@ -1,37 +1,35 @@
-# Amending Commits {#amend}
+# 커밋 수정하기 {#amend}
 
 [i[Commit-->Amending]<]
 
-Git gives you the power to relatively easily amend the last commit.
+Git을 사용하면 마지막 커밋을 비교적 쉽게 수정할 수 있습니다.
 
-> **Caution!** This section talks about changing history, and let's not
-> forget The One Rule Of Changing History: thou shalt not change history
-> of anything that you've pushed, lest someone else might have already
-> pulled thy earlier changes, causing your commit histories to become
-> woefully out of sync and much shouting.
+> **주의!** 이 절에서는 이력을 바꾸는 방법을 다룹니다. 이력을 바꿀 때의
+> 단 하나뿐인 규칙을 잊지 맙시다. 푸시한 것의 이력을 바꾸지 말지어다.
+> 다른 누군가가 이미 이전 변경 사항을 풀했을 수도 있고, 그러면 서로의
+> 커밋 이력이 처참하게 어긋나서 큰 소리가 오갈 수 있기 때문입니다.
 >
-> In short, if you pushed a change, assume someone else has pulled it
-> already and amending your commit (changing history) would cause lots
-> of pain.
-> 
-> In shorter, if you pushed, it's too late. No more amending the commit.
+> 요컨대 변경 사항을 푸시했다면 다른 누군가가 이미 풀했다고 가정해야
+> 합니다. 이때 커밋을 수정하면(즉, 이력을 바꾸면) 큰 골칫거리가 생깁니다.
+>
+> 더 짧게 말하면, 푸시했다면 이미 늦었습니다. 더는 커밋을 수정하지 마세요.
 
-So what are some use cases?
+그렇다면 어떤 때에 이 기능을 쓸까요?
 
-* Maybe you botched the commit message and you want to rewrite it.
-* Maybe you forgot to add some files.
+* 커밋 메시지를 망쳐서 다시 쓰고 싶을 수 있습니다.
+* 파일 몇 개를 추가하는 것을 깜빡했을 수 있습니다.
 
-That kind of thing that none of us have ever done ever, right?
+물론 우리 중 누구도 평생 한 번도 해 본 적 없는 실수겠지요?
 
-## Amending the Commit Message
+## 커밋 메시지 수정하기 {#amending-the-commit-message}
 
 [i[Commit-->Amending commit messages]<]
 
-This one is pretty easy. Let's take an example of a commit that I've
-botched. Note that this is completely committed at this point—I've
-already run `git commit`. But, crucially, I haven't pushed yet.
+이건 꽤 쉽습니다. 제가 망친 커밋을 예로 들어 보겠습니다. 이 시점에는
+이미 완전히 커밋된 상태라는 데 주목하세요. `git commit`을 이미 실행했습니다.
+하지만 결정적으로, 아직 푸시하지는 않았습니다.
 
-Let's get a status and see the log:
+상태와 로그를 확인해 봅시다.
 
 ``` {.default}
 $ git status
@@ -45,25 +43,24 @@ $ git log
     addded
 ```
 
-That's one "d" too many in the commit message. Fixing it up is as easy
-as this:
+커밋 메시지에 "d"가 하나 너무 많습니다. 고치는 방법은 다음처럼 간단합니다.
 
 ``` {.default}
 $ git commit --amend
 ```
 
-And that brings me right into my editor where I can change the message.
+그러면 곧바로 편집기가 열리고 메시지를 바꿀 수 있습니다.
 
-If I don't want to use the editor, I can do it on the command line:
+편집기를 사용하고 싶지 않다면 명령줄에서 바꿀 수도 있습니다.
 
 ``` {.default}
 $ git commit --amend -m "the new commit message"
 ```
 
-Note that doing this preserves the author of the commit. (Which is
-probably what you want 99.9999% of the time since you were probably
-already the author.) If you want to change the identity, you'll have to
-reconfigure your identity with `git config` and then run:
+이렇게 하면 커밋 작성자는 그대로 유지됩니다. (이미 여러분이 작성자였을
+가능성이 크므로 99.9999%의 경우에는 이것이 원하는 동작일 겁니다.) 신원을
+바꾸고 싶다면 `git config`로 신원을 다시 설정한 다음 다음 명령을 실행해야
+합니다.
 
 ``` {.default}
 $ git commit --amend --reset-author
@@ -71,14 +68,14 @@ $ git commit --amend --reset-author
 
 [i[Commit-->Amending commit messages]>]
 
-## Adding some Files to the Commit
+## 커밋에 파일 추가하기 {#adding-some-files-to-the-commit}
 
 [i[Commit-->Amending files]<]
 
-Ugh! You just made that commit but you forgot to add one of the files to
-it! You got `foo.c` and `bar.c` in there, but you left out `baz.h`!
+으악! 방금 커밋했는데 파일 하나를 추가하는 걸 깜빡했습니다! `foo.c`와
+`bar.c`는 넣었지만 `baz.h`가 빠졌습니다!
 
-Let's look.
+확인해 봅시다.
 
 ``` {.default}
 $ ls
@@ -94,26 +91,25 @@ $ git log --name-only
   foo.c
 ```
 
-OK, so how can we get `baz.h` in there? Like this:
+좋습니다. 그러면 `baz.h`를 어떻게 넣을까요? 이렇게 하면 됩니다.
 
-1. `git add baz.h` to add it to the stage.
-2. `git commit --amend` to get it into the commit.
+1. `git add baz.h`로 스테이징 영역에 추가합니다.
+2. `git commit --amend`로 커밋에 넣습니다.
 
-This will bring you into an editor to edit the commit message. You can
-just save it as is. Or you can specify the `-m` option on the command
-line to give a new message.
+그러면 커밋 메시지를 편집할 수 있도록 편집기가 열립니다. 그대로 저장해도
+됩니다. 또는 명령줄에서 `-m` 옵션을 지정해 새 메시지를 줄 수도 있습니다.
 
-Alternately, if you're just adding files, you might not need to change
-the commit message at all. In that case you can just run:
+파일만 추가하는 상황이라면 커밋 메시지를 전혀 바꿀 필요가 없을 수도
+있습니다. 그럴 때는 다음 명령만 실행하면 됩니다.
 
 ``` {.default}
 $ git commit --amend --no-edit
 ```
 
-That'll run the amend and not edit the commit message at all.
+그러면 수정 작업은 수행하되 커밋 메시지는 전혀 편집하지 않습니다.
 
-And there we have it—you can easily amend the last commit. Just be sure
-you haven't pushed it before you do.
+이것으로 마지막 커밋을 쉽게 수정할 수 있습니다. 다만 수정하기 전에 아직
+푸시하지 않았는지 꼭 확인하세요.
 
 [i[Commit-->Amending files]>]
 
