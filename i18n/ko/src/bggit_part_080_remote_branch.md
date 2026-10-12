@@ -208,7 +208,7 @@ $ git push --set-upstream origin topic99
 
 [i[GitHub-->Branches]]
 
-이 시점에 GitHub로 푸시했다면 프로젝트의 GitHub 페이지로 이동하세요. 왼쪽 위 근처에 그림_#.1과 비슷한 것이 보일 것입니다.
+이 시점에 GitHub로 푸시했다면 프로젝트의 GitHub 페이지로 이동하세요. 왼쪽 위 근처에 Figure_#.1과 비슷한 것이 보일 것입니다.
 
 ![GitHub의 브랜치 두 개](img_080_010.png "Two branches on GitHub")
 

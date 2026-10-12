@@ -109,8 +109,8 @@ $ git revert 5af89a8985c001ec02409d77e093fb7be45495ff
   hint: "git config advice.mergeConflict false"
 ```
 
-여기서 선택할 수 있는 몇 가지 방법도 알려 줍니다. 우리의 친구 `git
-status`로 더 많은 정보를 얻을 수 있습니다.
+여기서 선택할 수 있는 몇 가지 방법도 알려 줍니다. 우리의 친구
+`git status`로 더 많은 정보를 얻을 수 있습니다.
 
 ``` {.default}
 $ git status

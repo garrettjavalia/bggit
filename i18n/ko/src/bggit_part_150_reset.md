@@ -346,8 +346,8 @@ $ git status
 5. 스태시한 변경 사항이 있다면 팝합니다.
 6. 사라진 이전 커밋을 다시 적용할 수도 있습니다[^318a].
 
-[^318a]: 뒤의 장에서 다루는 `git reflog`, `git cherry-pick` 또는 `git
-    cherry-pick -n`, 필요하다면 `git add -p`를 사용할 수 있습니다. 리베이스도
+[^318a]: 뒤의 장에서 다루는 `git reflog`, `git cherry-pick` 또는
+    `git cherry-pick -n`, 필요하다면 `git add -p`를 사용할 수 있습니다. 리베이스도
     신중하게 함께 사용하면 커밋 이력을 깔끔하게 유지하면서 이전 커밋이나 그
     일부를 적용할 수 있습니다.
 
@@ -467,8 +467,8 @@ $ git reset --hard origin/main
 $ git stash pop
 ```
 
-이전 커밋을 참고하려고 위처럼 `oldmain` 브랜치를 만들어 두었다면 `git switch
-oldmain`으로 전환해 살펴보고, `git cherry-pick` 같은 명령으로 필요한 기능을
+이전 커밋을 참고하려고 위처럼 `oldmain` 브랜치를 만들어 두었다면
+`git switch oldmain`으로 전환해 살펴보고, `git cherry-pick` 같은 명령으로 필요한 기능을
 가져올 수 있습니다.
 
 [i[Push-->Forced]>]

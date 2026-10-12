@@ -100,8 +100,8 @@ $ git stash pop
 
 [i[Stash-->The stack]<]
 
-[flw[스택 추상 자료형|Stack_(abstract_data_type)]]에 익숙하다면 `git stash
-pop`을 읽는 순간 귀가 솔깃했을 것입니다.
+[flw[스택 추상 자료형|Stack_(abstract_data_type)]]에 익숙하다면
+`git stash pop`을 읽는 순간 귀가 솔깃했을 것입니다.
 
 그렇습니다. Git은 스택으로 스태시를 추적합니다. 스택이 익숙하지 않다면 먼저
 관련 내용을 읽어 보세요.

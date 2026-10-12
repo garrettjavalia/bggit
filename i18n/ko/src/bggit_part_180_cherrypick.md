@@ -146,8 +146,8 @@ $ git cherry-pick checkpoint
    1 file changed, 1 insertion(+)
 ```
 
-이 명령은 새로 삽입된 5번 줄만 가져오고 다른 변경 사항은 하나도 가져오지
-*않았어야* 합니다. `main`의 `foo.txt`를 살펴봅시다.
+이 명령으로 새로 삽입된 5번 줄만 가져오고 다른 변경 사항은 하나도 가져오지
+*않았을* 것입니다. `main`의 `foo.txt`를 살펴봅시다.
 
 ``` {.default}
 Line 1

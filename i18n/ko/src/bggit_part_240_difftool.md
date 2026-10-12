@@ -20,7 +20,7 @@
 $ git difftool HEAD~3^!
 ```
 
-그러면 무엇을 볼 수 있을까요? 저는 Vim을 쓰고 Vimdiff를 difftool로 설정했으므로 그림_#.1과 같은 화면이 나타납니다.
+그러면 무엇을 볼 수 있을까요? 저는 Vim을 쓰고 Vimdiff를 difftool로 설정했으므로 Figure_#.1과 같은 화면이 나타납니다.
 
 ![difftool로 사용하는 Vimdiff.](img_difftool.png "Vimdiff as the difftool.")
 
