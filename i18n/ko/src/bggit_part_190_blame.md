@@ -38,7 +38,7 @@ Chris가 와서 중간의 몇 줄을 수정하거나 추가했습니다.
 
 `--color-lines` 스위치를 쓰면 커밋마다 색이 번갈아 나오는 컬러 출력을
 볼 수 있습니다. 아주 신나는 일이죠. 언제나 이렇게 표시하고 싶다면
-`color.blame.repeatedLines` 구성 옵션을 설정하면 됩니다.
+`color.blame.repeatedLines` 설정 옵션을 지정하면 됩니다.
 
 날짜를 조금 줄여 주는 `--date=short`는 이미 살펴봤습니다.
 

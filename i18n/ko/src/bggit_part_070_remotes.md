@@ -162,7 +162,7 @@ commit 311eb3 (origin/master)
 commit d5d2cc (reallinux/master)
 ```
 
-이 시점에는 `git push`를 실행하여 로컬 `master`의 변경 사항을 GitHub로 보내고 그곳의 `origin/master`를 따라잡게 합니다. 그러면 맨 위 커밋은 다음처럼 보입니다.
+이 시점에는 `git push`를 실행하여 로컬 `master`의 변경 사항을 GitHub로 보내고 `origin/master`도 로컬 `master`와 같은 최신 커밋을 가리키게 합니다. 그러면 맨 위 커밋은 다음처럼 보입니다.
 
 ``` {.default}
 commit 2d7d5d (HEAD -> master, origin/master)

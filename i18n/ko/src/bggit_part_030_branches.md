@@ -31,7 +31,7 @@ Git은 모든 커밋의 부모 커밋을 항상 추적합니다. 예를 들어 �
 이름표를 옮길 수 있습니다.
 
 기본 브랜치 이름이 [i[Branch-->`main`]] `main`이라고 가정합니다. 아직 설정하지
-않았다면 [Git 기초](#initial-setup) 장의 설명대로 기본 브랜치를 구성하세요.
+않았다면 [Git 기초](#initial-setup) 장의 설명대로 기본 브랜치를 설정하세요.
 
 ![커밋에 붙은 `main` 브랜치.](img_030_020.pdf "[The main branch on a commit.]")
 
