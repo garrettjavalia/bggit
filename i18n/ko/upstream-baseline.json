@@ -7,155 +7,155 @@
   "files": {
     "bggit_part_005_boilerplate.md": {
       "sha256": "5069e0b17b1a047fa427f43823d7234daa7847ac47d2d6a7ab87571c6555d255",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_010_git_basics.md": {
       "sha256": "535d9b75f000162242f4be3e3f0724fba56a1bad17ccabcba295587009861f7e",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_020_using_github.md": {
       "sha256": "7cb248a44ad11db5c9afae78993cdd39c6fff515c56e683fa6941efd047b7334",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_025_headlog.md": {
       "sha256": "2d833d6fcc83992f811e0926df8afe85cbdfde7041fef251b0c846cdc5d7bf47",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_030_branches.md": {
       "sha256": "d5e7127c5b78a21de3daf8603c05e504457241a84e9b88af8a4667de75f27b63",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_040_merging.md": {
       "sha256": "e2faf66338c592997a8373424559660eff3aac62601c9ee4faa6921359f7d608",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_050_subdir.md": {
       "sha256": "eefe57caf6655ae796dfdfe3e44a4a85c73b8284ec6ecaee37133a756628dc00",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_060_gitignore.md": {
       "sha256": "1e49378e91dd14892f67d0ca83ca8fb234a54b48891a2d3243488a45704c8f26",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_070_remotes.md": {
       "sha256": "c000c7fa77c3954745cb5b118ea7d6dbcdea3cc2df7ddbc1da14c4626ee461a2",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_080_remote_branch.md": {
       "sha256": "d4bf72b08d7bedb8c1289f891c75f97a8608faab4463ca1593b413d03b375cb5",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_090_file_states.md": {
       "sha256": "8deeba312b4d2917c5ef6f096551be5b27b46b6a62c23ae920ec948c4826eec6",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_092_diff.md": {
       "sha256": "a445c4ee02b5545b7aa7e4018a215bfe8f187e7c4ad98bda90d0dc34a5ab70b5",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_095_renaming_removing.md": {
       "sha256": "46000c5fce99d16c7ff66ae5aae42ba44ed61d4890e5210a843bc0bab0eb7d46",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_100_collaboration.md": {
       "sha256": "3aa1190cb88aa2f740acb92431294b3f10c6bb915e3685494f38b12c59db6c84",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_110_rebase.md": {
       "sha256": "7e30a52e3f80071f6a20b7615e932c24c6c6d52eb5033174d95f38dadd6beba0",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_120_stash.md": {
       "sha256": "85a15917aafde551960bd202896545ab0dc31fea2c167bc4cee5875cc45e0fa1",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_130_pullreq.md": {
       "sha256": "73fdfb8ddee3b62601fca452daf4be418969779d24d7b288857f1fd27ab065bc",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_140_revert.md": {
       "sha256": "13f657231afcdd17f06f0c7da0a960be5e31ef00656a8978b2a4a9c468066ab6",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_150_reset.md": {
       "sha256": "74c972a48cf615cbb69717d3336d98c00f45e03225f691fb6e8cfdc84968546b",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_160_reflog.md": {
       "sha256": "e7c33613ed0dddc0185083f45eaf92de90d4a6fb1169133794e642225c42fef7",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_170_patch.md": {
       "sha256": "095f8ed917659be1db0c8f7756b1d91c1b56a50da30b803da0f805e86a1c669c",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_180_cherrypick.md": {
       "sha256": "92de403ddcbfc8138f8321a1a0877bc58f08feb93b4b024646e04f340bb7332d",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_190_blame.md": {
       "sha256": "47a317fc5e145919baa49e2fb9825b4dcae81320dbfafb2c1ab242f52f04594a",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_200_config.md": {
       "sha256": "91925238d5b581b5f2df992c31093957bc0606589e3e89c9a6f3c28c736534fb",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_210_alias.md": {
       "sha256": "288e25aa022a46247dc3a7334db46bab50a043da08c734b42733296486969525",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_220_id.md": {
       "sha256": "48a1cb282d1993675c6826c6e3551210ba88bd4fb6299867e8ca8883f56b02e3",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_230_amend.md": {
       "sha256": "ecb6cdd467f2a985a8a07dbb6e2feaeaa02c0b0ee736ec0eece5ad4cab2321aa",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_240_difftool.md": {
       "sha256": "dddfce419baddba71a1be9137fc448ff4439d4556ac3ddb91e3439e195399e85",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_250_mergetool.md": {
       "sha256": "a12f848369e65d212e69e4a5c70ab7e646631c66e0d443480beeebdbadd4e321",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_260_submodules.md": {
       "sha256": "d856a28daf64ac7cd17649dc2a405cad2b8c98f9f1212ccbdbfebd119e833d9a",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_270_tags.md": {
       "sha256": "b5e7ddd983b979978aa643594e1877652809800a0994eb92ca6eb173e1cffb3f",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_280_worktrees.md": {
       "sha256": "c83bf577ab2dbc0dc7107ddfa90248fe8d152a3d455bea76a9ab834ee4e2cb09",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_A005_playground.md": {
       "sha256": "075369fe7a554444296400f2da404b378b9dfda91f3f70f9455dd0645a95153c",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_A010_editors.md": {
       "sha256": "aae1053a128a3ac2e00e27aa0f1d31412d7a10b33ba1d1696a49b5e43a1ca70c",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_A020_errors.md": {
       "sha256": "c128c5826475200834b8b29af87d1d438c7a00d5e9c31bad266ea56d1e1d42d3",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_A030_vim.md": {
       "sha256": "457ef0701391c50419e0eb5b00d5250182809e2e4897901d3a24669ba86492b5",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_A800_refs.md": {
       "sha256": "f27b0d142c2a501d9c33c2d1b9b8a8e1a60f0973b615a81bca55381f6c9139d0",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "bggit_part_A900_reference.md": {
       "sha256": "2ae4c2fb76055ed36881928ba05dad9fef843478e8cd2bf7f3678360c1676e33",
-      "status": "untranslated"
+      "status": "translated-draft"
     },
     "img_030_010.pdf": {
       "sha256": "c9079eee42a3d263fc9c7a98c5cd082e45700c47c7de1bbe5194f8bf840ef8f1",
